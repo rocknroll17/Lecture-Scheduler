@@ -1,6 +1,6 @@
 class Timeblock():
     def __init__(self):
-        self.day = ""  # 요일 "Monday" ~ "Sunday"
+        self.day = ""  # 요일 "월" ~ "일"
         self.period = 0  # N교시
         self.courseTime = "0:00" # H:MM -> H시간 MM분 강의
         
