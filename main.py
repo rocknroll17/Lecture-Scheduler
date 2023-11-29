@@ -9,4 +9,6 @@ with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
         DB.add(Course.Course(lecture_data[i].strip().split("$")))
         
 DB.sort('courseId')
-print(DB.course_list)
+print(DB.course_list[0].time)
+for f in Course.fails:
+    print(f)
