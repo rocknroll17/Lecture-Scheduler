@@ -1,17 +1,19 @@
 class Course():
-    def __init__(self, one_course):
-        # one_course 문자열 파싱해서 클래스변수 저장
-        self.college = "" # 대학
-        self.department = "" # 개설학과
-        self.isMajor = "" # 이수구분 - 전공인지 -> 필요한가??
-        self.grade = 0 # 학년 -> 필요한가??
-        self.courseId = 0 # 과목번호
-        self.title = "" # 과목명
-        self.credit = 0 # 학점
-        self.instructor = "" # 강의자
-        #self.vector<Timeblock> courseTime # 강의시간. Timeblock 배열에 저장.
-        self.courseType = "" # 강의유형 -> 필요한가??
-        self.annotations = "" # 비고 -> 필요한가??
+    def __init__(self, lecture):
+        # lecture 문자열 파싱해서 클래스변수 저장
+        self.college = lecture[0] # 대학
+        self.department = lecture[1] # 개설학과
+        self.campus = lecture[2] #캠퍼스
+        self.grade = lecture[3] # 학년
+        self.course = lecture[4] #과정
+        self.category = lecture[5] # 이수구분
+        self.courseId = lecture[6] # 과목번호
+        self.title = lecture[7] # 과목명
+        self.credit = lecture[8] # 학점
+        self.instructor = lecture[9] # 강의자
+        self.closed = lecture[10] #폐강 여부
+        self.time = lecture[11] # 강의시간
+        self.annotations = lecture[12] # 비고
     def __repr__(self):
         return self.__str__()
     def __str__(self):
