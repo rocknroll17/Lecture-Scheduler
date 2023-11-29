@@ -12,3 +12,7 @@ class Course():
         #self.vector<Timeblock> courseTime # 강의시간. Timeblock 배열에 저장.
         self.courseType = "" # 강의유형 -> 필요한가??
         self.annotations = "" # 비고 -> 필요한가??
+    def __repr__(self):
+        return self.__str__()
+    def __str__(self):
+        return self.title
