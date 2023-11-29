@@ -5,5 +5,5 @@ class CourseDB():
     def add(self, lecture):
         self.course_list.append(lecture)
 
-    def sort(self):
-        self.course_list.sort()
+    def sort(self, option):
+        self.course_list.sort(key=lambda x: getattr(x, option))

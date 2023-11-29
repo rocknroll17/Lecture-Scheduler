@@ -148,6 +148,7 @@ for i in range(40):
                 etc = row[0].select('div:nth-of-type(13) > div.sp-grid-data.text-center > span > span')
                 etc = str(etc)
                 etc = etc[121:-8]
+                etc = etc.replace("\n", "")
                 lecture=[]
                 lecture.append(college)
                 lecture.append(major)
