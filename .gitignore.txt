@@ -1,3 +1,4 @@
+account.md
 #### vscode용 ####
 .vscode/*
 !.vscode/settings.json

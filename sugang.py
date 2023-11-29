@@ -174,7 +174,7 @@ for i in range(40):
                     print(lecture_number+'겹침')
                 
 driver.quit()
-with open('lecture.txt', 'w', encoding='utf-8') as file:
+with open('Data/lecture.txt', 'w', encoding='utf-8') as file:
     for i in range(len(lectures)):
         file.write(lectures[i][0]+seperator+lectures[i][1]+seperator+lectures[i][2]+seperator+lectures[i][3]+seperator+lectures[i][4]+seperator+lectures[i][5]+seperator+lectures[i][6]+seperator+lectures[i][7]+seperator+lectures[i][8]+seperator+lectures[i][9]+seperator+lectures[i][10]+seperator+lectures[i][11]+seperator+lectures[i][12]+"\n")
 print("done")
