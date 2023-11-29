@@ -171,7 +171,8 @@ for i in range(40):
                     #print('추가됨')
                     pass
                 else:
-                    print(lecture_number+'겹침')
+                    #print(lecture_number+'겹침')
+                    pass
                 
 driver.quit()
 with open('Data/lecture.txt', 'w', encoding='utf-8') as file:
