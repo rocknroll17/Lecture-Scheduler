@@ -16,7 +16,7 @@ account.md
 #### 파이썬용 ####
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*/__pycache__/
+TimeTablePackage/
 *.py[cod]
 *$py.class
 
