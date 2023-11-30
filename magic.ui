@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1212</width>
+    <height>804</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255)</string>
+  </property>
+  <widget class="QPushButton" name="Button_Courses">
+   <property name="geometry">
+    <rect>
+     <x>1100</x>
+     <y>10</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color : rgb(238, 238, 238)</string>
+   </property>
+   <property name="text">
+    <string>강의 검색</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Button_Schedule">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>10</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color : rgb(238, 238, 238)</string>
+   </property>
+   <property name="text">
+    <string>시간표</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>510</y>
+     <width>1171</width>
+     <height>261</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>장바구니</string>
+   </property>
+   <widget class="QTableWidget" name="Table_Course">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>1151</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="dragEnabled">
+     <bool>true</bool>
+    </property>
+    <property name="dragDropMode">
+     <enum>QAbstractItemView::DragOnly</enum>
+    </property>
+    <property name="defaultDropAction">
+     <enum>Qt::MoveAction</enum>
+    </property>
+    <property name="gridStyle">
+     <enum>Qt::SolidLine</enum>
+    </property>
+    <property name="sortingEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <column>
+     <property name="text">
+      <string/>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>대학</string>
+     </property>
+     <property name="background">
+      <color>
+       <red>242</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>개설학과</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>캠퍼스</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>학년</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>과정</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>이수구분</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>과목번호</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>과목명</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>학점-시간</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>담당교수</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>폐강여부</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>강의시간</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>비고</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupMust">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>561</width>
+     <height>421</height>
+    </rect>
+   </property>
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="title">
+    <string>꼭</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupPrefer">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>60</y>
+     <width>561</width>
+     <height>421</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>들으면 좋음</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="group1Button">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>480</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>그룹 추가</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="group2Button">
+   <property name="geometry">
+    <rect>
+     <x>1120</x>
+     <y>480</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>그룹 추가</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
