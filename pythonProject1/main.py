@@ -1,8 +1,32 @@
 import sys
+sys.path.append('..')
+import Course
+import CourseDB
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
+
+# lecture_list = []
+# DB = CourseDB.CourseDB()
+# with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
+#     lecture_data = f.readlines()
+#     for i in range(len(lecture_data)):
+#         DB.add(Course.Course(lecture_data[i].strip().split("$")))
+lecture_list = []
+DB = CourseDB.CourseDB()
+with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
+    lecture_data = f.readlines()
+    for i in range(len(lecture_data)):
+    # for i in range(300):
+        course = Course.Course(lecture_data[i].strip().split("$"))
+        DB.add(course)
+        # # Timeblock 파싱 확인용
+        print(f"{course.title[:5]}", end=" ")
+        for t in course.time:
+            print(t, end=" ")
+        print(f" '{course.time_info_raw_string}'",end=" ")
+        print()
 
 # 처음 모든 강의 목록을 볼 수 있는 창
 # -> 왼쪽에 버튼 3개 (강의목록 / 시간표 / 마법사)
@@ -26,11 +50,9 @@ form_class1 = uic.loadUiType("test.ui")[0]
 form_class2 = uic.loadUiType("magic.ui")[0]
 form_class3 = uic.loadUiType("table.ui")[0]
 
-course = ['소프트웨어대학', '소프트웨어학부', '3', '전공', '수치해석', '3-3', '이창하', '월 7,8 / 수 7 / 310관 728호', '대면수업', '공학인증(BSM)']
-selected_course_index = []      # 장바구니에 담을 객체 index
-selected_course = []            # 장바구니에 담을 객체 리스트
-condition_search = ["","","","","",""]      # 검색 조건
-searched_course = []                        # 검색 조건에 부합하는 강의 리스트
+selected_course = []            # 장바구니에 담을 강의 리스트
+condition = ["","","","",""]    # 검색 조건
+searched_course = []            # 검색 조건에 부합하는 강의 리스트
 
 # 강의 검색 창
 class courseSearch(QMainWindow, form_class1) :
@@ -38,103 +60,99 @@ class courseSearch(QMainWindow, form_class1) :
         super().__init__()
         self.setupUi(self)
 
-        self.pushButton_1.clicked.connect(self.button1Function)  # 강의 검색 버튼
-        self.pushButton_2.clicked.connect(self.button2Function)  # 시간표 창으로 이동하는 버튼
-        self.pushButton_3.clicked.connect(self.button3Function)  # 마법사 창으로 이동하는 버튼
-        self.pushButton_4.clicked.connect(self.getSelectedRows)  # 장바구니 담기 버튼
+        self.Button_Search.clicked.connect(self.Button_SearchFunction)  # 강의 검색 버튼
+        self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 시간표 창으로 이동하는 버튼
+        self.Button_Magic.clicked.connect(self.Button_MagicFunction)  # 마법사 창으로 이동하는 버튼
+        self.Button_Select.clicked.connect(self.getSelectedRows)  # 장바구니 담기 버튼
 
-        self.comboBox_1.currentIndexChanged.connect(self.comboBoxFunction)  # 조건 검색 : 대학
-        self.comboBox_2.currentIndexChanged.connect(self.comboBoxFunction)  # 조건 검색 : 학과
-        self.comboBox_3.currentIndexChanged.connect(self.comboBoxFunction)  # 조건 검색 : 과목명
-        self.comboBox_4.currentIndexChanged.connect(self.comboBoxFunction)  # 조건 검색 : 요일
-        self.comboBox_5.currentIndexChanged.connect(self.comboBoxFunction)  # 조건 검색 : 교시
-        self.comboBox_6.currentIndexChanged.connect(self.comboBoxFunction)  # 조건 검색 : 캠퍼스
+        self.comboBoxCollege.addItems([""] + list(set(course.college for course in DB.course_list)))  # 대학 검색
+        self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
+        self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
 
-        self.table1.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.comboBoxDepartment.addItems(list(set(course.department for course in DB.course_list))) # 학과 검색
+        self.comboBoxDepartment.model().sort(0, Qt.AscendingOrder)
+        self.comboBoxDepartment.currentIndexChanged.connect(self.comboBoxFunction)
 
-    def button1Function(self):
-        # 강의 검색 버튼을 누르면 일단 검색조건(condition_search)랑 부합하는 course들을 꺼내서 course 리스트를 searched_course에 저장하고 얘를 테이블에 추가하면 됨
+        self.titleInput.textChanged.connect(self.printFunction) # 과목명 입력
 
-        self.table1.setRowCount(10)
+        self.comboBoxDay.addItems(["", "월", "화", "수", "목", "금", "토"])  # 요일 검색
+        self.comboBoxDay.currentIndexChanged.connect(self.comboBoxFunction)
 
-        i=0
-        while i<10:
-            if course[0] != condition_search[0] and condition_search[0] != "":
-                self.table1.setRowCount(0)
-                break
-            if course[1] != condition_search[1] and condition_search[1] != "":
-                self.table1.setRowCount(0)
-                break
-            if course[4] != condition_search[2] and condition_search[2] != "":
-                self.table1.setRowCount(0)
-                break
-            if condition_search[3] != "":
-                parts = course[7].split('/')
-                parts = [part.strip() for part in parts]
+        periods = list(set(int(period) for course in DB.course_list for time in course.time for period in [time.period]))
+        periods.sort()
+        self.comboBoxPeriod.addItems([""] + [str(period) for period in periods]) # 교시 검색
+        self.comboBoxPeriod.currentIndexChanged.connect(self.comboBoxFunction)
 
-                if parts[0][0] != condition_search[3][0] and parts[1][0] != condition_search[3][0]:
-                    self.table1.setRowCount(0)
-                    break
+        self.Table_Course.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
+    def Button_SearchFunction(self):
+        self.Table_Course.setRowCount(0)
+        searched_course.clear()
+
+        for course in DB.course_list:
+            if (not condition[1] or course.department == condition[1]) and \
+                (not condition[2] or course.title == condition[2]) and \
+                (not condition[3] or (condition[3] in [time.day for time in course.time])) and \
+                (not condition[4] or any(time.day == condition[3] and str(time.period) == condition[4] for time in course.time)):
+                searched_course.append(course)
+
+        self.Table_Course.setRowCount(len(searched_course))
+
+        for i in range(0, len(searched_course)):
             checkbox = QCheckBox()
             checkbox.setStyleSheet("QCheckBox {margin-left: 10%; margin-right: 10%;}")
-            self.table1.setCellWidget(i, 0, checkbox)  # 첫 번째 열에 체크박스 추가
+            self.Table_Course.setCellWidget(i, 0, checkbox)  # 첫 번째 열에 체크박스 추가
 
-            for j in range(1, 11):
-                item_text = course[j - 1]
+            for j in range(1, 13):
+                item_text = searched_course[i].total[j-1]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
-                self.table1.setItem(i, j, item)
+                self.Table_Course.setItem(i, j, item)
 
-            i+=1
+        self.Table_Course.resizeRowsToContents()  # 칸 크기 맞추기
+        self.Table_Course.resizeColumnsToContents()   # 칸 크기 맞추기
 
-        self.table1.resizeRowsToContents()  # 칸 크기 맞추기
-        self.table1.resizeColumnsToContents()   # 칸 크기 맞추기
-        total_width = sum(self.table1.columnWidth(i) for i in range(self.table1.columnCount()))
-        total_height = sum(self.table1.rowHeight(i) for i in range(self.table1.rowCount()))
-        self.table1.setFixedSize(total_width, total_height)
-
-    def button2Function(self):
+    def Button_ScheduleFunction(self):
         myWindow3.show()
         self.close()
 
-    def button3Function(self):
+    def Button_MagicFunction(self):
+        myWindow2.createTable()
         myWindow2.show()
+        # myWindow2.setTable()
         self.close()
 
     def comboBoxFunction(self):
         sender = self.sender()
 
-        if sender == self.comboBox_1:
-            selected_data = self.comboBox_1.currentText()
-            condition_search[0] = selected_data
-        elif sender == self.comboBox_2:
-            selected_data = self.comboBox_2.currentText()
-            condition_search[1] = selected_data
-        elif sender == self.comboBox_3:
-            selected_data = self.comboBox_3.currentText()
-            condition_search[2] = selected_data
-        elif sender == self.comboBox_4:
-            selected_data = self.comboBox_4.currentText()
-            condition_search[3] = selected_data
-        elif sender == self.comboBox_5:
-            selected_data = self.comboBox_5.currentText()
-            condition_search[4] = selected_data
-        elif sender == self.comboBox_6:
-            selected_data = self.comboBox_6.currentText()
-            condition_search[5] = selected_data
+        if sender == self.comboBoxCollege:
+            selected_data = self.comboBoxCollege.currentText()
+            condition[0] = selected_data
+        elif sender == self.comboBoxDepartment:
+            selected_data = self.comboBoxDepartment.currentText()
+            condition[1] = selected_data
+        elif sender == self.comboBoxDay:
+            selected_data = self.comboBoxDay.currentText()
+            condition[3] = selected_data
+        elif sender == self.comboBoxPeriod:
+            selected_data = self.comboBoxPeriod.currentText()
+            condition[4] = selected_data
 
-        print(condition_search)
+        print(condition)
+
+    def printFunction(self):
+        condition[2] = self.titleInput.text()
 
     def getSelectedRows(self):
-        # 장바구니 담기 버튼을 누르면 searched_course중 체크된 애들만 selected_course에 옮겨 담으면 됨
-        for i in range(self.table1.rowCount()):
-            checkbox_widget = self.table1.cellWidget(i, 0)
+        for i in range(self.Table_Course.rowCount()):
+            checkbox_widget = self.Table_Course.cellWidget(i, 0)
 
-            if checkbox_widget.isChecked():
-                selected_course_index.append(i)
+            if checkbox_widget.isChecked() and searched_course[i] not in selected_course:
+                selected_course.append(searched_course[i])
+            elif checkbox_widget.isChecked() == False and searched_course[i] in selected_course:
+                selected_course.remove(searched_course[i])
 
-        print("장바구니에 담을 강의 index:", selected_course_index)
+        print(selected_course)
 
 # 마법사
 class Magic(QMainWindow, form_class2):
@@ -142,66 +160,82 @@ class Magic(QMainWindow, form_class2):
         super().__init__()
         self.setupUi(self)
 
-        self.pushButton_1.clicked.connect(self.button1Function)     # 시간표 창으로 이동하는 버튼
-        self.pushButton_2.clicked.connect(self.button2Function)     # 강의 검색 창으로 이동하는 버튼
-        self.group1Button.clicked.connect(self.g1buttonFunction)    # 꼭에 그룹 추가하는 버튼
-        # self.group2Button.clicked.connect(self.g2buttonFunction)    # 들으면 좋음에 그룹 추가하는 버튼
+        self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction) # Button to move to timetable window
+        self.Button_Courses.clicked.connect(self.Button_CoursesFunction) # Button to move to the course search window
+        self.group1Button.clicked.connect(self.g1buttonFunction) # Button to add group to
+        self.group2Button.clicked.connect(self.g2buttonFunction) # Button to add group to Good to Hear
 
-        self.groupBox_1.setLayout(QVBoxLayout())  # groupBox_1의 레이아웃 초기화
-        self.groupBox_2.setLayout(QVBoxLayout())  # groupBox_2의 레이아웃 초기화
+        self.groupMust.setLayout(QVBoxLayout(self.groupMust))
+        self.groupPrefer.setLayout(QVBoxLayout(self.groupPrefer))
 
-        self.groupRects = {}  # 그룹들의 위치 정보를 저장할 딕셔너리
+    #  장바구니 테이블 생성하는 메소드
+    def createTable(self):
+        self.Table_Course.setRowCount(len(selected_course))
+        # self.Table_Course.setDragEnabled(True)
 
-        self.table1.setRowCount(10)
-        for j in range(0, 10):
-            item_text = course[j]
-            item = QTableWidgetItem(item_text)
-            item.setTextAlignment(Qt.AlignCenter)
-            self.table1.setItem(0, j, item)
+        for i in range(len(selected_course)):
+            button = QPushButton("장바구니 삭제")
+            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setSizePolicy(
+                QSizePolicy.Expanding, QSizePolicy.Expanding
+            )
+            button.clicked.connect(self.buttonClicked)
+            self.Table_Course.setCellWidget(i, 0, button)  # 첫 번째 열에 삭제버튼 추가
 
-        self.table1.resizeRowsToContents()  # 칸 크기 맞추기
-        self.table1.resizeColumnsToContents()   # 칸 크기 맞추기
-        # total_width = sum(self.table1.columnWidth(i) for i in range(self.table1.columnCount()))
-        # total_height = sum(self.table1.rowHeight(i) for i in range(self.table1.rowCount()))
-        # self.table1.setFixedSize(total_width, total_height)
-        self.table1.setFixedSize(self.table1.size())
-        self.table1.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            for j in range(1, 14):
+                item_text = selected_course[i].total[j-1]
+                item = QTableWidgetItem(item_text)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.Table_Course.setItem(i, j, item)
 
-    def button1Function(self):
+        self.Table_Course.resizeRowsToContents()  # 칸 크기 맞추기
+        self.Table_Course.resizeColumnsToContents()  # 칸 크기 맞추기
+        self.Table_Course.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.Table_Course.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.Table_Course.setSelectionMode(QAbstractItemView.SingleSelection)
+
+    # def startDrag(self, dropActions):
+    #     selected_row = self.Table_Course.currentRow()
+    #     print(selected_row)
+    #     if selected_row != -1:
+    #         selected_course_object = selected_course[selected_row]
+    # 
+    #         mime_data = QMimeData()
+    #         serialized_data = f"{selected_course_object.title},{selected_course_object.instructor},{selected_course_object.time_info_raw_string}"
+    #         mime_data.setText(serialized_data)
+    # 
+    #         print(serialized_data)
+    # 
+    #         drag = QDrag(self)
+    #         drag.setMimeData(mime_data)
+    #         drag.exec_(dropActions)
+
+    def buttonClicked(self):
+        button = self.sender()
+        if button:
+            index = self.Table_Course.indexAt(button.pos())
+            row = index.row()
+
+            if row != -1:
+                del selected_course[row]
+                self.Table_Course.removeRow(row)
+                print(selected_course)
+
+    def Button_ScheduleFunction(self):
         myWindow3.show()
         self.close()
 
-    def button2Function(self):
+    def Button_CoursesFunction(self):
         myWindow1.show()
         self.close()
 
     def g1buttonFunction(self):
-        new_group = QGroupBox("그룹")
-        new_group.setAcceptDrops(True)
-        group_layout = QVBoxLayout()
-        # group_layout.addWidget(QLabel("웹프로그래밍"))
-        # group_layout.addWidget(QLabel("김상욱"))
-        # group_layout.addWidget(QLabel("화7,8,9 / 310관 619호"))
-        new_group.setLayout(group_layout)
-        self.groupBox_1.layout().addWidget(new_group)
-        # 그룹의 위치 정보 저장
-        self.groupRects[new_group] = new_group.geometry()
+        new_group = Table()
+        self.groupMust.layout().addWidget(new_group)
 
     def g2buttonFunction(self):
-        new_group = QGroupBox("그룹")
-        group_layout = QVBoxLayout(new_group)
-        self.groupBox_2.layout().addWidget(new_group)
-
-    def dropEvent(self, event):
-        pos = event.pos()
-
-        # 드롭된 위치와 그룹들의 위치를 비교하여 어느 그룹에 드롭되었는지 판별
-        for group, rect in self.groupRects.items():
-            if rect.contains(pos):
-                dropped_item_text = self.table1.selectedItems()[0].text()
-                label = QLabel(dropped_item_text)
-                group.layout().addWidget(label)
-                print(f"Dropped on {group.title()}")
+        new_group = Table()
+        self.groupPrefer.layout().addWidget(new_group)
 
 # 시간표
 class timeTable(QMainWindow, form_class3):
@@ -220,6 +254,35 @@ class timeTable(QMainWindow, form_class3):
         myWindow1.show()
         self.close()
 
+class Table(QTableWidget):
+    def __init__(self):
+        super().__init__()
+        self.setDragEnabled(True)
+        self.setAcceptDrops(True)
+
+        self.setColumnCount(14)
+        self.setHorizontalHeaderLabels(["", '대학', '개설학과', '캠퍼스', '학년', '과정', '이수구분', '과목번호', '과목명', '학점-시간', '담당교수', '폐강여부', '강의시간', '비고'])
+
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.setSelectionMode(QAbstractItemView.SingleSelection)
+
+    # def dragEnterEvent(self, e):
+    #     e.acceptProposedAction()
+    # 
+    # def dropEvent(self, e):
+    #     for row in range(self.rowCount()):
+    #         for col in range(self.columnCount()):
+    #             item = self.item(row, col)
+    #             if item is not None:
+    #                 print(f"Row {row}, Column {col}: {item.text()}")
+    # 
+    #     mime_data = e.mimeData()
+    #     if mime_data.hasText():
+    #         print("!!")
+    #     # self.resizeRowsToContents()
+    #     # self.resizeColumnsToContents()
+    #     e.acceptProposedAction()
 
 if __name__ == "__main__" :
     #QApplication : 프로그램을 실행시켜주는 클래스
