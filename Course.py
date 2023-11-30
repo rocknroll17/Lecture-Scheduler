@@ -46,7 +46,7 @@ class Course:
         # 시간 형식 (1) : 월(16:30~17:45) 형식
         time_type1 = re.compile(r'([월|화|수|목|금|토|일])\(([0-9]{2}:[0-9]{2})~([0-9]{2}:[0-9]{2})\)') 
         # 시간 형식 (2) : 월4 / 월4,5 / 월4,5,6 형식
-        time_type2 = re.compile(r'([월|화|수|목|금|토|일])([0-9])(,[0-9])*') 
+        time_type2 = re.compile(r'([월|화|수|목|금|토|일])([0-9]+)(,[0-9]+)*') 
         # 강의실 정보는 파싱하지 않는다
 
         try:
@@ -79,6 +79,8 @@ class Course:
                 lecture_hour = end_hour - start_hour
                 lecture_minute = end_minute - start_minute
                 lecture_time = str(lecture_hour) + ":" + str(lecture_minute)
+                if lecture_hour < 10:
+                    lecture_time = '0' + lecture_time
                 # Timeblock 객체 생성
                 timeblock = Timeblock.Timeblock(day, period, lecture_time)
                 timeblocks.append(timeblock)
