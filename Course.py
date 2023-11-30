@@ -1,7 +1,8 @@
-fails = []
+
 import re
 import Timeblock
 class Course:
+    fails = []
     def __init__(self):
         pass
     def __init__(self, line):
@@ -109,8 +110,8 @@ class Course:
                     start_time = str(int(period) + 8) + ":00"
                     if int(period)+8 < 10:
                         start_time = '0' + start_time
-                    end_time = str(int([periods_list[-1]]) + 9) + ":00"
-                    if int([periods_list[-1]])+9 < 10:
+                    end_time = str(int(periods_list[-1]) + 9) + ":00"
+                    if int(periods_list[-1])+9 < 10:
                         end_time = '0' + end_time
                     timeblock = Timeblock.Timeblock(day, period, lecture_time, start_time, end_time)
                     timeblocks.append(timeblock)
@@ -140,12 +141,14 @@ class Course:
                     timeblock1 = Timeblock.Timeblock(day, period1, lecture_time1, start_time1, end_time1)
                     timeblock2 = Timeblock.Timeblock(day, period2, lecture_time2, start_time2, end_time2)
                     timeblocks.extend([timeblock1, timeblock2])
+                    Course.fails.append(f"'{self.title[:6]}' -> '{time_string}'") 
+                    # 오류는 아닌데 보고싶음
         except:
             # 예외상황 -> 문자열 처리 오류 / 강의 정보 오류 -> 아무튼 예외처리
-            fails.append(f"'{self.title}' -> '{time_string}'")
+            Course.fails.append(f"'{self.title[:6]}' -> '{time_string}'")
             return []
         if not timeblocks:
-            fails.append(f"'{self.title}' -> '{time_string}'")
+            Course.fails.append(f"'{self.title[:6]}' -> '{time_string}' (no timeblocks)")
         return timeblocks
 
 
