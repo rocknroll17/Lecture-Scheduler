@@ -3,6 +3,7 @@ class Timeblock:
     # 강의를 두번에 걸쳐서 하는 강의는, Timeblock을 두 개 갖는다
     # ex) 월 34, 수 4 -> [Timeblock('월', 3, "2:00"), Timeblock('수', 4, '1:00')]
     # 교시랑 시간도 같이 넣자
+    day_value = {'월':1}
     def __init__(self):
         self.day = ""  # 요일 "월" ~ "일"
         self.period = 0  # N교시
@@ -10,7 +11,7 @@ class Timeblock:
         self.start_time = "00:00" # 시작시간 HH:MM 형식으로
         self.end_time = "00:00" # 종료시간 HH:MM 형식으로
         
-    def __init__(self, day, period, course_time, start_time = "", end_time = ""):
+    def __init__(self, day, period, course_time, start_time, end_time):
         self.day = day
         self.period = period
         self.course_time = course_time
@@ -19,7 +20,15 @@ class Timeblock:
 
     def intersects_with(self, other):
         # 해당 timeblock과 other timeblock이 겹치는가? -> True False
-        # 만들어야댐
+        if self.day != other.day:
+            return False
+        self_start = time_to_int(self.start_time)
+        self_end = time_to_int(self.end_time)
+        other_start= time_to_int(other.start_time)
+        other_end = time_to_int(other.end_time)
+        return 
+
+        # start_time, end_time 갖고 만들어야댐
         return False
 
     ## 내장함수 ##
@@ -32,21 +41,37 @@ class Timeblock:
     ## 비교연산자 오버로딩 ##
     def __eq__(self, other):
         # ==
-        return (self.period == other.period)and(self.course_time == other.course_time)
+        return (self.period == other.period) and (self.course_time == other.course_time)
+    
     def __ne__(self, other):
         # !=
         return not self.__eq__(self, other)
+    
     def __gt__(self, other):
         # > 
-        # 겹치지 않고 더 큰 경우
+        # 겹치지 않고 더 큰 경우   
         
         pass
+
     def __ge__(self, other):
         # >=
+        # 더 큰 경우 (겹쳐도 됨)
         pass
+
     def __le__(self, other):
         # <
+        # 겹치지 않고 더 작은 경우
         pass
+
     def __lt__(self, other):
         # <=
+        # 더 작은 경우 (겹쳐도 됨)
         pass
+
+def time_to_int(time):
+    # 분 단위로 바꿔줌
+    hour, min = map(int, time.split(":"))
+    return min + hour * 60
+
+if __name__ == "__main__":
+    pass
