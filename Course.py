@@ -116,7 +116,7 @@ class Course:
                     end_time = str(int(periods_list[-1]) + 9) + ":00"
                     if int(periods_list[-1])+9 < 10:
                         end_time = '0' + end_time
-                    timeblock = Timeblock.Timeblock(day, period, lecture_time, start_time, end_time)
+                    timeblock = Timeblock.Timeblock(day, period, lecture_time, start_time, end_time, periods_list)
                     timeblocks.append(timeblock)
                 # 만약 교시가 이어지지 않는 경우 두 개의 Timeblock으로 나눠 저장한다 ex) [1,2,6,7]
                 else:
@@ -141,8 +141,8 @@ class Course:
                         end_time1 = '0' + end_time1
                     if int(periods_list[-1])+9 < 10:
                         end_time2 = '0' + end_time2
-                    timeblock1 = Timeblock.Timeblock(day, period1, lecture_time1, start_time1, end_time1)
-                    timeblock2 = Timeblock.Timeblock(day, period2, lecture_time2, start_time2, end_time2)
+                    timeblock1 = Timeblock.Timeblock(day, period1, lecture_time1, start_time1, end_time1, periods_list[:index])
+                    timeblock2 = Timeblock.Timeblock(day, period2, lecture_time2, start_time2, end_time2, periods_list[index:])
                     timeblocks.extend([timeblock1, timeblock2])
                     Course.fails.append((self, time_string, "non-consecutive blocks (not a failure)")) 
                     # 오류는 아닌데 보고싶음
