@@ -1,3 +1,27 @@
-# 장바구니 객체
-# - 강의를 모아두는 객체
-# - '꼭 들어야 되는 강의' '들으면 좋은 강의' '목록'이 여기에 속함
+class Candidate:
+    #꼭 들으면 좋음
+    def __init__(self):
+        self.data = []
+    
+    def add(self, group):
+        self.data.append(group)
+
+    def delete(self, index):
+        del self.data[index]
+
+    def remove(self, group):
+        self.data.remove(group)
+
+class basket:
+    #장바구니
+    def __init__(self):
+        self.data = []
+
+    def add(self, lecture):
+        self.data.append(lecture)
+
+    def delete(self, index):
+        del self.data[index]
+
+    def remove(self, lecture):
+        self.data.remove(lecture)
