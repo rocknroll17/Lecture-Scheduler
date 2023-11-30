@@ -43,7 +43,7 @@ class Timeblock:
         return f"{self.day}/{self.period}/{self.course_time}"
     
     def __repr__(self):
-        return self.__str__
+        return self.__str__()
 
     ## 비교연산자 오버로딩 ##
     def __eq__(self, other):

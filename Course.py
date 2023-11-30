@@ -24,6 +24,9 @@ class Course:
         self.time = self.__parse_time_info(line[11]) # 강의시간 -> Timeblock list로
         self.time_info_raw_string = line[11] # 강의시간/강의실정보 - 파싱 전
         self.annotations = line[12]  # 비고
+        self.total = []
+        for i in range(13):
+            self.total.append(line[i])
         
     def __parse_time_info(self, time_string):
         # '수1,2 / 310관(310관) B603호 <대형강의실>' 꼴의 문자열을 Timeblock 객체로 만들어서 반환
