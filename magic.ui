@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1212</width>
-    <height>804</height>
+    <width>1685</width>
+    <height>1075</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255)</string>
   </property>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="Button_Courses">
    <property name="geometry">
     <rect>
-     <x>1100</x>
+     <x>1550</x>
      <y>10</y>
      <width>91</width>
      <height>41</height>
@@ -39,10 +39,10 @@
     <string>강의 검색</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_1">
+  <widget class="QPushButton" name="Button_Schedule">
    <property name="geometry">
     <rect>
-     <x>1000</x>
+     <x>1440</x>
      <y>10</y>
      <width>91</width>
      <height>41</height>
@@ -66,21 +66,21 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>510</y>
-     <width>1171</width>
+     <y>780</y>
+     <width>1631</width>
      <height>261</height>
     </rect>
    </property>
    <property name="title">
     <string>장바구니</string>
    </property>
-   <widget class="QTableWidget" name="table1">
+   <widget class="QTableWidget" name="Table_Course">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>1151</width>
-      <height>231</height>
+      <y>30</y>
+      <width>1611</width>
+      <height>221</height>
      </rect>
     </property>
     <property name="dragEnabled">
@@ -106,6 +106,11 @@
     </attribute>
     <column>
      <property name="text">
+      <string/>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>대학</string>
      </property>
      <property name="background">
@@ -123,12 +128,27 @@
     </column>
     <column>
      <property name="text">
+      <string>캠퍼스</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>학년</string>
      </property>
     </column>
     <column>
      <property name="text">
+      <string>과정</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>이수구분</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>과목번호</string>
      </property>
     </column>
     <column>
@@ -148,12 +168,12 @@
     </column>
     <column>
      <property name="text">
-      <string>강의시간</string>
+      <string>폐강여부</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>강의유형</string>
+      <string>강의시간</string>
      </property>
     </column>
     <column>
@@ -163,14 +183,17 @@
     </column>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox_1">
+  <widget class="QGroupBox" name="groupMust">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>60</y>
-     <width>561</width>
-     <height>421</height>
+     <width>831</width>
+     <height>671</height>
     </rect>
+   </property>
+   <property name="acceptDrops">
+    <bool>false</bool>
    </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
@@ -179,13 +202,13 @@
     <string>꼭</string>
    </property>
   </widget>
-  <widget class="QGroupBox" name="groupBox_2">
+  <widget class="QGroupBox" name="groupPrefer">
    <property name="geometry">
     <rect>
-     <x>630</x>
+     <x>870</x>
      <y>60</y>
-     <width>561</width>
-     <height>421</height>
+     <width>781</width>
+     <height>671</height>
     </rect>
    </property>
    <property name="title">
@@ -195,8 +218,8 @@
   <widget class="QPushButton" name="group1Button">
    <property name="geometry">
     <rect>
-     <x>510</x>
-     <y>480</y>
+     <x>780</x>
+     <y>740</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -208,8 +231,8 @@
   <widget class="QPushButton" name="group2Button">
    <property name="geometry">
     <rect>
-     <x>1120</x>
-     <y>480</y>
+     <x>1580</x>
+     <y>740</y>
      <width>75</width>
      <height>23</height>
     </rect>
