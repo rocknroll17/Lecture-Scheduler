@@ -6,7 +6,7 @@ DB = CourseDB()
 with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
     lecture_data = f.readlines()
     #for i in range(len(lecture_data)):
-    for i in range(300, 600):
+    for i in range(600, 900):
         course = Course(lecture_data[i].strip().split("$"))
         DB.add(course)
         # Timeblock 파싱 확인용
@@ -21,4 +21,5 @@ DB.sort('courseId')
 # 파싱 실패한 거 있으면 출력
 
 for f in Course.fails:
-    print(f"fails: {f}")
+    course, string, message = f
+    print(f"fails: {course.title[:6]} -> '{string}' ({message})")
