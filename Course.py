@@ -82,7 +82,7 @@ class Course:
                 if lecture_hour < 10:
                     lecture_time = '0' + lecture_time
                 # Timeblock 객체 생성
-                timeblock = Timeblock.Timeblock(day, period, lecture_time)
+                timeblock = Timeblock.Timeblock(day, period, lecture_time, start_time, end_time)
                 timeblocks.append(timeblock)
 
             # type2로 적힌 경우
@@ -105,7 +105,14 @@ class Course:
                     lecture_time = str(len(periods_list)) + ":" + "00"
                     if len(periods_list) < 10:
                         lecture_time = '0' + lecture_time # "HH:MM"으로 형식 맞추기
-                    timeblock = Timeblock.Timeblock(day, period, lecture_time)
+                    # start_time, end_time 계산
+                    start_time = str(int(period) + 8) + ":00"
+                    if int(period)+8 < 10:
+                        start_time = '0' + start_time
+                    end_time = str(int([periods_list[-1]]) + 9) + ":00"
+                    if int([periods_list[-1]])+9 < 10:
+                        end_time = '0' + end_time
+                    timeblock = Timeblock.Timeblock(day, period, lecture_time, start_time, end_time)
                     timeblocks.append(timeblock)
                 # 만약 교시가 이어지지 않는 경우 두 개의 Timeblock으로 나눠 저장한다 ex) [1,2,6,7]
                 else:
@@ -117,8 +124,21 @@ class Course:
                         lecture_time1 = '0' + lecture_time1
                     if len(periods_list) - index < 10:
                         lecture_time2 = '0' + lecture_time2
-                    timeblock1 = Timeblock.Timeblock(day, period1, lecture_time1)
-                    timeblock2 = Timeblock.Timeblock(day, period2, lecture_time2)
+                    # start_time, end_time 계산 (맞는지 확인필요)
+                    start_time1 = str(int(period1) + 8) + ":00"
+                    if int(period1)+8 < 10:
+                        start_time1 = '0' + start_time1
+                    start_time2 = str(int(period2) + 8) + ":00"
+                    if int(period2)+8 < 10:
+                        start_time2 = '0' + start_time2
+                    end_time1 = str(int(periods_list[index-1]) + 9) + ":00"
+                    end_time2 = str(int(periods_list[-1]) + 9) + ":00"
+                    if int(periods_list[index-1])+9 < 10:
+                        end_time1 = '0' + end_time1
+                    if int(periods_list[-1])+9 < 10:
+                        end_time2 = '0' + end_time2
+                    timeblock1 = Timeblock.Timeblock(day, period1, lecture_time1, start_time1, end_time1)
+                    timeblock2 = Timeblock.Timeblock(day, period2, lecture_time2, start_time2, end_time2)
                     timeblocks.extend([timeblock1, timeblock2])
         except:
             # 예외상황 -> 문자열 처리 오류 / 강의 정보 오류 -> 아무튼 예외처리

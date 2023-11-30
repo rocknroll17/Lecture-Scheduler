@@ -14,9 +14,15 @@ class Timeblock:
         self.day = day
         self.period = period
         self.course_time = course_time
-        self.start_time = start_time # 나중에 만들기
-        self.end_time = end_time # 나중에 만들기
+        self.start_time = start_time # 시작시간 HH:MM - 나중에 만들기
+        self.end_time = end_time # 종료시간 HH:MM - 나중에 만들기
 
+    def intersects_with(self, other):
+        # 해당 timeblock과 other timeblock이 겹치는가? -> True False
+        # 만들어야댐
+        return False
+
+    ## 내장함수 ##
     def __str__(self):
         return f"{self.day}/{self.period}/{self.course_time}"
     
@@ -26,19 +32,21 @@ class Timeblock:
     ## 비교연산자 오버로딩 ##
     def __eq__(self, other):
         # ==
-        pass
+        return (self.period == other.period)and(self.course_time == other.course_time)
     def __ne__(self, other):
         # !=
-        pass
+        return not self.__eq__(self, other)
     def __gt__(self, other):
-        # <
+        # > 
+        # 겹치지 않고 더 큰 경우
+        
         pass
     def __ge__(self, other):
-        # <=
-        pass
-    def __le__(self, other):
         # >=
         pass
+    def __le__(self, other):
+        # <
+        pass
     def __lt__(self, other):
-        # >
+        # <=
         pass
