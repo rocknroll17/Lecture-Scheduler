@@ -86,7 +86,8 @@ class Course:
                 if lecture_hour < 10:
                     lecture_time = '0' + lecture_time
                 # Timeblock 객체 생성
-                timeblock = Timeblock.Timeblock(day, period, lecture_time, start_time, end_time)
+                # TODO: periods_list 만들어
+                timeblock = Timeblock.Timeblock(day, period, lecture_time, start_time, end_time, [])
                 timeblocks.append(timeblock)
 
             # type2로 적힌 경우
