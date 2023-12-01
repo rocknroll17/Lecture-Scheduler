@@ -1,5 +1,6 @@
 import Course
 from functools import partial
+from itertools import product
 from TimeTablePackage import CourseDB
 
 import sys
@@ -8,12 +9,35 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 
+def time_table_maker(group):
+    possible_table = []#가능한 시간표를 담아서 나중에 반환
+    all_combinations = list(product(*group))#가능한 모든 경우의 수를 뽑음
+    for i in all_combinations:#모든 경우에 수에 대해서
+        if magician(list(i)):#가능한 시간표인지 판단
+            possible_table.append(list(i))#가능한 시간표라면 추가
+    return possible_table#반환
+
+#후보 하나가 주어지면 이 후보로 시간표가 작성이 가능한지 판단
+def magician(time_group):
+    day = {'일':0, '월':1, '화':2, '수':3, '목':4, '금':5, '토':6}
+    compare_time = [[],[],[],[],[],[],[]]#리스트에 넣고 돌리려면 필요했음.
+    for i in range(len(time_group)):#주어진 수업의 갯수만큼
+        for j in range(len(time_group[i].time)):#한 수업이 가진 분할 수업의 갯수만큼
+            compare_time[day[time_group[i].time[j].day]].extend(list(range(time_group[i].time[j].startmin,time_group[i].time[j].endmin)))
+            #이 코드가 startmin과 endmin사이의 모든 분을 만들어서 각 요일 리스트에 추가
+    for i in range(len(compare_time)):#일-토까지
+        if len(compare_time[i]) != len(set(compare_time[i])):#겹치는 시간이 있는 지 비교
+            return False
+    return True
+
+
 # lecture_list = []
 # DB = CourseDB.CourseDB()
 # with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
 #     lecture_data = f.readlines()
 #     for i in range(len(lecture_data)):
 #         DB.add(Course.Course(lecture_data[i].strip().split("$")))
+
 lecture_list = []
 DB = CourseDB.CourseDB()
 with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
@@ -29,27 +53,21 @@ with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
         # print(f" '{course.time_info_raw_string}'",end=" ")
         # print()
 
+print(time_table_maker([[DB.course_list[0],DB.course_list[1]],[DB.course_list[2], DB.course_list[4],DB.course_list[5]],[DB.course_list[14],DB.course_list[15]]]))
 # 처음 모든 강의 목록을 볼 수 있는 창
 # -> 왼쪽에 버튼 3개 (강의목록 / 시간표 / 마법사)
 # -> 오른쪽에 강의 목록 보여주기
 # 검색 조건을 선택하면(condition_search), 이 조건에 맞는 강의들을 강의DB 객체에서 뽑아옴(searched_course), 그리고 여기서 장바구니에 넣을 강의들을 선택해서 뽑음(selected_course)
 
-# 시간표를 볼 수 있는 창 (버튼 클릭)
-# -> table로 열은 시간, 행은 요일로 구성해야할듯?
-# -> 마법사에서 "꼭"에 있는 애들로 알고리즘(애들이 할거임)을 통해 생성한 새로운 course 리스트가 있을건데 그걸 내가 추가만 하면 됨
-
+# 시간표를 볼 수 있는 창
 # 마법사로 들어가는 창 (버튼 클릭)
-# -> 왼쪽부터 순서대로 꼭 / 그냥 / 원하는 수강목록
-# -> 아마 table로 만들어야 될 것 같음..?
-# -> 수강목록에서 drag drop으로 꼭 / 그냥에 강의 넣기
-# -> 강의목록 창에서 뽑은 selected_course를 장바구니 table에 다 넣는다
-# -> drag & drop으로 "꼭", "들으면 좋음"에 옮긴다. 이 때 "꼭"과 "들으면 좋음"은 각각 그룹이 형성되어 있는데 이 그룹에 대해 course 리스트를 동적으로 생성해야함(그룹 생길 때마다 만들기)
 
 #UI파일 연결
 #단, UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다.
 form_class1 = uic.loadUiType("test.ui")[0]
 form_class2 = uic.loadUiType("magic.ui")[0]
 form_class3 = uic.loadUiType("table.ui")[0]
+form_class4 = uic.loadUiType("create.ui")[0]
 
 condition = ["","","","",""]    # 검색 조건
 searched_course = []            # 검색 조건에 부합하는 강의 리스트
@@ -232,8 +250,9 @@ class Magic(QMainWindow, form_class2):
         super().__init__()
         self.setupUi(self)
 
-        self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)
-        self.Button_Courses.clicked.connect(self.Button_CoursesFunction)
+        self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 확인
+        self.Button_Courses.clicked.connect(self.Button_CoursesFunction)    # 강의 검색 창
+        self.Button_Create.clicked.connect(self.Button_CreateFunction)      # 시간표 생성(마법사)
         self.group1Button.clicked.connect(self.g1buttonFunction)
         self.group2Button.clicked.connect(self.g2buttonFunction)
 
@@ -245,6 +264,9 @@ class Magic(QMainWindow, form_class2):
 
         self.buttonGroup2 = QGroupBox()
         self.group_layout2 = QHBoxLayout(self.buttonGroup2)
+
+        self.group1 = QGroupBox()
+        self.g_layout1 = QVBoxLayout(self.group1)
 
     #  장바구니 테이블 생성하는 메소드
     def setTable(self):
@@ -289,17 +311,37 @@ class Magic(QMainWindow, form_class2):
                 del selected_course[row]
                 self.Course_Basket.removeRow(row)
                 print(selected_course)
-
+                #
+                #
+                #
+                label = QLabel('그룹 번호 선택')
+                comboBox = QComboBox()
+                items = ['']
                 for i in range(len(Must_layout)):
-                    button = QPushButton(str(i+1))
-                    button.clicked.connect(partial(self.addCourse1, i, course))
-                    self.group_layout1.addWidget(button)
+                    items.append('그룹' + ' ' + str(i+1))
+                comboBox.addItems(items)
+                comboBox.model().sort(0, Qt.AscendingOrder)
+                comboBox.currentIndexChanged.connect(partial(self.comboBoxFunction1, course))
 
-                self.layout().addWidget(self.buttonGroup1)
-                self.buttonGroup1.adjustSize()
+                self.g_layout1.addWidget(label)
+                self.g_layout1.addWidget(comboBox)
+
+                self.layout().addWidget(self.group1)
+                self.group1.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                self.buttonGroup1.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
-                self.buttonGroup1.show()
+                self.group1.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
+                self.group1.show()
+
+                # for i in range(len(Must_layout)):
+                #     button = QPushButton(str(i+1))
+                #     button.clicked.connect(partial(self.addCourse1, i, course))
+                #     self.group_layout1.addWidget(button)
+                #
+                # self.layout().addWidget(self.buttonGroup1)
+                # self.buttonGroup1.adjustSize()
+                # c_button_pos = c_button.mapToGlobal(c_button.pos())
+                # self.buttonGroup1.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
+                # self.buttonGroup1.show()
 
     # 들으면 좋음 버튼 눌렀을 때
     def inGroupButton2(self):
@@ -326,19 +368,42 @@ class Magic(QMainWindow, form_class2):
                 self.buttonGroup2.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
                 self.buttonGroup2.show()
 
-    # 꼭 그룹의 그룹번호 선택하기
+    # 꼭 그룹의 그룹번호 선택하기 (체크박스 버전)
+    def comboBoxFunction1(self, course):
+        sender = self.sender()
+        words = sender.currentText().split()
+        for word in words:
+            if word.isdigit():
+                i = int(word) - 1
+                self.addCourse1(i, course)
+                break
+
     def addCourse1(self, i, course):
-        self.layout().removeWidget(self.buttonGroup1)
-        while self.group_layout1.count():
-            item = self.group_layout1.takeAt(0)
+        self.layout().removeWidget(self.group1)
+        while self.g_layout1.count():
+            item = self.g_layout1.takeAt(0)
             if item:
                 widget = item.widget()
                 if widget:
                     widget.deleteLater()
-        self.buttonGroup1.hide()
+        self.group1.hide()
         widget = Must_layout[i]
         Must_group[i].append(course)
         widget.createTable1(i)
+
+    # 꼭 그룹의 그룹번호 선택하기 (버튼 버전)
+    # def addCourse1(self, i, course):
+    #     self.layout().removeWidget(self.buttonGroup1)
+    #     while self.group_layout1.count():
+    #         item = self.group_layout1.takeAt(0)
+    #         if item:
+    #             widget = item.widget()
+    #             if widget:
+    #                 widget.deleteLater()
+    #     self.buttonGroup1.hide()
+    #     widget = Must_layout[i]
+    #     Must_group[i].append(course)
+    #     widget.createTable1(i)
 
     # 들으면 좋음 그룹의 그룹번호 선택하기
     def addCourse2(self, i, course):
@@ -364,6 +429,10 @@ class Magic(QMainWindow, form_class2):
         myWindow1.setTable()
         myWindow1.show()
         self.close()
+
+    # 시간표 만들기
+    def Button_CreateFunction(self):
+        myWindow4.show()
 
     # 꼭에서 그룹추가
     def g1buttonFunction(self):
@@ -399,6 +468,23 @@ class timeTable(QMainWindow, form_class3):
         myWindow1.setTable()
         myWindow1.show()
         self.close()
+
+# 시간표 후보 생성 창
+class Candidate(QMainWindow, form_class4):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.time_tables = []   # 얘로 시간표 구현하면 됨
+        self.pushButton.clicked.connect(self.buttonFunction)    # 실험용
+
+    def buttonFunction(self):
+        self.time_tables = time_table_maker(Must_group)
+        print('꼭 그룹 리스트 : ')
+        print(Must_group)
+        print('시간표 리스트 : ')
+        print(self.time_tables)
+
 
 # 꼭, 들으면 좋음에서 하나의 그룹을 테이블로 표현함
 class Table(QTableWidget):
@@ -501,14 +587,6 @@ class Table(QTableWidget):
 
         myWindow2.setTable()
 
-class Group(QGroupBox):
-    def __init__(self):
-        super().__init__()
-
-        self.group_layout = QVBoxLayout()
-        self.setLayout(self.group_layout)
-
-
 if __name__ == "__main__" :
     #QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
@@ -517,6 +595,7 @@ if __name__ == "__main__" :
     myWindow1 = courseSearch()
     myWindow2 = Magic()
     myWindow3 = timeTable()
+    myWindow4 = Candidate()
 
     #프로그램 화면을 보여주는 코드
     myWindow1.show()

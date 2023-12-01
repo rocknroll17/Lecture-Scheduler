@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1686</width>
+    <width>1691</width>
     <height>871</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
   <widget class="QPushButton" name="Button_Courses">
    <property name="geometry">
     <rect>
-     <x>1550</x>
+     <x>1450</x>
      <y>10</y>
      <width>91</width>
      <height>41</height>
@@ -42,7 +42,7 @@
   <widget class="QPushButton" name="Button_Schedule">
    <property name="geometry">
     <rect>
-     <x>1440</x>
+     <x>1340</x>
      <y>10</y>
      <width>91</width>
      <height>41</height>
@@ -223,7 +223,7 @@
   <widget class="QPushButton" name="group1Button">
    <property name="geometry">
     <rect>
-     <x>780</x>
+     <x>700</x>
      <y>570</y>
      <width>75</width>
      <height>23</height>
@@ -236,7 +236,7 @@
   <widget class="QPushButton" name="group2Button">
    <property name="geometry">
     <rect>
-     <x>1580</x>
+     <x>1500</x>
      <y>570</y>
      <width>75</width>
      <height>23</height>
@@ -244,6 +244,55 @@
    </property>
    <property name="text">
     <string>그룹 추가</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="group3Button">
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>570</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>그룹 삭제</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="group4Button">
+   <property name="geometry">
+    <rect>
+     <x>1580</x>
+     <y>570</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>그룹 삭제</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Button_Create">
+   <property name="geometry">
+    <rect>
+     <x>1560</x>
+     <y>10</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color : rgb(238, 238, 238)</string>
+   </property>
+   <property name="text">
+    <string>시간표 생성</string>
    </property>
   </widget>
  </widget>
