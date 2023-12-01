@@ -16,7 +16,7 @@ class Course:
         self.grade = line[3]  # 학년
         self.course = line[4]  # 과정
         self.category = line[5]  # 이수구분
-        self.courseId = line[6]  # 과목번호
+        self.course_id = line[6]  # 과목번호
         self.title = line[7]  # 과목명
         self.credit = line[8]  # 학점
         self.instructor = line[9]  # 강의자
