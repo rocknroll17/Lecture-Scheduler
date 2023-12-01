@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1685</width>
-    <height>1075</height>
+    <width>1691</width>
+    <height>871</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
   <widget class="QPushButton" name="Button_Courses">
    <property name="geometry">
     <rect>
-     <x>1550</x>
+     <x>1450</x>
      <y>10</y>
      <width>91</width>
      <height>41</height>
@@ -42,7 +42,7 @@
   <widget class="QPushButton" name="Button_Schedule">
    <property name="geometry">
     <rect>
-     <x>1440</x>
+     <x>1340</x>
      <y>10</y>
      <width>91</width>
      <height>41</height>
@@ -66,7 +66,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>780</y>
+     <y>600</y>
      <width>1631</width>
      <height>261</height>
     </rect>
@@ -74,7 +74,7 @@
    <property name="title">
     <string>장바구니</string>
    </property>
-   <widget class="QTableWidget" name="Table_Course">
+   <widget class="QTableWidget" name="Course_Basket">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -104,6 +104,11 @@
     <attribute name="horizontalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
+    <column>
+     <property name="text">
+      <string/>
+     </property>
+    </column>
     <column>
      <property name="text">
       <string/>
@@ -189,7 +194,7 @@
      <x>20</x>
      <y>60</y>
      <width>831</width>
-     <height>671</height>
+     <height>501</height>
     </rect>
    </property>
    <property name="acceptDrops">
@@ -208,7 +213,7 @@
      <x>870</x>
      <y>60</y>
      <width>781</width>
-     <height>671</height>
+     <height>501</height>
     </rect>
    </property>
    <property name="title">
@@ -218,8 +223,8 @@
   <widget class="QPushButton" name="group1Button">
    <property name="geometry">
     <rect>
-     <x>780</x>
-     <y>740</y>
+     <x>700</x>
+     <y>570</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -231,14 +236,63 @@
   <widget class="QPushButton" name="group2Button">
    <property name="geometry">
     <rect>
-     <x>1580</x>
-     <y>740</y>
+     <x>1500</x>
+     <y>570</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
     <string>그룹 추가</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="group3Button">
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>570</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>그룹 삭제</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="group4Button">
+   <property name="geometry">
+    <rect>
+     <x>1580</x>
+     <y>570</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>그룹 삭제</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Button_Create">
+   <property name="geometry">
+    <rect>
+     <x>1560</x>
+     <y>10</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color : rgb(238, 238, 238)</string>
+   </property>
+   <property name="text">
+    <string>시간표 생성</string>
    </property>
   </widget>
  </widget>
