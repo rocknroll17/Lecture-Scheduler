@@ -4,7 +4,6 @@ from Course import * # 나중에 지워 test
 class CourseDB():
     def __init__(self):
         self.course_list = []
-        self.search_option_MATCHALL = False
 
     def add(self, lecture):
         self.course_list.append(lecture)

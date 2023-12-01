@@ -110,16 +110,19 @@ class courseSearch(QMainWindow, form_class1) :
 
     # 조건 넣고 검색버튼 누르면 강의 검색 테이블 만들어짐
     def Button_SearchFunction(self):
+        global searched_course
         self.Table_Course.setRowCount(0)
         searched_course.clear()
 
+        '''
         for course in DB.course_list:
             if (not condition[1] or course.department == condition[1]) and \
                 (not condition[2] or course.title == condition[2]) and \
                 (not condition[3] or (condition[3] in [time.day for time in course.time])) and \
                 (not condition[4] or any(time.day == condition[3] and str(time.period) == condition[4] for time in course.time)):
                 searched_course.append(course)
-
+        '''
+        searched_course = DB.search(condition)
         self.createTable()
 
     # 강의 검색 테이블 생성
