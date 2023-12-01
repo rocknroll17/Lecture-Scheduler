@@ -161,7 +161,11 @@ class Course:
 
     def __str__(self, option=None):
         if option is None:
-            return f"{self.courseId} {self.title}"
+            time_string = ""
+            for t in self.time:
+                time_string += str(t)
+                time_string += " "
+            return f"'{self.title}'$'{self.college}'$'{self.department}${time_string.strip()}'"
         elif option == 'college':
             return self.college
         elif option == 'department':
