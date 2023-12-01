@@ -48,7 +48,9 @@ class CourseDB():
             period_to_min = (int(condition[4]) + 8) * 60
             for t in course.time:
                 if t.startmin <= period_to_min < t.endmin:
-                    return True
+                    if (not condition[3]) or (condition[3] and t.day == condition[3]):
+                        # 요일도 설정된 경우, 교시+요일 둘 다 겹쳐야 함
+                        return True
             return False
         
         # 대학 검색 (ex. 대학(전체), 소프트웨어대학)
