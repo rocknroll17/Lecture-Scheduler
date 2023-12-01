@@ -12,7 +12,7 @@ class Candidate:
     def remove(self, group):
         self.data.remove(group)
 
-class basket:
+class Basket:
     #장바구니
     def __init__(self):
         self.data = []
