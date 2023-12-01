@@ -21,11 +21,13 @@ with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
         course = Course.Course(lecture_data[i].strip().split("$"))
         DB.add(course)
         # # Timeblock 파싱 확인용
+        '''
         print(f"{course.title[:5]}", end=" ")
         for t in course.time:
             print(t, end=" ")
         print(f" '{course.time_info_raw_string}'",end=" ")
         print()
+        '''
 
 # 처음 모든 강의 목록을 볼 수 있는 창
 # -> 왼쪽에 버튼 3개 (강의목록 / 시간표 / 마법사)
