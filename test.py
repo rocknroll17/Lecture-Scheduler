@@ -10,11 +10,15 @@ with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
         course = Course(lecture_data[i].strip().split("$"))
         DB.add(course)
         # Timeblock 파싱 확인용
+        '''
         print(f"{course.title[:5]}", end=" ")
         for t in course.time:
             print(t, end=" ")
         print(f" '{course.time_info_raw_string}'",end=" ")
         print()
+        '''
+        # Course 객체 확인용
+        print(course)
         
 DB.sort('courseId')
 
