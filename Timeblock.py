@@ -7,7 +7,7 @@ class Timeblock:
     def __init__(self):
         self.day = ""  # 요일 "월" ~ "일"
         self.period = 0  # N교시
-        self.periods = [] # 몇교시인지 int list  ex) [4, 5, 6]
+        # self.periods = [] # 몇교시인지 int list  ex) [4, 5, 6] -> 안쓸 예정. 주석처리
         self.course_time = "00:00" # HH:MM -> H시간 MM분 강의
         self.start_time = "00:00" # 시작시간 HH:MM 형식으로
         self.end_time = "00:00" # 종료시간 HH:MM 형식으로
@@ -22,7 +22,7 @@ class Timeblock:
         self.end_time = end_time # 종료시간 HH:MM 
         self.startmin = Timeblock.time_to_int(start_time)
         self.endmin = Timeblock.time_to_int(end_time)
-        self.periods = periods 
+        #self.periods = periods -> 안쓸 예정. 주석처리
 
     def intersects_with(self, other):
         # 해당 timeblock과 other timeblock이 겹치는가? -> True False
