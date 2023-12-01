@@ -1,7 +1,7 @@
 import sys
 import Course
 import CourseDB
-
+from itertools import product
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
@@ -12,22 +12,38 @@ from PyQt5 import uic
 #     lecture_data = f.readlines()
 #     for i in range(len(lecture_data)):
 #         DB.add(Course.Course(lecture_data[i].strip().split("$")))
+
+def time_table_maker(group):
+    possible_table = []#가능한 시간표를 담아서 나중에 반환
+    all_combinations = list(product(*group))#가능한 모든 경우의 수를 뽑음
+    for i in all_combinations:#모든 경우에 수에 대해서
+        if magician(list(i)):#가능한 시간표인지 판단
+            possible_table.append(list(i))#가능한 시간표라면 추가
+    return possible_table#반환
+
+#후보 하나가 주어지면 이 후보로 시간표가 작성이 가능한지 판단
+def magician(time_group):
+    day = {'일':0, '월':1, '화':2, '수':3, '목':4, '금':5, '토':6}
+    compare_time = [[],[],[],[],[],[],[]]#리스트에 넣고 돌리려면 필요했음.
+    for i in range(len(time_group)):#주어진 수업의 갯수만큼
+        for j in range(len(time_group[i].time)):#한 수업이 가진 분할 수업의 갯수만큼
+            compare_time[day[time_group[i].time[j].day]].extend(list(range(time_group[i].time[j].startmin,time_group[i].time[j].endmin)))
+            #이 코드가 startmin과 endmin사이의 모든 분을 만들어서 각 요일 리스트에 추가
+    for i in range(len(compare_time)):#일-토까지
+        if len(compare_time[i]) != len(set(compare_time[i])):#겹치는 시간이 있는 지 비교
+            return False
+    return True
+
 lecture_list = []
 DB = CourseDB.CourseDB()
 with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
     lecture_data = f.readlines()
     for i in range(len(lecture_data)):
-    # for i in range(300):
         course = Course.Course(lecture_data[i].strip().split("$"))
         DB.add(course)
-        # # Timeblock 파싱 확인용
-        '''
-        print(f"{course.title[:5]}", end=" ")
-        for t in course.time:
-            print(t, end=" ")
-        print(f" '{course.time_info_raw_string}'",end=" ")
-        print()
-        '''
+
+print(time_table_maker([[DB.course_list[0],DB.course_list[1]],[DB.course_list[2], DB.course_list[4],DB.course_list[5]],[DB.course_list[14],DB.course_list[15]]]))
+#[[그룹1],[그룹2],[그룹4],[그룹5],[그룹6]]의 형식으로 매개변수 주면 됌
 
 # 처음 모든 강의 목록을 볼 수 있는 창
 # -> 왼쪽에 버튼 3개 (강의목록 / 시간표 / 마법사)
@@ -195,21 +211,22 @@ class Magic(QMainWindow, form_class2):
         self.Table_Course.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.Table_Course.setSelectionMode(QAbstractItemView.SingleSelection)
 
-    # def startDrag(self, dropActions):
-    #     selected_row = self.Table_Course.currentRow()
-    #     print(selected_row)
-    #     if selected_row != -1:
-    #         selected_course_object = selected_course[selected_row]
-    # 
-    #         mime_data = QMimeData()
-    #         serialized_data = f"{selected_course_object.title},{selected_course_object.instructor},{selected_course_object.time_info_raw_string}"
-    #         mime_data.setText(serialized_data)
-    # 
-    #         print(serialized_data)
-    # 
-    #         drag = QDrag(self)
-    #         drag.setMimeData(mime_data)
-    #         drag.exec_(dropActions)
+    def startDrag(self, dropActions):
+        selected_row = self.Table_Course.currentRow()
+        print(selected_row)
+        if selected_row != -1:
+            selected_course_object = selected_course[selected_row]
+     
+            mime_data = QMimeData()
+            serialized_data = f"{selected_course_object.title},{selected_course_object.instructor},{selected_course_object.time_info_raw_string}"
+            mime_data.setText(serialized_data)
+     
+            print(serialized_data)
+            super().__init__()
+            drag = QDrag(self)
+            drag.setMimeData(mime_data)
+            drag.exec_(dropActions)
+
 
     def buttonClicked(self):
         button = self.sender()
