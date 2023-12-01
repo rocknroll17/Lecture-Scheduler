@@ -20,7 +20,7 @@ class CourseDB():
         #   condition[1] : 학과명
         #   condition[2] : 이게 강의명인듯
         #   condition[3] : 요일 "일" ~ "월"
-        #   condition[4] : 교시? -> 1교시면 1교시에 시작하는 것만 검색해야 되나
+        #   condition[4] : 교시
         
         # search 방식
         # 일단 모든 강의를 담아두고,
@@ -68,7 +68,7 @@ class CourseDB():
         if condition[4]:
             result = list(filter(checkPeriod, result))
 
-        # 강의명 (ex. ACT, AC)
+        # 강의명 (ex. ACT, AC) -> 연산 젤 많을 거 같아서 뒤로 뺐음
         if condition[2]:
             result = list(filter(checkTitle, result))
 
