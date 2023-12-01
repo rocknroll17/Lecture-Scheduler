@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1212</width>
-    <height>804</height>
+    <width>1686</width>
+    <height>871</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
   <widget class="QPushButton" name="Button_Courses">
    <property name="geometry">
     <rect>
-     <x>1100</x>
+     <x>1550</x>
      <y>10</y>
      <width>91</width>
      <height>41</height>
@@ -42,7 +42,7 @@
   <widget class="QPushButton" name="Button_Schedule">
    <property name="geometry">
     <rect>
-     <x>1000</x>
+     <x>1440</x>
      <y>10</y>
      <width>91</width>
      <height>41</height>
@@ -66,20 +66,20 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>510</y>
-     <width>1171</width>
+     <y>600</y>
+     <width>1631</width>
      <height>261</height>
     </rect>
    </property>
    <property name="title">
     <string>장바구니</string>
    </property>
-   <widget class="QTableWidget" name="Table_Course">
+   <widget class="QTableWidget" name="Course_Basket">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>1151</width>
+      <width>1611</width>
       <height>221</height>
      </rect>
     </property>
@@ -87,7 +87,7 @@
      <bool>true</bool>
     </property>
     <property name="dragDropMode">
-     <enum>QAbstractItemView::DragOnly</enum>
+     <enum>QAbstractItemView::DragDrop</enum>
     </property>
     <property name="defaultDropAction">
      <enum>Qt::MoveAction</enum>
@@ -104,6 +104,11 @@
     <attribute name="horizontalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
+    <column>
+     <property name="text">
+      <string/>
+     </property>
+    </column>
     <column>
      <property name="text">
       <string/>
@@ -188,8 +193,8 @@
     <rect>
      <x>20</x>
      <y>60</y>
-     <width>561</width>
-     <height>421</height>
+     <width>831</width>
+     <height>501</height>
     </rect>
    </property>
    <property name="acceptDrops">
@@ -205,10 +210,10 @@
   <widget class="QGroupBox" name="groupPrefer">
    <property name="geometry">
     <rect>
-     <x>630</x>
+     <x>870</x>
      <y>60</y>
-     <width>561</width>
-     <height>421</height>
+     <width>781</width>
+     <height>501</height>
     </rect>
    </property>
    <property name="title">
@@ -218,8 +223,8 @@
   <widget class="QPushButton" name="group1Button">
    <property name="geometry">
     <rect>
-     <x>510</x>
-     <y>480</y>
+     <x>780</x>
+     <y>570</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -231,8 +236,8 @@
   <widget class="QPushButton" name="group2Button">
    <property name="geometry">
     <rect>
-     <x>1120</x>
-     <y>480</y>
+     <x>1580</x>
+     <y>570</y>
      <width>75</width>
      <height>23</height>
     </rect>
