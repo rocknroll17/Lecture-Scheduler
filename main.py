@@ -87,8 +87,8 @@ selected_course = []            # 장바구니에 담을 강의 리스트
 #Must_group = []                 # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Must_group = Candidate()
 Must_layout = []                # 꼭 그룹에 추가되는 테이블 모음
-Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
-#Perfer_group = Candidate()
+#Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
+Prefer_group = Candidate()
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
 
 # 강의 검색 창
@@ -435,7 +435,8 @@ class Magic(QMainWindow, form_class2):
                     widget.deleteLater()
         self.buttonGroup2.hide()
         widget = Prefer_layout[i]
-        Prefer_group[i].append(course)
+        #Prefer_group[i].append(course)
+        Prefer_group.add_course(i, course)
         widget.createTable2(i)
 
     # 시간표 버튼 클릭
@@ -466,7 +467,8 @@ class Magic(QMainWindow, form_class2):
     def g2buttonFunction(self):
         new_group = Table()
         course_group = []
-        Prefer_group.append(course_group)
+        #Prefer_group.append(course_group)
+        Prefer_group.add(course_group)
         Prefer_layout.append(new_group)
         self.groupPrefer.layout().addWidget(new_group)
 
@@ -556,9 +558,12 @@ class Table(QTableWidget):
 
     # 들으면 좋음에서 그룹 생성
     def createTable2(self, index):
-        self.setRowCount(len(Prefer_group[index]))
+        #self.setRowCount(len(Prefer_group[index]))
+        self.setRowCount(len(Prefer_group.get_group(index)))
 
-        for i in range(len(Prefer_group[index])):
+
+        #for i in range(len(Prefer_group[index])):
+        for i in range(len(Prefer_group.get_group(index))):
             button = QPushButton("X")
             button.setStyleSheet("background-color: rgb(242, 255, 255);")
             button.setSizePolicy(
@@ -570,13 +575,17 @@ class Table(QTableWidget):
             for j in range(1, 5):
                 item_text = ""
                 if j == 1:
-                    item_text = Prefer_group[index][i].total[7]
+                    #item_text = Prefer_group[index][i].total[7]
+                    item_text = Prefer_group.get_group(index)[i].total[7]
                 elif j == 2:
-                    item_text = Prefer_group[index][i].total[6]
+                    #item_text = Prefer_group[index][i].total[6]
+                    item_text = Prefer_group.get_group(index)[i].total[6]
                 elif j == 3:
-                    item_text = Prefer_group[index][i].total[9]
+                    #item_text = Prefer_group[index][i].total[9]
+                    item_text = Prefer_group.get_group(index)[i].total[9]
                 elif j == 4:
-                    item_text = Prefer_group[index][i].total[11]
+                    #item_text = Prefer_group[index][i].total[11]
+                    item_text = Prefer_group.get_group(index)[i].total[11]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
@@ -610,8 +619,9 @@ class Table(QTableWidget):
             idx = Prefer_layout.index(self)
 
             if row != -1:
-                selected_course.append(Prefer_group[idx][row])
-                del Prefer_group[idx][row]
+                #selected_course.append(Prefer_group[idx][row])
+                selected_course.append(Prefer_group.get_group(idx)[row])
+                del Prefer_group.get_group(idx)[row]
                 self.removeRow(row)
 
         myWindow2.setTable()
