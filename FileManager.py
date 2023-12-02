@@ -30,24 +30,33 @@ class FileManager:
         self.schedules = None
         self.filename = "scheduleManagerSaveFile.pickle"
 
-    def save(self):
-        data_list = [self.basket, self.must_group, self.prefer_group, self.schedules]
+    def save(self, basket=None, must_group=None, prefer_group=None, schedules=None):
+        data_list = [basket, must_group, prefer_group, schedules]
         with open(self.filename, "wb") as writef:
             pickle.dump(data_list, writef)
     
     def load(self):
-        with open(self.filename, "rb") as readf:
-            loaded_data = pickle.load(readf)
-        self.basket = loaded_data[0]
-        self.must_group = loaded_data[1]
-        self.prefer_group = loaded_data[2]
-        self.schedules = loaded_data[3]
+        try:
+            with open(self.filename, "rb") as readf:
+                loaded_data = pickle.load(readf)
+            self.basket = loaded_data[0]
+            self.must_group = loaded_data[1]
+            self.prefer_group = loaded_data[2]
+            self.schedules = loaded_data[3]
+            return True
+        except:
+            self.basket = None
+            self.must_group = None
+            self.prefer_group = None
+            self.schedules = None
+            return False
     
     def __str__(self):
         return str(self.basket) + str(self.must_group) + str(self.prefer_group) + str(self.schedules)
     
 if __name__ == "__main__":
     f = FileManager()
+    f.filename = "saveTestFile"
     f.prefer_group = "Prefer Group"
     f.basket = [[1], [1,2], [1,2,3]]
     f.must_group = FileManager()

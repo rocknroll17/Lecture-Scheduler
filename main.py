@@ -2,6 +2,7 @@ import Course
 from functools import partial
 from itertools import product
 import CourseDB
+import FileManager
 
 import sys
 
@@ -79,6 +80,7 @@ form_class2 = uic.loadUiType("magic.ui")[0]
 form_class3 = uic.loadUiType("table.ui")[0]
 form_class4 = uic.loadUiType("create.ui")[0]
 
+# 전역변수
 condition = ["","","","",""]    # 검색 조건
 searched_course = []            # 검색 조건에 부합하는 강의 리스트
 selected_course = []            # 장바구니에 담을 강의 리스트
@@ -87,8 +89,34 @@ Must_layout = []                # 꼭 그룹에 추가되는 테이블 모음
 Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
 
+fm = FileManager.FileManager()
+is_loaded = fm.load()
+if is_loaded:
+    if fm.basket: # 나중에 list를 Basket으로 바꿔야댐
+        selected_course = fm.basket
+    if fm.must_group:
+        Must_group = fm.must_group
+    if fm.prefer_group:
+        Prefer_group = fm.prefer_group
+
+
+# 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
+class SaveOnClose:
+    def closeEvent(self, event):
+        fm.save(selected_course, Must_group, Prefer_group)
+        '''
+        # 종료 창 출력
+        quit_msg = "종료하시겠습니까?"
+        reply = QMessageBox.question(self, 'Message', quit_msg, QMessageBox.Yes, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+        '''
+
 # 강의 검색 창
-class courseSearch(QMainWindow, form_class1) :
+class courseSearch(QMainWindow, form_class1, SaveOnClose) :
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -117,6 +145,7 @@ class courseSearch(QMainWindow, form_class1) :
 
         self.Table_Course.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setTable() # 처음 생성할 때에도 장바구니 로드
 
     # 조건 넣고 검색버튼 누르면 강의 검색 테이블 만들어짐
     def Button_SearchFunction(self):
@@ -258,7 +287,7 @@ class courseSearch(QMainWindow, form_class1) :
         condition[2] = self.titleInput.text()
 
 # 마법사
-class Magic(QMainWindow, form_class2):
+class Magic(QMainWindow, form_class2, SaveOnClose):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -464,7 +493,7 @@ class Magic(QMainWindow, form_class2):
         self.groupPrefer.layout().addWidget(new_group)
 
 # 시간표
-class timeTable(QMainWindow, form_class3):
+class timeTable(QMainWindow, form_class3, SaveOnClose):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -483,7 +512,7 @@ class timeTable(QMainWindow, form_class3):
         self.close()
 
 # 시간표 후보 생성 창
-class Candidate(QMainWindow, form_class4):
+class Candidate(QMainWindow, form_class4, SaveOnClose):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
