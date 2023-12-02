@@ -1,5 +1,3 @@
-# 만들지 말지 생각만 하는중
-from collections import defaultdict
 import pickle
 
 class FileManager:
@@ -12,7 +10,7 @@ class FileManager:
     # 사용법:
     # (1) 저장하기
     #   FileManager를 선언한다.
-    #   - ex) FileManager fm
+    #   - ex) fm = FileManager()
     #   FileManager에 파일을 넣는다.
     #   - ex) fm.must_group = Must_group
     #   save 호출
@@ -30,20 +28,30 @@ class FileManager:
         self.must_group = None
         self.prefer_group = None
         self.schedules = None
-        self.data_list = [self.basket, self.must_group, self.prefer_group, self.schedules]
         self.filename = "scheduleManagerSaveFile.pickle"
 
     def save(self):
-        with open("scheduleManagerSaveFile.pickle", "wb") as writef:
-            pickle.dump(writef, self.data_list)
+        data_list = [self.basket, self.must_group, self.prefer_group, self.schedules]
+        with open(self.filename, "wb") as writef:
+            pickle.dump(data_list, writef)
     
     def load(self):
-        with open("scheduleManagerSaveFile.pickle", "rb") as readf:
+        with open(self.filename, "rb") as readf:
             loaded_data = pickle.load(readf)
         self.basket = loaded_data[0]
         self.must_group = loaded_data[1]
         self.prefer_group = loaded_data[2]
         self.schedules = loaded_data[3]
     
-
-            
+    def __str__(self):
+        return str(self.basket) + str(self.must_group) + str(self.prefer_group) + str(self.schedules)
+    
+if __name__ == "__main__":
+    f = FileManager()
+    f.prefer_group = "Prefer Group"
+    f.basket = [[1], [1,2], [1,2,3]]
+    f.must_group = FileManager()
+    f.schedules = {"dict" : "TEST"}
+    f.save()
+    f.load()
+    print(f)
