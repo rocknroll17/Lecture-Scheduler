@@ -9,6 +9,16 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 
+from os import environ       # environ 를 import 해야 아래 suppress_qt_warnings 가 정상 동작하니다
+
+def suppress_qt_warnings():   # 해상도별 글자크기 강제 고정하는 함수
+    environ["QT_DEVICE_PIXEL_RATIO"] = "0"
+    environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    environ["QT_SCREEN_SCALE_FACTORS"] = "1"
+    environ["QT_SCALE_FACTOR"] = "1"
+
+
+
 def time_table_maker(group):
     possible_table = []#가능한 시간표를 담아서 나중에 반환
     all_combinations = list(product(*group))#가능한 모든 경우의 수를 뽑음
@@ -591,6 +601,7 @@ class Table(QTableWidget):
         myWindow2.setTable()
 
 if __name__ == "__main__" :
+    suppress_qt_warnings()
     #QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
 
