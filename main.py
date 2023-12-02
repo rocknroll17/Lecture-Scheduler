@@ -2,6 +2,8 @@ import Course
 from functools import partial
 from itertools import product
 import CourseDB
+from Basket import Candidate
+from Basket import Basket
 
 import sys
 
@@ -9,9 +11,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 
-from os import environ       # environ 를 import 해야 아래 suppress_qt_warnings 가 정상 동작하니다
+from os import environ # 환경변수 조절 용
 
-def suppress_qt_warnings():   # 해상도별 글자크기 강제 고정하는 함수
+def suppress_qt_warnings():   # 해상도 별 UI크기 강제 고정
     environ["QT_DEVICE_PIXEL_RATIO"] = "0"
     environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
@@ -82,9 +84,11 @@ form_class4 = uic.loadUiType("create.ui")[0]
 condition = ["","","","",""]    # 검색 조건
 searched_course = []            # 검색 조건에 부합하는 강의 리스트
 selected_course = []            # 장바구니에 담을 강의 리스트
-Must_group = []                 # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
+#Must_group = []                 # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
+Must_group = Candidate()
 Must_layout = []                # 꼭 그룹에 추가되는 테이블 모음
 Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
+#Perfer_group = Candidate()
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
 
 # 강의 검색 창
@@ -401,7 +405,8 @@ class Magic(QMainWindow, form_class2):
                     widget.deleteLater()
         self.group1.hide()
         widget = Must_layout[i]
-        Must_group[i].append(course)
+        #Must_group[i].append(course)
+        Must_group.add_course(i, course)
         widget.createTable1(i)
 
     # 꼭 그룹의 그룹번호 선택하기 (버튼 버전)
@@ -416,6 +421,7 @@ class Magic(QMainWindow, form_class2):
     #     self.buttonGroup1.hide()
     #     widget = Must_layout[i]
     #     Must_group[i].append(course)
+    #     #  Must_group.add_course(i, course)
     #     widget.createTable1(i)
 
     # 들으면 좋음 그룹의 그룹번호 선택하기
@@ -451,7 +457,8 @@ class Magic(QMainWindow, form_class2):
     def g1buttonFunction(self):
         new_group = Table()
         course_group = []
-        Must_group.append(course_group)
+        #Must_group.append(course_group)
+        Must_group.add(course_group)
         Must_layout.append(new_group)
         self.groupMust.layout().addWidget(new_group)
 
@@ -492,7 +499,8 @@ class Candidate(QMainWindow, form_class4):
         self.pushButton.clicked.connect(self.buttonFunction)    # 실험용
 
     def buttonFunction(self):
-        self.time_tables = time_table_maker(Must_group)
+        # self.time_tables = time_table_maker(Must_group)
+        self.time_tables = time_table_maker(Must_group.get_groups())
         print('꼭 그룹 리스트 : ')
         print(Must_group)
         print('시간표 리스트 : ')
@@ -512,9 +520,11 @@ class Table(QTableWidget):
 
     # 꼭에서 그룹 생성
     def createTable1(self, index):
-        self.setRowCount(len(Must_group[index]))
+        #self.setRowCount(len(Must_group[index]))
+        self.setRowCount(len(Must_group.get_groups()[index]))
 
-        for i in range(len(Must_group[index])):
+        #for i in range(len(Must_group[index])):
+        for i in range(len(Must_group.get_groups()[index])):
             button = QPushButton("X")
             button.setStyleSheet("background-color: rgb(242, 255, 255);")
             button.setSizePolicy(
@@ -526,13 +536,17 @@ class Table(QTableWidget):
             for j in range(1, 5):
                 item_text = ""
                 if j == 1:
-                    item_text = Must_group[index][i].total[7]
+                    #item_text = Must_group[index][i].total[7]
+                    item_text = Must_group.get_group(index)[i].total[7]
                 elif j == 2:
-                    item_text = Must_group[index][i].total[6]
+                    #item_text = Must_group[index][i].total[6]
+                    item_text = Must_group.get_group(index)[i].total[6]
                 elif j == 3:
-                    item_text = Must_group[index][i].total[9]
+                    #item_text = Must_group[index][i].total[9]
+                    item_text = Must_group.get_group(index)[i].total[9]
                 elif j == 4:
-                    item_text = Must_group[index][i].total[11]
+                    #item_text = Must_group[index][i].total[11]
+                    item_text = Must_group.get_group(index)[i].total[11]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
@@ -579,8 +593,10 @@ class Table(QTableWidget):
             idx = Must_layout.index(self)
 
             if row != -1:
-                selected_course.append(Must_group[idx][row])
-                del Must_group[idx][row]
+                #selected_course.append(Must_group[idx][row])
+                selected_course.append(Must_group.get_group(idx)[row])
+                #del Must_group[idx][row]
+                del Must_group.get_group(idx)[row]
                 self.removeRow(row)
 
         myWindow2.setTable()
