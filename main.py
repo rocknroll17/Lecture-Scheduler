@@ -531,6 +531,8 @@ class Schedule_table(QTableWidget):
                 for row in range(start_row, end_row - 1):
                     if time_block.course_time == '01:00':
                         self.setSpan(row, day_column, 2, 1)
+                    elif time_block.course_time == '01:30':
+                        self.setSpan(row, day_column, 3, 1)
                     elif time_block.course_time == '02:00':
                         self.setSpan(row, day_column, 4, 1)
 
