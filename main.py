@@ -18,18 +18,34 @@ def suppress_qt_warnings():   # 해상도별 글자크기 강제 고정하는 �
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     environ["QT_SCALE_FACTOR"] = "1"
 
-def time_table_maker(group):
-    possible_table = []#가능한 시간표를 담아서 나중에 반환
-    all_combinations = list(product(*group))#가능한 모든 경우의 수를 뽑음
-    for i in all_combinations:#모든 경우에 수에 대해서
-        if magician(list(i)):#가능한 시간표인지 판단
-            possible_table.append(list(i))#가능한 시간표라면 추가
+def time_table_maker(must_group, prefer_group,credit_limit):
+    must_group = [i for i in must_group if i != []]
+    prefer_group = [i for i in prefer_group if i != []]
+    possible_table = []#꼭에 관한 가능한 시간표를 담아서 나중에 반환
+    prefer_combinations = []#들으면 좋음에 관한 모든 경우의 수를 찾아서 반환
+    must_combinations = list(product(*must_group))#가능한 모든 경우의 수를 뽑음
+
+    for combination in product(*prefer_group):
+        for mask in product(range(2), repeat=len(prefer_group)):
+            result = [item if flag else None for item, flag in zip(combination, mask)]
+            prefer_combinations.append(result)
+    prefer_combinations = list(set(tuple(filter(lambda x: x is not None, combination)) for combination in prefer_combinations))
+
+    for i in must_combinations:#모든 경우에 수에 대해서
+        for j in prefer_combinations:
+            if magician(list(i)+list(j), credit_limit):#가능한 시간표인지 판단
+                possible_table.append(list(i)+list(j))#가능한 시간표라면 추가
     return possible_table#반환
 
 #후보 하나가 주어지면 이 후보로 시간표가 작성이 가능한지 판단
-def magician(time_group):
+def magician(time_group, credit_limit):
     day = {'일':0, '월':1, '화':2, '수':3, '목':4, '금':5, '토':6}
     compare_time = [[],[],[],[],[],[],[]]#리스트에 넣고 돌리려면 필요했음.
+    credit_sum = 0
+    for i in range(len(time_group)):
+        credit_sum += float(time_group[i].credit.split("-")[0])
+    if credit_sum > credit_limit:
+        return False
     for i in range(len(time_group)):#주어진 수업의 갯수만큼
         for j in range(len(time_group[i].time)):#한 수업이 가진 분할 수업의 갯수만큼
             compare_time[day[time_group[i].time[j].day]].extend(list(range(time_group[i].time[j].startmin,time_group[i].time[j].endmin)))
@@ -589,9 +605,11 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
 
     def buttonFunction(self):
 
-        self.time_tables = time_table_maker(Must_group)  # 시간표 후보들
+        self.time_tables = time_table_maker(Must_group, Prefer_group, 20)  # 시간표 후보들 임의로 학점 제한 20인데 이거 나중에 설정할 수 있게 바꿔야 함.
         print('꼭 그룹 리스트 : ')
         print(Must_group)
+        print('들으면 좋음 그룹 리스트 : ')
+        print(Prefer_group)
         print('시간표 리스트 : ')
         print(self.time_tables)
 
