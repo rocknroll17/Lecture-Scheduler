@@ -70,12 +70,6 @@ with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
     # for i in range(300):
         course = Course.Course(lecture_data[i].strip().split("$"))
         DB.add(course)
-        # Timeblock 파싱 확인용
-        # print(f"{course.title[:5]}", end=" ")
-        # for t in course.time:
-        #     print(t, end=" ")
-        # print(f" '{course.time_info_raw_string}'",end=" ")
-        # print()
 
 
 # UI파일 연결
@@ -84,7 +78,7 @@ form_class2 = uic.loadUiType("magic.ui")[0]
 form_class3 = uic.loadUiType("table.ui")[0]
 form_class4 = uic.loadUiType("create.ui")[0]
 
-# 전역변수
+####### 전역변수 ########
 condition = ["","","","",""]    # 검색 조건
 searched_course = []            # 검색 조건에 부합하는 강의 리스트
 selected_course = []            # 장바구니에 담을 강의 리스트
@@ -94,6 +88,9 @@ Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[]
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []          # 선택한 최종 시간표
 
+TABLE_ROW_SIZE = 50 # 테이블 행 크기
+
+# 파일 로드
 fm = FileManager.FileManager()
 is_loaded = fm.load()
 if is_loaded:
@@ -103,6 +100,9 @@ if is_loaded:
         Must_group = fm.must_group
     if fm.prefer_group:
         Prefer_group = fm.prefer_group
+
+
+
 
 # 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
 class SaveOnClose:
@@ -179,8 +179,9 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.Table_Course.setItem(i, j, item)
+            self.Table_Course.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.Table_Course.resizeRowsToContents()
+        #self.Table_Course.resizeRowsToContents()
         self.Table_Course.resizeColumnsToContents()
         self.Table_Course.setSelectionMode(QAbstractItemView.NoSelection)
 
@@ -192,7 +193,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
             button = QPushButton("삭제")
             button.setStyleSheet("background-color: rgb(242, 255, 255);")
             button.setSizePolicy(
-                QSizePolicy.Expanding, QSizePolicy.Expanding
+                QSizePolicy.Fixed, QSizePolicy.Fixed
             )
             button.clicked.connect(self.outBasketButton)
             self.Course_Basket.setCellWidget(i, 0, button)
@@ -203,7 +204,8 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
                 item.setTextAlignment(Qt.AlignCenter)
                 self.Course_Basket.setItem(i, j, item)
 
-        self.Course_Basket.resizeRowsToContents()
+            self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE) # 테이블 행 높이
+        #self.Course_Basket.resizeRowsToContents()
         self.Course_Basket.resizeColumnsToContents()
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
 
@@ -229,8 +231,8 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
                     item = QTableWidgetItem(item_text)
                     item.setTextAlignment(Qt.AlignCenter)
                     self.Course_Basket.setItem(i, j, item)
-
-            self.Course_Basket.resizeRowsToContents()
+                self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
+            #self.Course_Basket.resizeRowsToContents()
             self.Course_Basket.resizeColumnsToContents()
             self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
         else:
@@ -325,8 +327,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.Course_Basket.setItem(i, j, item)
-
-        self.Course_Basket.resizeRowsToContents()
+            self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
+        #self.Course_Basket.resizeRowsToContents()
         self.Course_Basket.resizeColumnsToContents()
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
