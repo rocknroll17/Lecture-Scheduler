@@ -18,7 +18,7 @@ def suppress_qt_warnings():   # 해상도별 글자크기 강제 고정하는 �
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     environ["QT_SCALE_FACTOR"] = "1"
 
-def time_table_maker(must_group, prefer_group,credit_limit):
+def time_table_maker(must_group, prefer_group, credit_limit):
     must_group = [i for i in must_group if i != []]
     prefer_group = [i for i in prefer_group if i != []]
     possible_table = []#꼭에 관한 가능한 시간표를 담아서 나중에 반환
@@ -77,16 +77,8 @@ with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
         # print(f" '{course.time_info_raw_string}'",end=" ")
         # print()
 
-# 처음 모든 강의 목록을 볼 수 있는 창
-# -> 왼쪽에 버튼 3개 (강의목록 / 시간표 / 마법사)
-# -> 오른쪽에 강의 목록 보여주기
-# 검색 조건을 선택하면(condition_search), 이 조건에 맞는 강의들을 강의DB 객체에서 뽑아옴(searched_course), 그리고 여기서 장바구니에 넣을 강의들을 선택해서 뽑음(selected_course)
 
-# 시간표를 볼 수 있는 창
-# 마법사로 들어가는 창 (버튼 클릭)
-
-#UI파일 연결
-#단, UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다.
+# UI파일 연결
 form_class1 = uic.loadUiType("test.ui")[0]
 form_class2 = uic.loadUiType("magic.ui")[0]
 form_class3 = uic.loadUiType("table.ui")[0]
@@ -100,6 +92,7 @@ Must_group = []                 # 꼭 그룹 (한 그룹 = 강의[], 그룹들�
 Must_layout = []                # 꼭 그룹에 추가되는 테이블 모음
 Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
+selected_schedule = []          # 선택한 최종 시간표
 
 fm = FileManager.FileManager()
 is_loaded = fm.load()
@@ -132,13 +125,15 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
         super().__init__()
         self.setupUi(self)
 
-        self.Button_Search.clicked.connect(self.Button_SearchFunction)  # 강의 검색 버튼
-        self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 시간표 창으로 이동하는 버튼
+        # 버튼
+        self.Button_Search.clicked.connect(self.Button_SearchFunction)  # 강의 검색하는 버튼
+        self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 창으로 이동하는 버튼
         self.Button_Magic.clicked.connect(self.Button_MagicFunction)  # 마법사 창으로 이동하는 버튼
 
-        self.comboBoxCollege.addItems([""] + list(set(course.college for course in DB.course_list)))  # 대학 검색
-        self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
-        self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
+        # 조건 검색
+        # self.comboBoxCollege.addItems([""] + list(set(course.college for course in DB.course_list)))  # 대학 검색
+        # self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
+        # self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
 
         self.comboBoxDepartment.addItems(list(set(course.department for course in DB.course_list))) # 학과 검색
         self.comboBoxDepartment.model().sort(0, Qt.AscendingOrder)
@@ -158,20 +153,11 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setTable() # 처음 생성할 때에도 장바구니 로드
 
-    # 조건 넣고 검색버튼 누르면 강의 검색 테이블 만들어짐
+    # 조건 넣고 검색 버튼 누르면 강의 검색 테이블 만들어짐
     def Button_SearchFunction(self):
         global searched_course
         self.Table_Course.setRowCount(0)
         searched_course.clear()
-
-        '''
-        for course in DB.course_list:
-            if (not condition[1] or course.department == condition[1]) and \
-                (not condition[2] or course.title == condition[2]) and \
-                (not condition[3] or (condition[3] in [time.day for time in course.time])) and \
-                (not condition[4] or any(time.day == condition[3] and str(time.period) == condition[4] for time in course.time)):
-                searched_course.append(course)
-        '''
         searched_course = DB.search(condition)
         self.createTable()
 
@@ -198,7 +184,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
         self.Table_Course.resizeColumnsToContents()
         self.Table_Course.setSelectionMode(QAbstractItemView.NoSelection)
 
-    # 장바구니 테이블 최신화
+    # 장바구니 테이블 생성(최신화)
     def setTable(self):
         self.Course_Basket.setRowCount(len(selected_course))
 
@@ -221,7 +207,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
         self.Course_Basket.resizeColumnsToContents()
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
 
-    # 강의 검색 창에서 장바구니 버튼 누르면 장바구니로 이동
+    # 강의 검색 창에서 장바구니 버튼 누르면 해당 강의가 장바구니로 이동
     def inBasketButton(self, row):
         if searched_course[row] not in selected_course:
             selected_course.append(searched_course[row])
@@ -250,9 +236,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
         else:
             print("이미 장바구니에 담았습니다")
 
-        print(selected_course)
-
-    # 장바구니에서 삭제 버튼 누르면 장바구니에서 강의 삭제
+    # 장바구니에서 삭제 버튼 누르면 해당 강의를 장바구니에서 삭제
     def outBasketButton(self):
         button = self.sender()
         if button:
@@ -264,24 +248,26 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
                 self.Course_Basket.removeRow(row)
                 print(selected_course)
 
-    # 시간표 버튼 눌렀을 때
+    # 시간표 버튼 눌렀을 때 (최종 시간표 보는 창으로 이동)
     def Button_ScheduleFunction(self):
+        myWindow3.create_Table()
         myWindow3.show()
         self.close()
 
-    # 마법사 버튼 눌렀을 때
+    # 마법사 버튼 눌렀을 때 (마법사 창으로 이동)
     def Button_MagicFunction(self):
         myWindow2.setTable()
         myWindow2.show()
         self.close()
 
+    # 조건 검색에 활용하는 메소드
     def comboBoxFunction(self):
         sender = self.sender()
 
-        if sender == self.comboBoxCollege:
-            selected_data = self.comboBoxCollege.currentText()
-            condition[0] = selected_data
-        elif sender == self.comboBoxDepartment:
+        # if sender == self.comboBoxCollege:
+        #     selected_data = self.comboBoxCollege.currentText()
+        #     condition[0] = selected_data
+        if sender == self.comboBoxDepartment:
             selected_data = self.comboBoxDepartment.currentText()
             condition[1] = selected_data
         elif sender == self.comboBoxDay:
@@ -290,8 +276,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
         elif sender == self.comboBoxPeriod:
             selected_data = self.comboBoxPeriod.currentText()
             condition[4] = selected_data
-
-        print(condition)
 
     def printFunction(self):
         condition[2] = self.titleInput.text()
@@ -302,20 +286,21 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         super().__init__()
         self.setupUi(self)
 
-        self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 확인
-        self.Button_Courses.clicked.connect(self.Button_CoursesFunction)    # 강의 검색 창
-        self.Button_Create.clicked.connect(self.Button_CreateFunction)      # 시간표 생성(마법사)
-        self.group1Button.clicked.connect(self.g1buttonFunction)
-        self.group2Button.clicked.connect(self.g2buttonFunction)
+        self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 창으로 이동하는 버튼
+        self.Button_Courses.clicked.connect(self.Button_CoursesFunction)    # 강의 검색 창으로 이동하는 버튼
+        self.Button_Create.clicked.connect(self.Button_CreateFunction)      # 시간표 생성 창으로 이동하는 버튼
+        self.Must_Add.clicked.connect(self.must_AddFunction)                # 꼭 그룹에서 그룹 추가 버튼
+        self.Must_Remove.clicked.connect(self.must_RemoveFunction)          # 꼭 그룹에서 그룹 삭제 버튼
+        self.Prefer_Add.clicked.connect(self.prefer_AddFunction)            # 들으면 좋음 그룹에서 그룹 추가 버튼
+        self.Prefer_Remove.clicked.connect(self.prefer_RemoveFunction)      # 들으면 좋음 그룹에서 그룹 삭제 버튼
 
         self.groupMust.setLayout(QVBoxLayout(self.groupMust))
         self.groupPrefer.setLayout(QVBoxLayout(self.groupPrefer))
 
-        self.group1 = QGroupBox()
-        self.g_layout1 = QVBoxLayout(self.group1)
-
-        self.group2 = QGroupBox()
-        self.g_layout2 = QVBoxLayout(self.group2)
+        self.buttonGroup1 = QGroupBox()
+        self.group_layout1 = QHBoxLayout(self.buttonGroup1)
+        self.buttonGroup2 = QGroupBox()
+        self.group_layout2 = QHBoxLayout(self.buttonGroup2)
 
     #  장바구니 테이블 생성하는 메소드
     def setTable(self):
@@ -346,144 +331,165 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
 
-    # 꼭 버튼 눌렀을 때
+        # 기존에 저장된 그룹들 꼭이랑 들으면 좋음에 나타내기
+        while self.groupMust.layout().count():
+            item = self.groupMust.layout().takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
+
+        for course_group in Must_group:
+            if course_group:
+                new_group = Table()
+                new_group.createTable_1(course_group)
+                Must_layout.append(new_group)
+                self.groupMust.layout().addWidget(new_group)
+
+        while self.groupPrefer.layout().count():
+            item = self.groupPrefer.layout().takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
+
+        for course_group in Prefer_group:
+            if course_group:
+                new_group = Table()
+                new_group.createTable_2(course_group)
+                Prefer_layout.append(new_group)
+                self.groupPrefer.layout().addWidget(new_group)
+
+    # 장바구니에서 꼭 버튼 눌렀을 때
     def inGroupButton1(self):
-        c_button = self.sender()
+        if Must_layout:
+            c_button = self.sender()
 
-        if c_button:
-            index = self.Course_Basket.indexAt(c_button.pos())
-            row = index.row()
+            if c_button:
+                index = self.Course_Basket.indexAt(c_button.pos())
+                row = index.row()
 
-            if row != -1:
-                course = selected_course[row]
-                del selected_course[row]
-                self.Course_Basket.removeRow(row)
+                if row != -1:
+                    course = selected_course[row]
+                    del selected_course[row]
+                    self.Course_Basket.removeRow(row)
 
-                label = QLabel('그룹 번호 선택')
-                comboBox = QComboBox()
-                items = ['']
-                for i in range(len(Must_layout)):
-                    items.append('그룹' + ' ' + str(i+1))
-                comboBox.addItems(items)
-                comboBox.model().sort(0, Qt.AscendingOrder)
-                comboBox.currentIndexChanged.connect(partial(self.comboBoxFunction1, course))
+                    for i in range(len(Must_layout)):
+                        button = QPushButton('그룹' + str(i+1))
+                        button.clicked.connect(partial(self.addCourse1, i, course))
+                        self.group_layout1.addWidget(button)
 
-                self.g_layout1.addWidget(label)
-                self.g_layout1.addWidget(comboBox)
+                    self.layout().addWidget(self.buttonGroup1)
+                    self.buttonGroup1.adjustSize()
+                    c_button_pos = c_button.mapToGlobal(c_button.pos())
+                    self.buttonGroup1.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
+                    self.buttonGroup1.show()
 
-                self.layout().addWidget(self.group1)
-                self.group1.adjustSize()
-                c_button_pos = c_button.mapToGlobal(c_button.pos())
-                self.group1.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
-                self.group1.show()
-
-    # 들으면 좋음 버튼 눌렀을 때
+    # 장바구니에서 들으면 좋음 버튼 눌렀을 때
     def inGroupButton2(self):
-        c_button = self.sender()
+        if Prefer_layout:
+            c_button = self.sender()
 
-        if c_button:
-            index = self.Course_Basket.indexAt(c_button.pos())
-            row = index.row()
+            if c_button:
+                index = self.Course_Basket.indexAt(c_button.pos())
+                row = index.row()
 
-            if row != -1:
-                course = selected_course[row]
-                del selected_course[row]
-                self.Course_Basket.removeRow(row)
+                if row != -1:
+                    course = selected_course[row]
+                    del selected_course[row]
+                    self.Course_Basket.removeRow(row)
+                    print(selected_course)
 
-                label = QLabel('그룹 번호 선택')
-                comboBox = QComboBox()
-                items = ['']
-                for i in range(len(Prefer_layout)):
-                    items.append('그룹' + ' ' + str(i + 1))
-                comboBox.addItems(items)
-                comboBox.model().sort(0, Qt.AscendingOrder)
-                comboBox.currentIndexChanged.connect(partial(self.comboBoxFunction2, course))
+                    for i in range(len(Prefer_layout)):
+                        button = QPushButton('그룹 ' + str(i+1))
+                        button.clicked.connect(partial(self.addCourse2, i, course))
+                        self.group_layout2.addWidget(button)
 
-                self.g_layout2.addWidget(label)
-                self.g_layout2.addWidget(comboBox)
-
-                self.layout().addWidget(self.group2)
-                self.group2.adjustSize()
-                c_button_pos = c_button.mapToGlobal(c_button.pos())
-                self.group2.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
-                self.group2.show()
+                    self.layout().addWidget(self.buttonGroup2)
+                    self.buttonGroup2.adjustSize()
+                    c_button_pos = c_button.mapToGlobal(c_button.pos())
+                    self.buttonGroup2.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
+                    self.buttonGroup2.show()
 
     # 꼭 그룹의 그룹번호 선택하기
-    def comboBoxFunction1(self, course):
-        sender = self.sender()
-        words = sender.currentText().split()
-        for word in words:
-            if word.isdigit():
-                i = int(word) - 1
-                self.addCourse1(i, course)
-                break
-
     def addCourse1(self, i, course):
-        self.layout().removeWidget(self.group1)
-        while self.g_layout1.count():
-            item = self.g_layout1.takeAt(0)
+        self.layout().removeWidget(self.buttonGroup1)
+        while self.group_layout1.count():
+            item = self.group_layout1.takeAt(0)
             if item:
                 widget = item.widget()
                 if widget:
                     widget.deleteLater()
-        self.group1.hide()
+        self.buttonGroup1.hide()
         widget = Must_layout[i]
         Must_group[i].append(course)
         widget.createTable1(i)
 
     # 들으면 좋음 그룹의 그룹번호 선택하기
-    def comboBoxFunction2(self, course):
-        sender = self.sender()
-        words = sender.currentText().split()
-        for word in words:
-            if word.isdigit():
-                i = int(word) - 1
-                self.addCourse2(i, course)
-                break
-
     def addCourse2(self, i, course):
-        self.layout().removeWidget(self.group2)
-        while self.g_layout2.count():
-            item = self.g_layout2.takeAt(0)
+        self.layout().removeWidget(self.buttonGroup2)
+        while self.group_layout2.count():
+            item = self.group_layout2.takeAt(0)
             if item:
                 widget = item.widget()
                 if widget:
                     widget.deleteLater()
-        self.group2.hide()
+        self.buttonGroup2.hide()
         widget = Prefer_layout[i]
         Prefer_group[i].append(course)
         widget.createTable2(i)
 
-    # 시간표 버튼 클릭
+    # 시간표 버튼 클릭 (최종 시간표 창으로 이동)
     def Button_ScheduleFunction(self):
+        myWindow3.create_Table()
         myWindow3.show()
         self.close()
 
-    # 마법사 버튼 클릭
+    # 강의 검색 버튼 클릭 (강의 검색 창으로 이동)
     def Button_CoursesFunction(self):
         myWindow1.setTable()
         myWindow1.show()
         self.close()
 
-    # 시간표 만들기
+    # 시간표 만들기 (시간표 생성 창으로 이동)
     def Button_CreateFunction(self):
+        myWindow4.create_Header()
         myWindow4.show()
+        self.close()
 
-    # 꼭에서 그룹추가
-    def g1buttonFunction(self):
+    # 꼭에서 그룹 추가
+    def must_AddFunction(self):
         new_group = Table()
         course_group = []
         Must_group.append(course_group)
         Must_layout.append(new_group)
         self.groupMust.layout().addWidget(new_group)
 
-    # 들으면 좋음에서 그룹추가
-    def g2buttonFunction(self):
+    # 꼭에서 그룹 삭제
+    def must_RemoveFunction(self):
+        Must_group.pop()
+        Must_layout.pop()
+        if self.groupMust.layout().count() > 0:
+            item = self.groupMust.layout().takeAt(self.groupMust.layout().count() - 1)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
+
+    # 들으면 좋음에서 그룹 추가
+    def prefer_AddFunction(self):
         new_group = Table()
         course_group = []
         Prefer_group.append(course_group)
         Prefer_layout.append(new_group)
         self.groupPrefer.layout().addWidget(new_group)
+
+    # 들으면 좋음에서 그룹 삭제
+    def prefer_RemoveFunction(self):
+        Prefer_group.pop()
+        Prefer_layout.pop()
+        if self.groupPrefer.layout().count() > 0:
+            item = self.groupPrefer.layout().takeAt(self.groupPrefer.layout().count() - 1)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
 
 # 최종 시간표 보여주는 창
 class timeTable(QMainWindow, form_class3, SaveOnClose):
@@ -491,34 +497,178 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
         super().__init__()
         self.setupUi(self)
 
-        self.pushButton_1.clicked.connect(self.button1Function) # 마법사 창으로 이동하는 버튼
-        self.pushButton_2.clicked.connect(self.button2Function) # 강의 검색 창으로 이동하는 버튼
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
+        self.central_layout = QVBoxLayout(self.central_widget)
 
-    def button1Function(self):
-        myWindow2.setTable()
-        myWindow2.show()
-        self.close()
+        self.button_search = QPushButton('강의 검색')            # 강의 검색 창으로 이동하는 버튼
+        self.button_magic = QPushButton('마법사')                # 마법사 창으로 이동하는 버튼
+        self.button_candidate = QPushButton('시간표 생성')        # 시간표 생성 창으로 이동하는 버튼
 
-    def button2Function(self):
+        self.button_search.clicked.connect(self.button_Search)
+        self.button_magic.clicked.connect(self.button_Magic)
+        self.button_candidate.clicked.connect(self.button_Candidate)
+
+    # 최종 시간표를 생성하는 메소드
+    def create_Table(self):
+        while self.central_layout.count():
+            item = self.central_layout.takeAt(0)
+            if item.layout():
+                item.layout().deleteLater()
+
+        group = QGroupBox()
+        group_layout = QHBoxLayout(group)
+        group_layout.addWidget(self.button_magic)
+        group_layout.addWidget(self.button_search)
+        group_layout.addWidget(self.button_candidate)
+
+        table = Schedule_table(selected_schedule)
+
+        self.central_layout.addWidget(group)
+        self.central_layout.addWidget(table)
+
+    # 강의 검색 버튼 클릭 (강의 검색 창으로 이동)
+    def button_Search(self):
         myWindow1.setTable()
         myWindow1.show()
         self.close()
 
-# 시간표
+    # 마법사 버튼 클릭 (마법사 창으로 이동)
+    def button_Magic(self):
+        myWindow2.setTable()
+        myWindow2.show()
+        self.close()
+
+    # 시간표 생성 버튼 클릭 (시간표 생성 창으로 이동)
+    def button_Candidate(self):
+        myWindow4.create_Header()
+        myWindow4.show()
+        self.close()
+
+# 시간표 후보 생성 창
+class Candidate(QMainWindow, form_class4, SaveOnClose):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.time_tables = []
+
+        self.main_layout = QVBoxLayout()
+        self.central_widget = QWidget()
+        self.central_widget.setLayout(self.main_layout)
+        self.setCentralWidget(self.central_widget)
+
+    # 시간표 생성 창에서 위쪽 글씨랑 버튼 모음
+    def create_Header(self):
+        while self.main_layout.count():
+            item = self.main_layout.takeAt(0)
+            if item.layout():
+                item.layout().deleteLater()
+
+        self.time_tables = time_table_maker(Must_group, Prefer_group, 20)  # 시간표 후보들 임의로 학점 제한 20인데 이거 나중에 설정할 수 있게 바꿔야 함.
+        self.time_tables.sort(key=lambda x: len(x), reverse=True)
+
+        header = QGroupBox()
+        header_layout = QVBoxLayout(header)
+
+        button_schedule = QPushButton('시간표')
+        button_schedule.clicked.connect(self.button_Schedule)
+        button_magic = QPushButton('마법사')
+        button_magic.clicked.connect(self.button_Magic)
+        button_search = QPushButton('강의 검색')
+        button_search.clicked.connect(self.button_Search)
+
+        group = QGroupBox()
+        group_layout = QHBoxLayout(group)
+
+        group_layout.addWidget(button_schedule)
+        group_layout.addWidget(button_search)
+        group_layout.addWidget(button_magic)
+
+        header_layout.addWidget(group)
+
+        if len(self.time_tables) > 1:
+            label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
+            label.setAlignment(Qt.AlignCenter)
+
+            button_layout = QHBoxLayout()
+
+            for i in range(len(self.time_tables)):
+                button = QPushButton(str(i+1) + '번 시간표')
+                button.clicked.connect(partial(self.buttonFunction, i))
+                button_layout.addWidget(button)
+
+            header_layout.addWidget(label)
+            header_layout.addLayout(button_layout)
+
+            self.main_layout.addWidget(header)
+
+        else:
+            label = QLabel('만들어진 시간표가 없습니다. 강의를 그룹에 추가하세요')
+            label.setAlignment(Qt.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            header_layout.addWidget(label)
+            self.main_layout.addWidget(header)
+
+    # 시간표 후보 중 하나를 보여주는 버튼을 클릭
+    def buttonFunction(self, index):
+        if self.main_layout.count() > 1:
+            item = self.main_layout.takeAt(2)
+            if item.layout():
+                item.layout().deleteLater()
+
+        group = QGroupBox()
+        group.setLayout(QVBoxLayout(group))
+
+        schedule = Schedule_table(self.time_tables[index])
+
+        button = QPushButton('저장')
+        button.clicked.connect(lambda _, idx=index: self.select_Table(idx))
+
+        group.layout().addWidget(schedule)
+        group.layout().addWidget(button)
+
+        self.main_layout.addWidget(group)
+
+    # 강의 검색 버튼 클릭 (강의 검색 창으로 이동)
+    def button_Search(self):
+        myWindow1.setTable()
+        myWindow1.show()
+        self.close()
+
+    # 마법사 버튼 클릭 (마법사 창으로 이동)
+    def button_Magic(self):
+        myWindow2.setTable()
+        myWindow2.show()
+        self.close()
+
+    # 시간표 버튼 클릭 (시간표 창으로 이동)
+    def button_Schedule(self):
+        myWindow3.create_Table()
+        myWindow3.show()
+        self.close()
+
+    # 시간표 후보 중 최종 시간표를 저장
+    def select_Table(self, index):
+        selected_schedule.clear()
+        for course in self.time_tables[index]:
+            selected_schedule.append(course)
+
+# 시간표 테이블 1개에 대한 class
 class Schedule_table(QTableWidget):
     def __init__(self, courses):
         super().__init__()
         self.setColumnCount(8)
-        self.setRowCount(32)
-        self.setHorizontalHeaderLabels(['교시', '시간', '월요일(Mon)', '화요일(Tue)', '수요일(Wed)', '목요일(Thu)', '금요일(Fri)', '토요일(Sat)'])
-        h = [''] * 32
+        self.setRowCount(64)
+        self.setHorizontalHeaderLabels(
+            ['교시', '시간', '월요일(Mon)', '화요일(Tue)', '수요일(Wed)', '목요일(Thu)', '금요일(Fri)', '토요일(Sat)'])
+        h = [''] * 64
         self.setVerticalHeaderLabels(h)
 
-        for row in range(0, 32, 2):
-            self.setSpan(row, 0, 2, 1)
+        for row in range(0, 64, 4):
+            self.setSpan(row, 0, 4, 1)
 
         count = 0
-        for row in range(0, 32, 2):
+        for row in range(0, 64, 4):
             item = QTableWidgetItem(str(count))
             item.setTextAlignment(Qt.AlignCenter)
             self.setItem(row, 0, item)
@@ -527,11 +677,12 @@ class Schedule_table(QTableWidget):
         time_format = "{:02d}:{:02d}"
         count_hours = 8
         count_minutes = 0
-        for row in range(0, 32):
+
+        for row in range(0, 64):
             time_item = QTableWidgetItem(time_format.format(count_hours, count_minutes))
             time_item.setTextAlignment(Qt.AlignCenter)
             self.setItem(row, 1, time_item)
-            count_minutes += 30
+            count_minutes += 15
             if count_minutes == 60:
                 count_minutes = 0
                 count_hours += 1
@@ -545,12 +696,10 @@ class Schedule_table(QTableWidget):
                 end_row = self.get_time_index(time_block.end_time)
 
                 for row in range(start_row, end_row - 1):
-                    if time_block.course_time == '01:00':
-                        self.setSpan(row, day_column, 2, 1)
-                    elif time_block.course_time == '01:30':
-                        self.setSpan(row, day_column, 3, 1)
-                    elif time_block.course_time == '02:00':
-                        self.setSpan(row, day_column, 4, 1)
+                    hours, minutes = map(int, time_block.course_time.split(':'))
+                    total_minutes = hours * 60 + minutes
+                    span_size = total_minutes // 15
+                    self.setSpan(start_row, day_column, span_size, 1)
 
                     parts = course.time_info_raw_string.split('/')
                     if len(parts) >= 3:
@@ -565,7 +714,7 @@ class Schedule_table(QTableWidget):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.setItem(row, day_column, item)
 
-        fixed_row_height = 30
+        fixed_row_height = 15
         fixed_column_width = 300
         for row in range(self.rowCount()):
             self.setRowHeight(row, fixed_row_height)
@@ -584,50 +733,9 @@ class Schedule_table(QTableWidget):
 
     def get_time_index(self, time_str):
         hours, minutes = map(int, time_str.split(':'))
-        return (hours - 8) * 2 + (1 if minutes == 30 else 0)
+        return (hours - 8) * 4 + (1 if minutes == 15 else 0)
 
-# 시간표 후보 생성 창
-class Candidate(QMainWindow, form_class4, SaveOnClose):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.time_tables = []
-
-        self.central_widget = QWidget(self)
-        self.setCentralWidget(self.central_widget)
-        self.central_layout = QHBoxLayout(self.central_widget)
-
-        self.pushButton.clicked.connect(self.buttonFunction)    # 실험용
-        self.central_layout.addWidget(self.pushButton)
-
-    def select_Table(self):
-        print('선택됨')
-
-    def buttonFunction(self):
-
-        self.time_tables = time_table_maker(Must_group, Prefer_group, 20)  # 시간표 후보들 임의로 학점 제한 20인데 이거 나중에 설정할 수 있게 바꿔야 함.
-        print('꼭 그룹 리스트 : ')
-        print(Must_group)
-        print('들으면 좋음 그룹 리스트 : ')
-        print(Prefer_group)
-        print('시간표 리스트 : ')
-        print(self.time_tables)
-
-        for i in range(len(self.time_tables)):
-            group = QGroupBox()
-            group.setLayout(QVBoxLayout(group))
-
-            schedule = Schedule_table(self.time_tables[i])
-            button = QPushButton('선택')
-            button.clicked.connect(self.select_Table)
-
-            group.layout().addWidget(schedule)
-            group.layout().addWidget(button)
-
-            self.central_layout.addWidget(group)
-
-
-# 꼭, 들으면 좋음에서 하나의 그룹을 테이블로 표현함
+# 꼭, 들으면 좋음에서 추가되는 하나의 그룹을 테이블로 표현함
 class Table(QTableWidget):
     def __init__(self):
         super().__init__()
@@ -668,6 +776,36 @@ class Table(QTableWidget):
         self.resizeRowsToContents()
         self.resizeColumnsToContents()
 
+    # 꼭에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
+    def createTable_1(self, courses):
+        self.setRowCount(len(courses))
+
+        for i in range(len(courses)):
+            button = QPushButton("X")
+            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setSizePolicy(
+                QSizePolicy.Expanding, QSizePolicy.Expanding
+            )
+            button.clicked.connect(self.outGroupButton1)
+            self.setCellWidget(i, 0, button)
+
+            for j in range(1, 5):
+                item_text = ""
+                if j == 1:
+                    item_text = courses[i].total[7]
+                elif j == 2:
+                    item_text = courses[i].total[6]
+                elif j == 3:
+                    item_text = courses[i].total[9]
+                elif j == 4:
+                    item_text = courses[i].total[11]
+                item = QTableWidgetItem(item_text)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.setItem(i, j, item)
+
+        self.resizeRowsToContents()
+        self.resizeColumnsToContents()
+
     # 들으면 좋음에서 그룹 생성
     def createTable2(self, index):
         self.setRowCount(len(Prefer_group[index]))
@@ -697,6 +835,36 @@ class Table(QTableWidget):
 
         self.resizeRowsToContents()  # 칸 크기 맞추기
         self.resizeColumnsToContents()  # 칸 크기 맞추기
+
+    # 들으면 좋음에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
+    def createTable_2(self, courses):
+        self.setRowCount(len(courses))
+
+        for i in range(len(courses)):
+            button = QPushButton("X")
+            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setSizePolicy(
+                QSizePolicy.Expanding, QSizePolicy.Expanding
+            )
+            button.clicked.connect(self.outGroupButton2)
+            self.setCellWidget(i, 0, button)
+
+            for j in range(1, 5):
+                item_text = ""
+                if j == 1:
+                    item_text = courses[i].total[7]
+                elif j == 2:
+                    item_text = courses[i].total[6]
+                elif j == 3:
+                    item_text = courses[i].total[9]
+                elif j == 4:
+                    item_text = courses[i].total[11]
+                item = QTableWidgetItem(item_text)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.setItem(i, j, item)
+
+        self.resizeRowsToContents()
+        self.resizeColumnsToContents()
 
     # 꼭 그룹에서 X 버튼 누르면 강의가 장바구니로 이동함
     def outGroupButton1(self):
@@ -733,7 +901,7 @@ if __name__ == "__main__" :
     #QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
 
-    #WindowClass의 인스턴스 생성
+    #각 창의 인스턴스 생성
     myWindow1 = courseSearch()
     myWindow2 = Magic()
     myWindow3 = timeTable()

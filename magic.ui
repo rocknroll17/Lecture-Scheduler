@@ -220,7 +220,7 @@
     <string>들으면 좋음</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="group1Button">
+  <widget class="QPushButton" name="Must_Add">
    <property name="geometry">
     <rect>
      <x>700</x>
@@ -233,7 +233,7 @@
     <string>그룹 추가</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="group2Button">
+  <widget class="QPushButton" name="Prefer_Add">
    <property name="geometry">
     <rect>
      <x>1500</x>
@@ -246,7 +246,7 @@
     <string>그룹 추가</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="group3Button">
+  <widget class="QPushButton" name="Must_Remove">
    <property name="geometry">
     <rect>
      <x>780</x>
@@ -259,7 +259,7 @@
     <string>그룹 삭제</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="group4Button">
+  <widget class="QPushButton" name="Prefer_Remove">
    <property name="geometry">
     <rect>
      <x>1580</x>

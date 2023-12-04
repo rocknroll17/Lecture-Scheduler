@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1190</width>
-    <height>685</height>
+    <height>758</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,19 +16,6 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255)</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>120</y>
-     <width>271</width>
-     <height>191</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>버튼</string>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections/>
