@@ -40,6 +40,9 @@ class Candidate:
             return None
         return self.__groups[index]
     
+    def pop(self):
+        return self.__groups.pop()
+
     def __str__(self):
         return str(self.__groups)
 
