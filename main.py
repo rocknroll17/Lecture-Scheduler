@@ -770,7 +770,7 @@ class Table(QTableWidget):
             )
             button.clicked.connect(self.outGroupButton1)
             self.setCellWidget(i, 0, button)
-            # 이거부분 수상
+            
             for j in range(1, 5):
                 item_text = ""
                 if j == 1:
@@ -788,8 +788,9 @@ class Table(QTableWidget):
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
+            self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.resizeRowsToContents()
+        #self.resizeRowsToContents()
         self.resizeColumnsToContents()
 
     # 꼭에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
@@ -818,8 +819,9 @@ class Table(QTableWidget):
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
+            self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.resizeRowsToContents()
+        #self.resizeRowsToContents()
         self.resizeColumnsToContents()
 
    
@@ -856,8 +858,9 @@ class Table(QTableWidget):
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
+            self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.resizeRowsToContents()  # 칸 크기 맞추기
+        #self.resizeRowsToContents()  # 칸 크기 맞추기
         self.resizeColumnsToContents()  # 칸 크기 맞추기
 
     # 들으면 좋음에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
@@ -886,8 +889,9 @@ class Table(QTableWidget):
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
+            self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.resizeRowsToContents()
+        #self.resizeRowsToContents()
         self.resizeColumnsToContents()
 
     # 꼭 그룹에서 X 버튼 누르면 강의가 장바구니로 이동함
