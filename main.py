@@ -95,8 +95,22 @@ TABLE_ROW_SIZE = 40 # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
 
 # 파일 로드
+fm = FileManager.FileManager()
+fm.save_and_load = SAVE_AND_LOAD_FILE
 if SAVE_AND_LOAD_FILE:
-    fm = FileManager.FileManager()
+    is_loaded = fm.load()
+    if is_loaded:
+        if fm.get("selected_course"):
+            selected_course = fm.get("selected_course")
+        if fm.get("Must_group"):
+            Must_group = fm.get("Must_group")
+        if fm.get("Prefer_group"):
+            Prefer_group = fm.get("Prefer_group")
+        if fm.get("Must_layout"):
+            Must_layout = fm.get("Must_layout")
+        if fm.get("Prefer_group"):
+            Prefer_group = fm.get("Prefer_group")
+    '''
     is_loaded = fm.load()
     if is_loaded:
         if fm.basket: # 나중에 list를 Basket으로 바꿔야댐
@@ -105,13 +119,19 @@ if SAVE_AND_LOAD_FILE:
             Must_group = fm.must_group
         if fm.prefer_group:
             Prefer_group = fm.prefer_group
+            '''
 
 
 # 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
 class SaveOnClose:
     def closeEvent(self, event):
         if SAVE_AND_LOAD_FILE:
-            fm.save(selected_course, Must_group, Prefer_group)
+            fm.add("selected_course", selected_course)
+            fm.add("Must_group", Must_group)
+            fm.add("Prefer_group", Prefer_group)
+            fm.add("Must_layout", Must_layout)
+            fm.add("Prefer_layout", Prefer_layout)
+            fm.save()
         '''
         # 종료 창 출력
         quit_msg = "종료하시겠습니까?"
@@ -313,6 +333,13 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.group_layout3 = QFormLayout(self.buttonGroup3)
         self.buttonGroup4 = QGroupBox()
         self.group_layout4 = QFormLayout(self.buttonGroup4)
+        self.setTable()
+        # 임시조치 - 창 시작할 때, 저장된 Must_group과 Prefer_group 수 만큼 테이블 위젯 생성
+        for _ in range(len(Must_group.get_groups())):
+            Must_layout.append(Table())
+        for _ in range(len(Prefer_group.get_groups())):
+            Prefer_group.append(Table())
+        self.setGroup()
 
     #  장바구니 테이블 생성하는 메소드
     def setTable(self):
@@ -1008,7 +1035,7 @@ class Table(QTableWidget):
         if button:
             index = self.indexAt(button.pos())
             row = index.row()
-            idx = Must_layout.index(self)
+            idx = Must_layout.index(self) # 오류
 
             if row != -1:
                 #selected_course.append(Must_group[idx][row])
@@ -1025,7 +1052,7 @@ class Table(QTableWidget):
         if button:
             index = self.indexAt(button.pos())
             row = index.row()
-            idx = Prefer_layout.index(self)
+            idx = Prefer_layout.index(self) # 오류
 
             if row != -1:
                 #selected_course.append(Prefer_group[idx][row])
