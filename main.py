@@ -2,6 +2,8 @@ import Course
 from functools import partial
 from itertools import product
 import CourseDB
+from Basket import Candidate
+from Basket import Basket
 import FileManager
 
 import sys
@@ -10,17 +12,17 @@ from PyQt5.QtCore import Qt, QTime
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 
-from os import environ       # environ 를 import 해야 아래 suppress_qt_warnings 가 정상 동작하니다
+from os import environ # 환경변수 조절 용
 
-def suppress_qt_warnings():   # 해상도별 글자크기 강제 고정하는 함수
+def suppress_qt_warnings():   # 해상도 별 UI크기 강제 고정
     environ["QT_DEVICE_PIXEL_RATIO"] = "0"
     environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     environ["QT_SCALE_FACTOR"] = "1"
 
 def time_table_maker(must_group, prefer_group, credit_limit):
-    must_group = [i for i in must_group if i != []]
-    prefer_group = [i for i in prefer_group if i != []]
+    must_group = [i for i in must_group.get_groups() if i != []]
+    prefer_group = [i for i in prefer_group.get_groups() if i != []]
     possible_table = []#꼭에 관한 가능한 시간표를 담아서 나중에 반환
     prefer_combinations = []#들으면 좋음에 관한 모든 경우의 수를 찾아서 반환
     must_combinations = list(product(*must_group))#가능한 모든 경우의 수를 뽑음
@@ -81,9 +83,11 @@ form_class4 = uic.loadUiType("create.ui")[0]
 condition = ["","","","",""]    # 검색 조건
 searched_course = []            # 검색 조건에 부합하는 강의 리스트
 selected_course = []            # 장바구니에 담을 강의 리스트
-Must_group = []                 # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
+#Must_group = []                 # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
+Must_group = Candidate()
 Must_layout = []                # 꼭 그룹에 추가되는 테이블 모음
-Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
+#Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
+Prefer_group = Candidate()
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []          # 선택한 최종 시간표
 
@@ -213,6 +217,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
             all(searched_course[row] not in group for group in Prefer_group)):
 
             selected_course.append(searched_course[row])
+
             self.Course_Basket.setRowCount(len(selected_course))
 
             for i in range(len(selected_course)):
@@ -343,7 +348,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         #     if widget:
         #         widget.deleteLater()
 
-        for course_group in Must_group:
+        for course_group in Must_group.get_groups():
             if course_group:
                 new_group = Table()
                 new_group.createTable_1(course_group)
@@ -356,7 +361,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         #     if widget:
         #         widget.deleteLater()
 
-        for course_group in Prefer_group:
+        for course_group in Prefer_group.get_groups():
             if course_group:
                 new_group = Table()
                 new_group.createTable_2(course_group)
@@ -440,7 +445,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup1.hide()
 
         widget = Must_layout[i]
-        Must_group[i].append(course)
+        #Must_group[i].append(course)
+        Must_group.add_course(i, course)
         widget.createTable1(i)
 
     # 장바구니에서 꼭 버튼 -> 그룹 추가 버튼
@@ -497,15 +503,16 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup2.hide()
 
         widget = Prefer_layout[i]
-        Prefer_group[i].append(course)
+        #Prefer_group[i].append(course)
+        Prefer_group.add_course(i, course)
         widget.createTable2(i)
 
     # 장바구니에서 들으면 좋음 버튼 -> 그룹 추가 버튼
     def prefer_AddFunction(self, course):
         new_group = Table()
         course_group = []
-        Prefer_group.append(course_group)
-        Prefer_layout.append(new_group)
+        Prefer_group.add(course_group) # 바꾸기
+        Prefer_layout.append(new_group) # 바꾸기
         self.groupPrefer.layout().addWidget(new_group)
 
         self.addCourse2(self.groupPrefer.layout().count() - 1, course)
@@ -525,7 +532,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 들으면 좋음에서 그룹 삭제 버튼 -> 그룹 번호 선택
     def removeFunction2(self, i):
-        del Prefer_group[i]
+        del Prefer_group.get_group()[i]
         del Prefer_layout[i]
 
         item = self.groupPrefer.layout().takeAt(i)
@@ -662,6 +669,7 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
             label.setAlignment(Qt.AlignCenter)
 
             button_layout = QHBoxLayout()
+
             for i in range(len(self.time_tables)):
                 button = QPushButton(str(i+1) + '번 시간표')
                 button.clicked.connect(partial(self.buttonFunction, i))
@@ -827,9 +835,11 @@ class Table(QTableWidget):
 
     # 꼭에서 그룹 생성
     def createTable1(self, index):
-        self.setRowCount(len(Must_group[index]))
+        #self.setRowCount(len(Must_group[index]))
+        self.setRowCount(len(Must_group.get_groups()[index]))
 
-        for i in range(len(Must_group[index])):
+        #for i in range(len(Must_group[index])):
+        for i in range(len(Must_group.get_groups()[index])):
             button = QPushButton("X")
             button.setStyleSheet("background-color: rgb(242, 255, 255);")
             button.setSizePolicy(
@@ -841,18 +851,23 @@ class Table(QTableWidget):
             for j in range(1, 5):
                 item_text = ""
                 if j == 1:
-                    item_text = Must_group[index][i].total[7]
+                    #item_text = Must_group[index][i].total[7]
+                    item_text = Must_group.get_group(index)[i].total[7]
                 elif j == 2:
-                    item_text = Must_group[index][i].total[6]
+                    #item_text = Must_group[index][i].total[6]
+                    item_text = Must_group.get_group(index)[i].total[6]
                 elif j == 3:
-                    item_text = Must_group[index][i].total[9]
+                    #item_text = Must_group[index][i].total[9]
+                    item_text = Must_group.get_group(index)[i].total[9]
                 elif j == 4:
-                    item_text = Must_group[index][i].total[11]
+                    #item_text = Must_group[index][i].total[11]
+                    item_text = Must_group.get_group(index)[i].total[11]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
+            self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.resizeRowsToContents()
+        #self.resizeRowsToContents()
         self.resizeColumnsToContents()
 
     # 꼭에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
@@ -881,15 +896,20 @@ class Table(QTableWidget):
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
+            self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.resizeRowsToContents()
+        #self.resizeRowsToContents()
         self.resizeColumnsToContents()
+
 
     # 들으면 좋음에서 그룹 생성
     def createTable2(self, index):
-        self.setRowCount(len(Prefer_group[index]))
+        #self.setRowCount(len(Prefer_group[index]))
+        self.setRowCount(len(Prefer_group.get_group(index)))
 
-        for i in range(len(Prefer_group[index])):
+
+        #for i in range(len(Prefer_group[index])):
+        for i in range(len(Prefer_group.get_group(index))):
             button = QPushButton("X")
             button.setStyleSheet("background-color: rgb(242, 255, 255);")
             button.setSizePolicy(
@@ -901,18 +921,23 @@ class Table(QTableWidget):
             for j in range(1, 5):
                 item_text = ""
                 if j == 1:
-                    item_text = Prefer_group[index][i].total[7]
+                    #item_text = Prefer_group[index][i].total[7]
+                    item_text = Prefer_group.get_group(index)[i].total[7]
                 elif j == 2:
-                    item_text = Prefer_group[index][i].total[6]
+                    #item_text = Prefer_group[index][i].total[6]
+                    item_text = Prefer_group.get_group(index)[i].total[6]
                 elif j == 3:
-                    item_text = Prefer_group[index][i].total[9]
+                    #item_text = Prefer_group[index][i].total[9]
+                    item_text = Prefer_group.get_group(index)[i].total[9]
                 elif j == 4:
-                    item_text = Prefer_group[index][i].total[11]
+                    #item_text = Prefer_group[index][i].total[11]
+                    item_text = Prefer_group.get_group(index)[i].total[11]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
+            self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.resizeRowsToContents()  # 칸 크기 맞추기
+        #self.resizeRowsToContents()  # 칸 크기 맞추기
         self.resizeColumnsToContents()  # 칸 크기 맞추기
 
     # 들으면 좋음에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
@@ -941,8 +966,9 @@ class Table(QTableWidget):
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
+            self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        self.resizeRowsToContents()
+        #self.resizeRowsToContents()
         self.resizeColumnsToContents()
 
     # 꼭 그룹에서 X 버튼 누르면 강의가 장바구니로 이동함
@@ -954,8 +980,10 @@ class Table(QTableWidget):
             idx = Must_layout.index(self)
 
             if row != -1:
-                selected_course.append(Must_group[idx][row])
-                del Must_group[idx][row]
+                #selected_course.append(Must_group[idx][row])
+                selected_course.append(Must_group.get_group(idx)[row])
+                #del Must_group[idx][row]
+                del Must_group.get_group(idx)[row]
                 self.removeRow(row)
 
         myWindow2.setTable()
@@ -969,8 +997,9 @@ class Table(QTableWidget):
             idx = Prefer_layout.index(self)
 
             if row != -1:
-                selected_course.append(Prefer_group[idx][row])
-                del Prefer_group[idx][row]
+                #selected_course.append(Prefer_group[idx][row])
+                selected_course.append(Prefer_group.get_group(idx)[row])
+                del Prefer_group.get_group(idx)[row]
                 self.removeRow(row)
 
         myWindow2.setTable()
