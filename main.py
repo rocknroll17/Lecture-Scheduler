@@ -91,7 +91,7 @@ Prefer_group = Candidate()
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []          # 선택한 최종 시간표
 
-TABLE_ROW_SIZE = 50 # 테이블 행 크기
+TABLE_ROW_SIZE = 40 # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
 
 # 파일 로드
@@ -639,7 +639,7 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
         self.close()
 
 # 시간표 후보 생성 창
-class Candidate(QMainWindow, form_class4, SaveOnClose):
+class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -678,7 +678,7 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
         group_layout.addWidget(button_magic)
 
         header_layout.addWidget(group)
-
+        print(f"possible schedules : {self.time_tables}")
         if len(self.time_tables) > 1:
             label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
             label.setAlignment(Qt.AlignCenter)
@@ -1046,7 +1046,7 @@ if __name__ == "__main__" :
     myWindow1 = courseSearch()
     myWindow2 = Magic()
     myWindow3 = timeTable()
-    myWindow4 = Candidate()
+    myWindow4 = ScheduleCandidates()
 
     #프로그램 화면을 보여주는 코드
     myWindow1.show()
