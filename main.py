@@ -108,16 +108,6 @@ if SAVE_AND_LOAD_FILE:
             Must_layout = fm.get("Must_layout")
         if fm.get("Prefer_group"):
             Prefer_group = fm.get("Prefer_group")
-    '''
-    is_loaded = fm.load()
-    if is_loaded:
-        if fm.basket: # 나중에 list를 Basket으로 바꿔야댐
-            selected_course = fm.basket
-        if fm.must_group:
-            Must_group = fm.must_group
-        if fm.prefer_group:
-            Prefer_group = fm.prefer_group
-            '''
 
 
 # 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
@@ -130,16 +120,6 @@ class SaveOnClose:
             fm.add("Must_layout", Must_layout)
             fm.add("Prefer_layout", Prefer_layout)
             fm.save()
-        '''
-        # 종료 창 출력
-        quit_msg = "종료하시겠습니까?"
-        reply = QMessageBox.question(self, 'Message', quit_msg, QMessageBox.Yes, QMessageBox.No)
-
-        if reply == QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()
-        '''
 
 # 강의 검색 창
 class courseSearch(QMainWindow, form_class1, SaveOnClose) :
@@ -257,7 +237,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
                     item.setTextAlignment(Qt.AlignCenter)
                     self.Course_Basket.setItem(i, j, item)
                 self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
-            # self.Course_Basket.resizeRowsToContents()
             self.Course_Basket.resizeColumnsToContents()
             self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
         else:
@@ -339,18 +318,18 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Course_Basket.setRowCount(len(selected_course))
 
         for i in range(len(selected_course)):
-            button1 = QPushButton("꼭")
-            button1.setStyleSheet("background-color: rgb(242, 255, 255);")
-            button1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            button1.clicked.connect(self.inGroupButton1)
+            must_button = QPushButton("꼭")
+            must_button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            must_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            must_button.clicked.connect(self.onMustButtonPress)
 
-            button2 = QPushButton("들으면 좋음")
-            button2.setStyleSheet("background-color: rgb(242, 255, 255);")
-            button2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            button2.clicked.connect(self.inGroupButton2)
+            prefer_button = QPushButton("들으면 좋음")
+            prefer_button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            prefer_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            prefer_button.clicked.connect(self.onPreferButtonPress)
 
-            self.Course_Basket.setCellWidget(i, 0, button1)
-            self.Course_Basket.setCellWidget(i, 1, button2)
+            self.Course_Basket.setCellWidget(i, 0, must_button)
+            self.Course_Basket.setCellWidget(i, 1, prefer_button)
 
             for j in range(2, 15):
                 item_text = selected_course[i].total[j-2]
@@ -392,7 +371,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.groupPrefer.layout().addWidget(new_group)
 
     # 장바구니에서 꼭 버튼 눌렀을 때
-    def inGroupButton1(self):
+    def onMustButtonPress(self):
+    #def inGroupButton1(self):
         if self.buttonGroup1.isVisible():
             # 이미 눌렀으면 아무 것도 안함
             return
@@ -431,7 +411,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.buttonGroup1.show()
 
     # 장바구니에서 들으면 좋음 버튼 눌렀을 때
-    def inGroupButton2(self):
+    def onPreferButtonPress(self):
+    #def inGroupButton2(self):
         if self.buttonGroup2.isVisible():
             # 이미 눌렀으면 아무 것도 안함
             return
