@@ -14,7 +14,7 @@ class CourseDB():
 
     def search(self, condition):
         # 검색 버튼 누르면 호출되는 메서드
-        #  condition : gui에서 사용자가 설정한 검색조건
+        #   condition : gui에서 사용자가 설정한 검색조건
         #   condition[0] : 대학명
         #   condition[1] : 학과명
         #   condition[2] : 이게 강의명인듯

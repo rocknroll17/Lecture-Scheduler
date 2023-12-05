@@ -213,8 +213,8 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
     # 강의 검색 창에서 장바구니 버튼 누르면 해당 강의가 장바구니로 이동
     def inBasketButton(self, row):
         if (searched_course[row] not in selected_course and
-            all(searched_course[row] not in group for group in Must_group) and
-            all(searched_course[row] not in group for group in Prefer_group)):
+            all(searched_course[row] not in group for group in Must_group.get_groups()) and
+            all(searched_course[row] not in group for group in Prefer_group.get_groups())):
 
             selected_course.append(searched_course[row])
 
@@ -445,7 +445,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup1.hide()
 
         widget = Must_layout[i]
-        #Must_group[i].append(course)
         Must_group.add_course(i, course)
         widget.createTable1(i)
 
@@ -453,7 +452,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     def must_AddFunction(self, course):
         new_group = Table()
         course_group = []
-        Must_group.append(course_group)
+        Must_group.add(course_group)
         Must_layout.append(new_group)
         self.groupMust.layout().addWidget(new_group)
 
@@ -474,7 +473,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 꼭에서 그룹 삭제 버튼 -> 그룹 번호 선택
     def removeFunction1(self, i):
-        del Must_group[i]
+        Must_group.delete(i)
         del Must_layout[i]
 
         item = self.groupMust.layout().takeAt(i)
@@ -503,7 +502,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup2.hide()
 
         widget = Prefer_layout[i]
-        #Prefer_group[i].append(course)
         Prefer_group.add_course(i, course)
         widget.createTable2(i)
 
@@ -511,8 +509,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     def prefer_AddFunction(self, course):
         new_group = Table()
         course_group = []
-        Prefer_group.add(course_group) # 바꾸기
-        Prefer_layout.append(new_group) # 바꾸기
+        Prefer_group.add(course_group)
+        Prefer_layout.append(new_group)
         self.groupPrefer.layout().addWidget(new_group)
 
         self.addCourse2(self.groupPrefer.layout().count() - 1, course)
@@ -532,7 +530,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 들으면 좋음에서 그룹 삭제 버튼 -> 그룹 번호 선택
     def removeFunction2(self, i):
-        del Prefer_group.get_group()[i]
+        Prefer_group.delete[i]
         del Prefer_layout[i]
 
         item = self.groupPrefer.layout().takeAt(i)
@@ -670,14 +668,25 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
 
             button_layout = QHBoxLayout()
 
-            for i in range(len(self.time_tables)):
-                button = QPushButton(str(i+1) + '번 시간표')
-                button.clicked.connect(partial(self.buttonFunction, i))
-                button_layout.addWidget(button)
+            # for i in range(len(self.time_tables)):
+            #     button = QPushButton(str(i+1) + '번 시간표')
+            #     button.clicked.connect(partial(self.buttonFunction, i))
+            #     button_layout.addWidget(button)
 
             left_button = QPushButton('<')
-            num_of_table = QLineEdit()
+            # left_button.clicked.connect(self.leftbuttonClicked)
             right_button = QPushButton('>')
+            # right_button.clicked.connect(self.rightbuttonClicked)
+
+            num_of_table = QComboBox();
+            items = []
+            for i in range(len(self.time_tables)):
+                items.append(str(i+1) + '번 그룹')
+            num_of_table.addItems(items)
+
+            # self.comboBoxDepartment.addItems(list(set(course.department for course in DB.course_list)))  # 학과 검색
+            # self.comboBoxDepartment.model().sort(0, Qt.AscendingOrder)
+            # self.comboBoxDepartment.currentIndexChanged.connect(self.comboBoxFunction)
 
             button_layout.addWidget(left_button)
             button_layout.addWidget(num_of_table)
@@ -694,6 +703,11 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
             label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             header_layout.addWidget(label)
             self.main_layout.addWidget(header)
+
+    # def leftbuttonClicked(self):
+    #
+    # def rightbuttonClicked(self):
+
 
     # 시간표 후보 중 하나를 보여주는 버튼을 클릭
     def buttonFunction(self, index):

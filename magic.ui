@@ -220,32 +220,6 @@
     <string>들으면 좋음</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="Must_Add">
-   <property name="geometry">
-    <rect>
-     <x>700</x>
-     <y>570</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>그룹 추가</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Prefer_Add">
-   <property name="geometry">
-    <rect>
-     <x>1500</x>
-     <y>570</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>그룹 추가</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="Must_Remove">
    <property name="geometry">
     <rect>
