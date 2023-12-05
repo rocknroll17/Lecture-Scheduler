@@ -453,7 +453,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     def must_AddFunction(self, course):
         new_group = Table()
         course_group = []
-        Must_group.append(course_group)
+        Must_group.add(course_group)
         Must_layout.append(new_group)
         self.groupMust.layout().addWidget(new_group)
 
@@ -474,7 +474,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 꼭에서 그룹 삭제 버튼 -> 그룹 번호 선택
     def removeFunction1(self, i):
-        del Must_group[i]
+        del Must_group.get_groups()[i]
         del Must_layout[i]
 
         item = self.groupMust.layout().takeAt(i)
