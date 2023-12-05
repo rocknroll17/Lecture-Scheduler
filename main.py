@@ -128,6 +128,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.college = "" # 대학 검색 조건
 
         # 버튼
         self.Button_Search.clicked.connect(self.Button_SearchFunction)  # 강의 검색하는 버튼
@@ -139,7 +140,13 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
         # self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         # self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
 
-        self.comboBoxDepartment.addItems(list(set(course.department for course in DB.course_list))) # 학과 검색
+        self.comboBoxCollege.addItems(list(set(course.college for course in DB.course_list))) # 대학 검색
+        self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
+        self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
+        self.comboBoxCollege.setCurrentIndex(4)
+        self.college = self.comboBoxCollege.currentText()
+
+        self.comboBoxDepartment.addItems(list(set(course.department for course in DB.course_list if course.college == self.college))) # 학과 검색
         self.comboBoxDepartment.model().sort(0, Qt.AscendingOrder)
         self.comboBoxDepartment.currentIndexChanged.connect(self.comboBoxFunction)
 
@@ -273,9 +280,13 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
     def comboBoxFunction(self):
         sender = self.sender()
 
-        # if sender == self.comboBoxCollege:
-        #     selected_data = self.comboBoxCollege.currentText()
-        #     condition[0] = selected_data
+        if sender == self.comboBoxCollege:
+            selected_data = self.comboBoxCollege.currentText()
+            condition[0] = selected_data
+            self.comboBoxDepartment.clear()
+            self.comboBoxDepartment.addItems(
+                list(set(course.department for course in DB.course_list if course.college == selected_data)))  # 학과 검색
+            self.comboBoxDepartment.model().sort(0, Qt.AscendingOrder)
         if sender == self.comboBoxDepartment:
             selected_data = self.comboBoxDepartment.currentText()
             condition[1] = selected_data
