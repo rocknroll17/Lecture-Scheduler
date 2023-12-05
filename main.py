@@ -242,7 +242,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
             self.Course_Basket.resizeColumnsToContents()
             self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
         else:
-            print("이미 장바구니에 담았습니다")
+            QMessageBox.information(self, 'note', '이미 장바구니에 담았습니다.')
 
     # 장바구니에서 삭제 버튼 누르면 해당 강의를 장바구니에서 삭제
     def outBasketButton(self):
