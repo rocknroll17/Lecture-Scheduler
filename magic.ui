@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1691</width>
-    <height>871</height>
+    <width>1400</width>
+    <height>800</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1400</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1400</width>
+    <height>800</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -16,60 +28,32 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255)</string>
   </property>
-  <widget class="QPushButton" name="Button_Courses">
-   <property name="geometry">
-    <rect>
-     <x>1450</x>
-     <y>10</y>
-     <width>91</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color : rgb(238, 238, 238)</string>
-   </property>
-   <property name="text">
-    <string>강의 검색</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Button_Schedule">
-   <property name="geometry">
-    <rect>
-     <x>1340</x>
-     <y>10</y>
-     <width>91</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color : rgb(238, 238, 238)</string>
-   </property>
-   <property name="text">
-    <string>시간표</string>
-   </property>
-  </widget>
   <widget class="QGroupBox" name="groupBox_3">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>600</y>
-     <width>1631</width>
-     <height>261</height>
+     <x>30</x>
+     <y>520</y>
+     <width>1341</width>
+     <height>250</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>250</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1341</width>
+     <height>250</height>
+    </size>
    </property>
    <property name="title">
     <string>장바구니</string>
@@ -79,9 +63,15 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>1611</width>
-      <height>221</height>
+      <width>1320</width>
+      <height>220</height>
      </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>1320</width>
+      <height>220</height>
+     </size>
     </property>
     <property name="dragEnabled">
      <bool>true</bool>
@@ -191,11 +181,29 @@
   <widget class="QGroupBox" name="groupMust">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>60</y>
-     <width>831</width>
-     <height>501</height>
+     <x>30</x>
+     <y>30</y>
+     <width>650</width>
+     <height>450</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>450</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>650</width>
+     <height>500</height>
+    </size>
    </property>
    <property name="acceptDrops">
     <bool>false</bool>
@@ -210,11 +218,29 @@
   <widget class="QGroupBox" name="groupPrefer">
    <property name="geometry">
     <rect>
-     <x>870</x>
-     <y>60</y>
-     <width>781</width>
-     <height>501</height>
+     <x>730</x>
+     <y>30</y>
+     <width>641</width>
+     <height>450</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>450</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>650</width>
+     <height>450</height>
+    </size>
    </property>
    <property name="title">
     <string>들으면 좋음</string>
@@ -223,8 +249,8 @@
   <widget class="QPushButton" name="Must_Remove">
    <property name="geometry">
     <rect>
-     <x>780</x>
-     <y>570</y>
+     <x>600</x>
+     <y>490</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -236,8 +262,8 @@
   <widget class="QPushButton" name="Prefer_Remove">
    <property name="geometry">
     <rect>
-     <x>1580</x>
-     <y>570</y>
+     <x>1290</x>
+     <y>490</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -246,28 +272,86 @@
     <string>그룹 삭제</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="Button_Create">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>1560</x>
-     <y>10</y>
-     <width>91</width>
+     <x>30</x>
+     <y>0</y>
+     <width>251</width>
      <height>41</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color : rgb(238, 238, 238)</string>
-   </property>
-   <property name="text">
-    <string>시간표 생성</string>
-   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="2">
+     <widget class="QPushButton" name="Button_Create">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color : rgb(238, 238, 238)</string>
+      </property>
+      <property name="text">
+       <string>시간표 생성</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QPushButton" name="Button_Schedule">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color : rgb(238, 238, 238)</string>
+      </property>
+      <property name="text">
+       <string>시간표</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="Button_Courses">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color : rgb(238, 238, 238)</string>
+      </property>
+      <property name="text">
+       <string>강의 검색</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
