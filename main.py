@@ -71,7 +71,6 @@ with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
         course = Course.Course(lecture_data[i].strip().split("$"))
         DB.add(course)
 
-
 # UI파일 연결
 form_class1 = uic.loadUiType("test.ui")[0]
 form_class2 = uic.loadUiType("magic.ui")[0]
@@ -100,8 +99,6 @@ if is_loaded:
         Must_group = fm.must_group
     if fm.prefer_group:
         Prefer_group = fm.prefer_group
-
-
 
 
 # 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
@@ -211,9 +208,11 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
 
     # 강의 검색 창에서 장바구니 버튼 누르면 해당 강의가 장바구니로 이동
     def inBasketButton(self, row):
-        if searched_course[row] not in selected_course:
-            selected_course.append(searched_course[row])
+        if (searched_course[row] not in selected_course and
+            all(searched_course[row] not in group for group in Must_group) and
+            all(searched_course[row] not in group for group in Prefer_group)):
 
+            selected_course.append(searched_course[row])
             self.Course_Basket.setRowCount(len(selected_course))
 
             for i in range(len(selected_course)):
@@ -227,12 +226,12 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
                 self.Course_Basket.setCellWidget(i, 0, button)
 
                 for j in range(1, 14):
-                    item_text = selected_course[i].total[j-1]
+                    item_text = selected_course[i].total[j - 1]
                     item = QTableWidgetItem(item_text)
                     item.setTextAlignment(Qt.AlignCenter)
                     self.Course_Basket.setItem(i, j, item)
                 self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
-            #self.Course_Basket.resizeRowsToContents()
+            # self.Course_Basket.resizeRowsToContents()
             self.Course_Basket.resizeColumnsToContents()
             self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
         else:
@@ -259,6 +258,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
     # 마법사 버튼 눌렀을 때 (마법사 창으로 이동)
     def Button_MagicFunction(self):
         myWindow2.setTable()
+        # myWindow2.setGroup()
         myWindow2.show()
         self.close()
 
@@ -291,18 +291,20 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 창으로 이동하는 버튼
         self.Button_Courses.clicked.connect(self.Button_CoursesFunction)    # 강의 검색 창으로 이동하는 버튼
         self.Button_Create.clicked.connect(self.Button_CreateFunction)      # 시간표 생성 창으로 이동하는 버튼
-        self.Must_Add.clicked.connect(self.must_AddFunction)                # 꼭 그룹에서 그룹 추가 버튼
         self.Must_Remove.clicked.connect(self.must_RemoveFunction)          # 꼭 그룹에서 그룹 삭제 버튼
-        self.Prefer_Add.clicked.connect(self.prefer_AddFunction)            # 들으면 좋음 그룹에서 그룹 추가 버튼
         self.Prefer_Remove.clicked.connect(self.prefer_RemoveFunction)      # 들으면 좋음 그룹에서 그룹 삭제 버튼
 
         self.groupMust.setLayout(QVBoxLayout(self.groupMust))
         self.groupPrefer.setLayout(QVBoxLayout(self.groupPrefer))
 
         self.buttonGroup1 = QGroupBox()
-        self.group_layout1 = QHBoxLayout(self.buttonGroup1)
+        self.group_layout1 = QFormLayout(self.buttonGroup1)
         self.buttonGroup2 = QGroupBox()
-        self.group_layout2 = QHBoxLayout(self.buttonGroup2)
+        self.group_layout2 = QFormLayout(self.buttonGroup2)
+        self.buttonGroup3 = QGroupBox()
+        self.group_layout3 = QFormLayout(self.buttonGroup3)
+        self.buttonGroup4 = QGroupBox()
+        self.group_layout4 = QFormLayout(self.buttonGroup4)
 
     #  장바구니 테이블 생성하는 메소드
     def setTable(self):
@@ -333,85 +335,100 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
 
-        # 기존에 저장된 그룹들 꼭이랑 들으면 좋음에 나타내기
-        while self.groupMust.layout().count():
-            item = self.groupMust.layout().takeAt(0)
-            widget = item.widget()
-            if widget:
-                widget.deleteLater()
+    # 기존에 저장된 그룹들 꼭이랑 들으면 좋음에 나타내기(initialize) : 프로그램 아예 재실행했을 때만 이니셜라이즈하게 재작성해야함
+    def setGroup(self):
+        # while self.groupMust.layout().count():
+        #     item = self.groupMust.layout().takeAt(0)
+        #     widget = item.widget()
+        #     if widget:
+        #         widget.deleteLater()
 
         for course_group in Must_group:
             if course_group:
                 new_group = Table()
                 new_group.createTable_1(course_group)
-                Must_layout.append(new_group)
+                # Must_layout.append(new_group)
                 self.groupMust.layout().addWidget(new_group)
 
-        while self.groupPrefer.layout().count():
-            item = self.groupPrefer.layout().takeAt(0)
-            widget = item.widget()
-            if widget:
-                widget.deleteLater()
+        # while self.groupPrefer.layout().count():
+        #     item = self.groupPrefer.layout().takeAt(0)
+        #     widget = item.widget()
+        #     if widget:
+        #         widget.deleteLater()
 
         for course_group in Prefer_group:
             if course_group:
                 new_group = Table()
                 new_group.createTable_2(course_group)
-                Prefer_layout.append(new_group)
+                # Prefer_layout.append(new_group)
                 self.groupPrefer.layout().addWidget(new_group)
 
     # 장바구니에서 꼭 버튼 눌렀을 때
     def inGroupButton1(self):
-        if Must_layout:
-            c_button = self.sender()
+        self.layout().removeWidget(self.buttonGroup1)
+        while self.group_layout1.count():
+            item = self.group_layout1.takeAt(0)
+            if item:
+                widget = item.widget()
+                if widget:
+                    widget.deleteLater()
 
-            if c_button:
-                index = self.Course_Basket.indexAt(c_button.pos())
-                row = index.row()
+        c_button = self.sender()
 
-                if row != -1:
-                    course = selected_course[row]
-                    del selected_course[row]
-                    self.Course_Basket.removeRow(row)
+        if c_button:
+            index = self.Course_Basket.indexAt(c_button.pos())
+            row = index.row()
 
-                    for i in range(len(Must_layout)):
-                        button = QPushButton('그룹' + str(i+1))
-                        button.clicked.connect(partial(self.addCourse1, i, course))
-                        self.group_layout1.addWidget(button)
+            if row != -1:
+                course = selected_course[row]
+                del selected_course[row]
+                self.Course_Basket.removeRow(row)
 
-                    self.layout().addWidget(self.buttonGroup1)
-                    self.buttonGroup1.adjustSize()
-                    c_button_pos = c_button.mapToGlobal(c_button.pos())
-                    self.buttonGroup1.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
-                    self.buttonGroup1.show()
+                for i in range(len(Must_layout)):
+                    button = QPushButton('그룹' + str(i+1))
+                    button.clicked.connect(partial(self.addCourse1, i, course))
+                    self.group_layout1.addWidget(button)
+
+                button = QPushButton('그룹 추가')
+                button.clicked.connect(partial(self.must_AddFunction, course))
+                self.group_layout1.addWidget(button)
+
+                self.layout().addWidget(self.buttonGroup1)
+                self.buttonGroup1.adjustSize()
+                c_button_pos = c_button.mapToGlobal(c_button.pos())
+                self.buttonGroup1.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
+                self.buttonGroup1.show()
 
     # 장바구니에서 들으면 좋음 버튼 눌렀을 때
     def inGroupButton2(self):
-        if Prefer_layout:
-            c_button = self.sender()
+        c_button = self.sender()
 
-            if c_button:
-                index = self.Course_Basket.indexAt(c_button.pos())
-                row = index.row()
+        if c_button:
+            index = self.Course_Basket.indexAt(c_button.pos())
+            row = index.row()
 
-                if row != -1:
-                    course = selected_course[row]
-                    del selected_course[row]
-                    self.Course_Basket.removeRow(row)
-                    print(selected_course)
+            if row != -1:
+                course = selected_course[row]
+                del selected_course[row]
+                self.Course_Basket.removeRow(row)
+                print(selected_course)
 
-                    for i in range(len(Prefer_layout)):
-                        button = QPushButton('그룹 ' + str(i+1))
-                        button.clicked.connect(partial(self.addCourse2, i, course))
-                        self.group_layout2.addWidget(button)
+                for i in range(len(Prefer_layout)):
+                    button = QPushButton('그룹 ' + str(i+1))
+                    button.clicked.connect(partial(self.addCourse2, i, course))
+                    self.group_layout2.addWidget(button)
 
-                    self.layout().addWidget(self.buttonGroup2)
-                    self.buttonGroup2.adjustSize()
-                    c_button_pos = c_button.mapToGlobal(c_button.pos())
-                    self.buttonGroup2.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
-                    self.buttonGroup2.show()
+                button = QPushButton('그룹 추가')
+                button.clicked.connect(partial(self.prefer_AddFunction, course))
+                self.group_layout2.addWidget(button)
 
-    # 꼭 그룹의 그룹번호 선택하기
+                self.layout().addWidget(self.buttonGroup2)
+                self.buttonGroup2.adjustSize()
+                c_button_pos = c_button.mapToGlobal(c_button.pos())
+                self.buttonGroup2.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
+                self.buttonGroup2.show()
+
+    # 장바구니에서 꼭 버튼 -> 그룹 번호 선택
     def addCourse1(self, i, course):
         self.layout().removeWidget(self.buttonGroup1)
         while self.group_layout1.count():
@@ -421,11 +438,54 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 if widget:
                     widget.deleteLater()
         self.buttonGroup1.hide()
+
         widget = Must_layout[i]
         Must_group[i].append(course)
         widget.createTable1(i)
 
-    # 들으면 좋음 그룹의 그룹번호 선택하기
+    # 장바구니에서 꼭 버튼 -> 그룹 추가 버튼
+    def must_AddFunction(self, course):
+        new_group = Table()
+        course_group = []
+        Must_group.append(course_group)
+        Must_layout.append(new_group)
+        self.groupMust.layout().addWidget(new_group)
+
+        self.addCourse1(self.groupMust.layout().count() - 1, course)
+
+    # 꼭에서 그룹 삭제 버튼 클릭
+    def must_RemoveFunction(self):
+        if Must_layout:
+            for i in range(len(Must_layout)):
+                button = QPushButton('그룹' + str(i + 1))
+                button.clicked.connect(partial(self.removeFunction1, i))
+                self.group_layout3.addWidget(button)
+
+            self.layout().addWidget(self.buttonGroup3)
+            self.buttonGroup3.adjustSize()
+            self.buttonGroup3.move(650, 500)
+            self.buttonGroup3.show()
+
+    # 꼭에서 그룹 삭제 버튼 -> 그룹 번호 선택
+    def removeFunction1(self, i):
+        del Must_group[i]
+        del Must_layout[i]
+
+        item = self.groupMust.layout().takeAt(i)
+        widget = item.widget()
+        if widget:
+            widget.deleteLater()
+
+        self.layout().removeWidget(self.buttonGroup3)
+        while self.group_layout3.count():
+            item = self.group_layout3.takeAt(0)
+            if item:
+                widget = item.widget()
+                if widget:
+                    widget.deleteLater()
+        self.buttonGroup3.hide()
+
+    # 장바구니에서 들으면 좋음 버튼 -> 그룹 번호 선택
     def addCourse2(self, i, course):
         self.layout().removeWidget(self.buttonGroup2)
         while self.group_layout2.count():
@@ -435,9 +495,53 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 if widget:
                     widget.deleteLater()
         self.buttonGroup2.hide()
+
         widget = Prefer_layout[i]
         Prefer_group[i].append(course)
         widget.createTable2(i)
+
+    # 장바구니에서 들으면 좋음 버튼 -> 그룹 추가 버튼
+    def prefer_AddFunction(self, course):
+        new_group = Table()
+        course_group = []
+        Prefer_group.append(course_group)
+        Prefer_layout.append(new_group)
+        self.groupPrefer.layout().addWidget(new_group)
+
+        self.addCourse2(self.groupPrefer.layout().count() - 1, course)
+
+    # 들으면 좋음에서 그룹 삭제 버튼 클릭
+    def prefer_RemoveFunction(self):
+        if Prefer_layout:
+            for i in range(len(Prefer_layout)):
+                button = QPushButton('그룹' + str(i + 1))
+                button.clicked.connect(partial(self.removeFunction2, i))
+                self.group_layout4.addWidget(button)
+
+            self.layout().addWidget(self.buttonGroup4)
+            self.buttonGroup4.adjustSize()
+            self.buttonGroup4.move(1450, 500)
+            self.buttonGroup4.show()
+
+    # 들으면 좋음에서 그룹 삭제 버튼 -> 그룹 번호 선택
+    def removeFunction2(self, i):
+        del Prefer_group[i]
+        del Prefer_layout[i]
+
+        item = self.groupPrefer.layout().takeAt(i)
+        widget = item.widget()
+        if widget:
+            widget.deleteLater()
+
+        self.layout().removeWidget(self.buttonGroup4)
+        while self.group_layout4.count():
+            item = self.group_layout4.takeAt(0)
+            if item:
+                widget = item.widget()
+                if widget:
+                    widget.deleteLater()
+        self.buttonGroup4.hide()
+
 
     # 시간표 버튼 클릭 (최종 시간표 창으로 이동)
     def Button_ScheduleFunction(self):
@@ -456,42 +560,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         myWindow4.create_Header()
         myWindow4.show()
         self.close()
-
-    # 꼭에서 그룹 추가
-    def must_AddFunction(self):
-        new_group = Table()
-        course_group = []
-        Must_group.append(course_group)
-        Must_layout.append(new_group)
-        self.groupMust.layout().addWidget(new_group)
-
-    # 꼭에서 그룹 삭제
-    def must_RemoveFunction(self):
-        Must_group.pop()
-        Must_layout.pop()
-        if self.groupMust.layout().count() > 0:
-            item = self.groupMust.layout().takeAt(self.groupMust.layout().count() - 1)
-            widget = item.widget()
-            if widget:
-                widget.deleteLater()
-
-    # 들으면 좋음에서 그룹 추가
-    def prefer_AddFunction(self):
-        new_group = Table()
-        course_group = []
-        Prefer_group.append(course_group)
-        Prefer_layout.append(new_group)
-        self.groupPrefer.layout().addWidget(new_group)
-
-    # 들으면 좋음에서 그룹 삭제
-    def prefer_RemoveFunction(self):
-        Prefer_group.pop()
-        Prefer_layout.pop()
-        if self.groupPrefer.layout().count() > 0:
-            item = self.groupPrefer.layout().takeAt(self.groupPrefer.layout().count() - 1)
-            widget = item.widget()
-            if widget:
-                widget.deleteLater()
 
 # 최종 시간표 보여주는 창
 class timeTable(QMainWindow, form_class3, SaveOnClose):
@@ -538,6 +606,7 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
     # 마법사 버튼 클릭 (마법사 창으로 이동)
     def button_Magic(self):
         myWindow2.setTable()
+        # myWindow2.setGroup()
         myWindow2.show()
         self.close()
 
@@ -593,11 +662,18 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
             label.setAlignment(Qt.AlignCenter)
 
             button_layout = QHBoxLayout()
-
             for i in range(len(self.time_tables)):
                 button = QPushButton(str(i+1) + '번 시간표')
                 button.clicked.connect(partial(self.buttonFunction, i))
                 button_layout.addWidget(button)
+
+            left_button = QPushButton('<')
+            num_of_table = QLineEdit()
+            right_button = QPushButton('>')
+
+            button_layout.addWidget(left_button)
+            button_layout.addWidget(num_of_table)
+            button_layout.addWidget(right_button)
 
             header_layout.addWidget(label)
             header_layout.addLayout(button_layout)
@@ -640,6 +716,7 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
     # 마법사 버튼 클릭 (마법사 창으로 이동)
     def button_Magic(self):
         myWindow2.setTable()
+        # myWindow2.setGroup()
         myWindow2.show()
         self.close()
 
