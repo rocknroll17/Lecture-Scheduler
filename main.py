@@ -119,8 +119,8 @@ class SaveOnClose:
             fm.add("selected_course", selected_course)
             fm.add("Must_group", Must_group)
             fm.add("Prefer_group", Prefer_group)
-            fm.add("Must_layout", Must_layout)
-            fm.add("Prefer_layout", Prefer_layout)
+            #fm.add("Must_layout", Must_layout)
+            #fm.add("Prefer_layout", Prefer_layout)
             fm.save()
 
 # 강의 검색 창
