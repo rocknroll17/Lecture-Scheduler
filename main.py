@@ -932,6 +932,8 @@ if __name__ == "__main__" :
     #QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
 
+    for s in set([c.department for c in DB.course_list]):
+        print(s)
     #각 창의 인스턴스 생성
     myWindow1 = courseSearch()
     myWindow2 = Magic()
