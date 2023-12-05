@@ -92,23 +92,26 @@ Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이
 selected_schedule = []          # 선택한 최종 시간표
 
 TABLE_ROW_SIZE = 50 # 테이블 행 크기
+SAVE_AND_LOAD_FILE = True
 
 # 파일 로드
-fm = FileManager.FileManager()
-is_loaded = fm.load()
-if is_loaded:
-    if fm.basket: # 나중에 list를 Basket으로 바꿔야댐
-        selected_course = fm.basket
-    if fm.must_group:
-        Must_group = fm.must_group
-    if fm.prefer_group:
-        Prefer_group = fm.prefer_group
+if SAVE_AND_LOAD_FILE:
+    fm = FileManager.FileManager()
+    is_loaded = fm.load()
+    if is_loaded:
+        if fm.basket: # 나중에 list를 Basket으로 바꿔야댐
+            selected_course = fm.basket
+        if fm.must_group:
+            Must_group = fm.must_group
+        if fm.prefer_group:
+            Prefer_group = fm.prefer_group
 
 
 # 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
 class SaveOnClose:
     def closeEvent(self, event):
-        fm.save(selected_course, Must_group, Prefer_group)
+        if SAVE_AND_LOAD_FILE: 
+            fm.save(selected_course, Must_group, Prefer_group)
         '''
         # 종료 창 출력
         quit_msg = "종료하시겠습니까?"
