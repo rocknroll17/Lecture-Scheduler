@@ -92,23 +92,26 @@ Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이
 selected_schedule = []          # 선택한 최종 시간표
 
 TABLE_ROW_SIZE = 50 # 테이블 행 크기
+SAVE_AND_LOAD_FILE = True
 
 # 파일 로드
-fm = FileManager.FileManager()
-is_loaded = fm.load()
-if is_loaded:
-    if fm.basket: # 나중에 list를 Basket으로 바꿔야댐
-        selected_course = fm.basket
-    if fm.must_group:
-        Must_group = fm.must_group
-    if fm.prefer_group:
-        Prefer_group = fm.prefer_group
+if SAVE_AND_LOAD_FILE:
+    fm = FileManager.FileManager()
+    is_loaded = fm.load()
+    if is_loaded:
+        if fm.basket: # 나중에 list를 Basket으로 바꿔야댐
+            selected_course = fm.basket
+        if fm.must_group:
+            Must_group = fm.must_group
+        if fm.prefer_group:
+            Prefer_group = fm.prefer_group
 
 
 # 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
 class SaveOnClose:
     def closeEvent(self, event):
-        fm.save(selected_course, Must_group, Prefer_group)
+        if SAVE_AND_LOAD_FILE:
+            fm.save(selected_course, Must_group, Prefer_group)
         '''
         # 종료 창 출력
         quit_msg = "종료하시겠습니까?"
@@ -445,6 +448,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup1.hide()
 
         widget = Must_layout[i]
+        #Must_group[i].append(course)
         Must_group.add_course(i, course)
         widget.createTable1(i)
 
@@ -502,6 +506,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup2.hide()
 
         widget = Prefer_layout[i]
+        #Prefer_group[i].append(course)
         Prefer_group.add_course(i, course)
         widget.createTable2(i)
 
@@ -1023,6 +1028,8 @@ if __name__ == "__main__" :
     #QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
 
+    for s in set([c.department for c in DB.course_list]):
+        print(s)
     #각 창의 인스턴스 생성
     myWindow1 = courseSearch()
     myWindow2 = Magic()

@@ -14,6 +14,10 @@ class Candidate:
             __id[c.course_id] = True
         self.__ids.append(__id)
     
+    def add_course(self, course):
+        # 새로운 그룹에 course 추가
+        self.__groups.append([course])
+    
     def add_course(self, group_index, course):
         # i번째 그룹에 course 추가
         self.__groups[group_index].append(course)
