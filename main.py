@@ -83,13 +83,11 @@ form_class4 = uic.loadUiType("create.ui")[0]
 condition = ["","","","",""]    # 검색 조건
 searched_course = []            # 검색 조건에 부합하는 강의 리스트
 selected_course = []            # 장바구니에 담을 강의 리스트
-#Must_group = []                 # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
-Must_group = Candidate()
+Must_group = Candidate()        # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Must_layout = []                # 꼭 그룹에 추가되는 테이블 모음
-#Prefer_group = []               # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
-Prefer_group = Candidate()
+Prefer_group = Candidate()      # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
-selected_schedule = []          # 선택한 최종 시간표
+selected_schedule = []          # 선택한 최종 시간표 
 
 TABLE_ROW_SIZE = 40 # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
@@ -334,11 +332,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup4 = QGroupBox()
         self.group_layout4 = QFormLayout(self.buttonGroup4)
         self.setTable()
-        # 임시조치 - 창 시작할 때, 저장된 Must_group과 Prefer_group 수 만큼 테이블 위젯 생성
-        for _ in range(len(Must_group.get_groups())):
-            Must_layout.append(Table())
-        for _ in range(len(Prefer_group.get_groups())):
-            Prefer_group.append(Table())
         self.setGroup()
 
     #  장바구니 테이블 생성하는 메소드
