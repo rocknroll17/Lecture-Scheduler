@@ -18,7 +18,7 @@ from os import environ # 환경변수 조절 용
 
 def suppress_qt_warnings():   # 해상도 별 UI크기 강제 고정
     environ["QT_DEVICE_PIXEL_RATIO"] = "0"
-    environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "2"
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     environ["QT_SCALE_FACTOR"] = "1"
 
@@ -93,12 +93,26 @@ Prefer_group = Candidate()
 Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []          # 선택한 최종 시간표
 
-TABLE_ROW_SIZE = 50 # 테이블 행 크기
+TABLE_ROW_SIZE = 40 # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
 
 # 파일 로드
+fm = FileManager.FileManager()
+fm.save_and_load = SAVE_AND_LOAD_FILE
 if SAVE_AND_LOAD_FILE:
-    fm = FileManager.FileManager()
+    is_loaded = fm.load()
+    if is_loaded:
+        if fm.get("selected_course"):
+            selected_course = fm.get("selected_course")
+        if fm.get("Must_group"):
+            Must_group = fm.get("Must_group")
+        if fm.get("Prefer_group"):
+            Prefer_group = fm.get("Prefer_group")
+        if fm.get("Must_layout"):
+            Must_layout = fm.get("Must_layout")
+        if fm.get("Prefer_group"):
+            Prefer_group = fm.get("Prefer_group")
+    '''
     is_loaded = fm.load()
     if is_loaded:
         if fm.basket: # 나중에 list를 Basket으로 바꿔야댐
@@ -107,13 +121,19 @@ if SAVE_AND_LOAD_FILE:
             Must_group = fm.must_group
         if fm.prefer_group:
             Prefer_group = fm.prefer_group
+            '''
 
 
 # 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
 class SaveOnClose:
     def closeEvent(self, event):
         if SAVE_AND_LOAD_FILE:
-            fm.save(selected_course, Must_group, Prefer_group)
+            fm.add("selected_course", selected_course)
+            fm.add("Must_group", Must_group)
+            fm.add("Prefer_group", Prefer_group)
+            fm.add("Must_layout", Must_layout)
+            fm.add("Prefer_layout", Prefer_layout)
+            fm.save()
         '''
         # 종료 창 출력
         quit_msg = "종료하시겠습니까?"
@@ -315,6 +335,13 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.group_layout3 = QFormLayout(self.buttonGroup3)
         self.buttonGroup4 = QGroupBox()
         self.group_layout4 = QFormLayout(self.buttonGroup4)
+        self.setTable()
+        # 임시조치 - 창 시작할 때, 저장된 Must_group과 Prefer_group 수 만큼 테이블 위젯 생성
+        for _ in range(len(Must_group.get_groups())):
+            Must_layout.append(Table())
+        for _ in range(len(Prefer_group.get_groups())):
+            Prefer_group.append(Table())
+        self.setGroup()
 
     #  장바구니 테이블 생성하는 메소드
     def setTable(self):
@@ -375,6 +402,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 꼭 버튼 눌렀을 때
     def inGroupButton1(self):
+        if self.buttonGroup1.isVisible():
+            # 이미 눌렀으면 아무 것도 안함
+            return
         self.layout().removeWidget(self.buttonGroup1)
         while self.group_layout1.count():
             item = self.group_layout1.takeAt(0)
@@ -411,6 +441,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 들으면 좋음 버튼 눌렀을 때
     def inGroupButton2(self):
+        if self.buttonGroup2.isVisible():
+            # 이미 눌렀으면 아무 것도 안함
+            return
         c_button = self.sender()
 
         if c_button:
@@ -465,6 +498,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 꼭에서 그룹 삭제 버튼 클릭
     def must_RemoveFunction(self):
+        if self.buttonGroup3.isVisible(): 
+            # 이미 눌러져있으면 아무것도 안함
+            return
         if Must_layout:
             for i in range(len(Must_layout)):
                 button = QPushButton('그룹' + str(i + 1))
@@ -522,6 +558,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 들으면 좋음에서 그룹 삭제 버튼 클릭
     def prefer_RemoveFunction(self):
+        if self.buttonGroup4.isVisible(): 
+            # 이미 눌러져있으면 아무것도 안함
+            return
         if Prefer_layout:
             for i in range(len(Prefer_layout)):
                 button = QPushButton('그룹' + str(i + 1))
@@ -632,7 +671,7 @@ class CenterAlignDelegate(QStyledItemDelegate):
         super().paint(painter, option, index)
 
 # 시간표 후보 생성 창
-class Candidate(QMainWindow, form_class4, SaveOnClose):
+class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -672,7 +711,7 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
         group_layout.addWidget(button_magic)
 
         header_layout.addWidget(group)
-
+        print(f"possible schedules : {self.time_tables}")
         if len(self.time_tables) > 1:
             label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
             label.setAlignment(Qt.AlignCenter)
@@ -1031,7 +1070,7 @@ class Table(QTableWidget):
         if button:
             index = self.indexAt(button.pos())
             row = index.row()
-            idx = Must_layout.index(self)
+            idx = Must_layout.index(self) # 오류
 
             if row != -1:
                 #selected_course.append(Must_group[idx][row])
@@ -1048,7 +1087,7 @@ class Table(QTableWidget):
         if button:
             index = self.indexAt(button.pos())
             row = index.row()
-            idx = Prefer_layout.index(self)
+            idx = Prefer_layout.index(self) # 오류
 
             if row != -1:
                 #selected_course.append(Prefer_group[idx][row])
@@ -1069,7 +1108,7 @@ if __name__ == "__main__" :
     myWindow1 = courseSearch()
     myWindow2 = Magic()
     myWindow3 = timeTable()
-    myWindow4 = Candidate()
+    myWindow4 = ScheduleCandidates()
 
     #프로그램 화면을 보여주는 코드
     myWindow1.show()
