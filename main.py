@@ -92,7 +92,7 @@ Prefer_layout = []              # 들으면 좋음 그룹에 추가되는 테이
 selected_schedule = []          # 선택한 최종 시간표 
 
 TABLE_ROW_SIZE = 40 # 테이블 행 크기
-SAVE_AND_LOAD_FILE = True
+SAVE_AND_LOAD_FILE = False
 
 # 파일 로드
 fm = FileManager.FileManager()
@@ -306,6 +306,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         super().__init__()
         self.setupUi(self)
 
+        self.row = -1
+
         self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 창으로 이동하는 버튼
         self.Button_Courses.clicked.connect(self.Button_CoursesFunction)    # 강의 검색 창으로 이동하는 버튼
         self.Button_Create.clicked.connect(self.Button_CreateFunction)      # 시간표 생성 창으로 이동하는 버튼
@@ -394,12 +396,11 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         if c_button:
             index = self.Course_Basket.indexAt(c_button.pos())
-            row = index.row()
+            self.row = index.row()
+            print(self.row)
 
-            if row != -1:
-                course = selected_course[row]
-                del selected_course[row]
-                self.Course_Basket.removeRow(row)
+            if self.row != -1:
+                course = selected_course[self.row]
 
                 for i in range(len(Must_layout)):
                     button = QPushButton('그룹' + str(i+1))
@@ -426,13 +427,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         if c_button:
             index = self.Course_Basket.indexAt(c_button.pos())
-            row = index.row()
+            self.row = index.row()
 
-            if row != -1:
-                course = selected_course[row]
-                del selected_course[row]
-                self.Course_Basket.removeRow(row)
-                print(selected_course)
+            if self.row != -1:
+                course = selected_course[self.row]
 
                 for i in range(len(Prefer_layout)):
                     button = QPushButton('그룹 ' + str(i+1))
@@ -451,6 +449,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 꼭 버튼 -> 그룹 번호 선택
     def addCourse1(self, i, course):
+        del selected_course[self.row]
+        self.Course_Basket.removeRow(self.row)
         self.layout().removeWidget(self.must_button_group)
         while self.must_group_layout.count():
             item = self.must_group_layout.takeAt(0)
@@ -511,6 +511,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 들으면 좋음 버튼 -> 그룹 번호 선택
     def addCourse2(self, i, course):
+        del selected_course[self.row]
+        self.Course_Basket.removeRow(self.row)
         self.layout().removeWidget(self.prefer_button_group)
         while self.prefer_group_layout.count():
             item = self.prefer_group_layout.takeAt(0)
