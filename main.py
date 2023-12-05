@@ -1,4 +1,5 @@
 import Course
+
 from functools import partial
 from itertools import product
 import CourseDB
@@ -8,6 +9,7 @@ import FileManager
 
 import sys
 
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtCore import Qt, QTime
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
@@ -448,7 +450,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup1.hide()
 
         widget = Must_layout[i]
-        #Must_group[i].append(course)
         Must_group.add_course(i, course)
         widget.createTable1(i)
 
@@ -506,7 +507,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.buttonGroup2.hide()
 
         widget = Prefer_layout[i]
-        #Prefer_group[i].append(course)
         Prefer_group.add_course(i, course)
         widget.createTable2(i)
 
@@ -535,7 +535,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 들으면 좋음에서 그룹 삭제 버튼 -> 그룹 번호 선택
     def removeFunction2(self, i):
-        Prefer_group.delete[i]
+        Prefer_group.delete(i)
         del Prefer_layout[i]
 
         item = self.groupPrefer.layout().takeAt(i)
@@ -626,12 +626,18 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
         myWindow4.show()
         self.close()
 
+class CenterAlignDelegate(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        option.displayAlignment = Qt.AlignCenter
+        super().paint(painter, option, index)
+
 # 시간표 후보 생성 창
 class Candidate(QMainWindow, form_class4, SaveOnClose):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.time_tables = []
+        self.current_table_index = -1
 
         self.main_layout = QVBoxLayout()
         self.central_widget = QWidget()
@@ -673,34 +679,36 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
 
             button_layout = QHBoxLayout()
 
-            # for i in range(len(self.time_tables)):
-            #     button = QPushButton(str(i+1) + '번 시간표')
-            #     button.clicked.connect(partial(self.buttonFunction, i))
-            #     button_layout.addWidget(button)
+            tableBox = QLineEdit('그룹 1');
+            tableBox.setAlignment(Qt.AlignCenter)
+            tableBox.setReadOnly(True)
 
             left_button = QPushButton('<')
-            # left_button.clicked.connect(self.leftbuttonClicked)
+            left_button.clicked.connect(lambda: self.leftbuttonClicked(tableBox, num_of_table))
             right_button = QPushButton('>')
-            # right_button.clicked.connect(self.rightbuttonClicked)
-
-            num_of_table = QComboBox();
-            items = []
-            for i in range(len(self.time_tables)):
-                items.append(str(i+1) + '번 그룹')
-            num_of_table.addItems(items)
-
-            # self.comboBoxDepartment.addItems(list(set(course.department for course in DB.course_list)))  # 학과 검색
-            # self.comboBoxDepartment.model().sort(0, Qt.AscendingOrder)
-            # self.comboBoxDepartment.currentIndexChanged.connect(self.comboBoxFunction)
+            right_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
 
             button_layout.addWidget(left_button)
-            button_layout.addWidget(num_of_table)
+            button_layout.addWidget(tableBox)
             button_layout.addWidget(right_button)
+
+            num_of_table = QComboBox();
+            num_of_table.setEditable(True)
+            num_of_table.lineEdit().setAlignment(Qt.AlignCenter)
+            num_of_table.lineEdit().setReadOnly(True)
+
+            num_of_table.currentIndexChanged.connect(lambda: self.comboBoxFunction(tableBox))
+            items = ['']
+            for i in range(len(self.time_tables)):
+                items.append('그룹 ' + str(i + 1))
+            num_of_table.addItems(items)
 
             header_layout.addWidget(label)
             header_layout.addLayout(button_layout)
+            header_layout.addWidget(num_of_table)
 
             self.main_layout.addWidget(header)
+            self.create_Table(0)
 
         else:
             label = QLabel('만들어진 시간표가 없습니다. 강의를 그룹에 추가하세요')
@@ -709,17 +717,44 @@ class Candidate(QMainWindow, form_class4, SaveOnClose):
             header_layout.addWidget(label)
             self.main_layout.addWidget(header)
 
-    # def leftbuttonClicked(self):
-    #
-    # def rightbuttonClicked(self):
+    def leftbuttonClicked(self, lineEdit, comboBox):
+        i = int(lineEdit.text().split()[-1]) - 1
+        num = len(self.time_tables)
+        if i == 0:
+            i = num - 1
+        else:
+            i = i - 1
+        lineEdit.setText('그룹 ' + str(i+1))
+        comboBox.setCurrentIndex(i+1)
+        self.create_Table(i)
 
+    def rightbuttonClicked(self, lineEdit, comboBox):
+        i = int(lineEdit.text().split()[-1]) - 1
+        num = len(self.time_tables)
+        if i == num - 1:
+            i = 0
+        else:
+            i = i + 1
+        lineEdit.setText('그룹 ' + str(i+1))
+        comboBox.setCurrentIndex(i+1)
+        self.create_Table(i)
 
-    # 시간표 후보 중 하나를 보여주는 버튼을 클릭
-    def buttonFunction(self, index):
+    def comboBoxFunction(self, lineEdit):
+        sender = self.sender()
+        if sender.currentText() != '':
+            i = int(sender.currentText().split()[-1]) - 1
+            lineEdit.setText('그룹 ' + str(i + 1))
+            self.create_Table(i)
+
+    # 시간표 보여주기 (초기화)
+    def create_Table(self, index):
         if self.main_layout.count() > 1:
-            item = self.main_layout.takeAt(2)
-            if item.layout():
-                item.layout().deleteLater()
+            current_widget = self.main_layout.itemAt(1)
+            if current_widget:
+                widget_to_remove = current_widget.widget()
+                if widget_to_remove:
+                    widget_to_remove.setParent(None)
+                    widget_to_remove.deleteLater()
 
         group = QGroupBox()
         group.setLayout(QVBoxLayout(group))
