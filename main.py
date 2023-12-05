@@ -16,7 +16,7 @@ from os import environ # 환경변수 조절 용
 
 def suppress_qt_warnings():   # 해상도 별 UI크기 강제 고정
     environ["QT_DEVICE_PIXEL_RATIO"] = "0"
-    environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "2"
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     environ["QT_SCALE_FACTOR"] = "1"
 
@@ -373,6 +373,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 꼭 버튼 눌렀을 때
     def inGroupButton1(self):
+        if self.buttonGroup1.isVisible():
+            # 이미 눌렀으면 아무 것도 안함
+            return
         self.layout().removeWidget(self.buttonGroup1)
         while self.group_layout1.count():
             item = self.group_layout1.takeAt(0)
@@ -409,6 +412,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 들으면 좋음 버튼 눌렀을 때
     def inGroupButton2(self):
+        if self.buttonGroup2.isVisible():
+            # 이미 눌렀으면 아무 것도 안함
+            return
         c_button = self.sender()
 
         if c_button:
@@ -464,6 +470,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 꼭에서 그룹 삭제 버튼 클릭
     def must_RemoveFunction(self):
+        if self.buttonGroup3.isVisible(): 
+            # 이미 눌러져있으면 아무것도 안함
+            return
         if Must_layout:
             for i in range(len(Must_layout)):
                 button = QPushButton('그룹' + str(i + 1))
@@ -522,6 +531,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 들으면 좋음에서 그룹 삭제 버튼 클릭
     def prefer_RemoveFunction(self):
+        if self.buttonGroup4.isVisible(): 
+            # 이미 눌러져있으면 아무것도 안함
+            return
         if Prefer_layout:
             for i in range(len(Prefer_layout)):
                 button = QPushButton('그룹' + str(i + 1))
