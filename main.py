@@ -10,9 +10,10 @@ import FileManager
 import sys
 
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtCore import Qt, QTime
+from PyQt5.QtCore import Qt, QTime, QTimer, QPropertyAnimation
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
+from PyQt5.QtGui import QFont
 
 from os import environ # 환경변수 조절 용
 
@@ -111,6 +112,45 @@ if SAVE_AND_LOAD_FILE:
         if fm.get("Prefer_group"):
             Prefer_group = fm.get("Prefer_group")
 
+
+class Notification(QWidget):
+    def __init__(self, message):
+        super(Notification, self).__init__()
+
+        self.message_label = QLabel(message)
+        self.message_label.setAlignment(Qt.AlignCenter)
+
+        # Set up layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.message_label)
+        self.setLayout(layout)
+
+        # Set up window properties
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
+        # Set up animation
+        self.fade_animation = QPropertyAnimation(self, b"windowOpacity")
+        self.fade_animation.finished.connect(self.close)
+        self.fade_animation.setStartValue(1.0)
+        self.fade_animation.setEndValue(0.0)
+        self.fade_animation.setDuration(1500)  # 1500 milliseconds (1.5 seconds)
+
+        # Set up timer for initial delay
+        self.delay_timer = QTimer(self)
+        self.delay_timer.timeout.connect(self.start_fade_out)
+
+        # Set up initial properties
+        self.setGeometry(300, 300, 200, 100)
+        self.setStyleSheet("background-color: rgba(0, 0, 0, 200); color: white;")
+
+    def show_notification(self):
+        self.show()
+        self.delay_timer.start(300)  # 500 milliseconds (0.5 seconds) delay
+
+    def start_fade_out(self):
+        self.delay_timer.stop()
+        self.fade_animation.start()
 
 # 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
 class SaveOnClose:
@@ -249,7 +289,9 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose) :
             self.Course_Basket.resizeColumnsToContents()
             self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
         else:
-            QMessageBox.information(self, 'note', '이미 장바구니에 담았습니다.')
+            #QMessageBox.information(self, 'note', '이미 장바구니에 담았습니다.')
+            notification = Notification("이미 장바구니에 담았습니다.")
+            notification.show_notification()
 
     # 장바구니에서 삭제 버튼 누르면 해당 강의를 장바구니에서 삭제
     def outBasketButton(self):
