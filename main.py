@@ -42,7 +42,8 @@ def time_table_maker(must_group, prefer_group, credit_limit):
     for i in must_combinations:  # 모든 경우에 수에 대해서
         for j in prefer_combinations:
             if magician(list(i) + list(j), credit_limit):  # 가능한 시간표인지 판단
-                possible_table.append(list(i) + list(j))  # 가능한 시간표라면 추가
+                if len(list(i) + list(j)) != 0:
+                    possible_table.append(list(i) + list(j))  # 가능한 시간표라면 추가
     return possible_table  # 반환
 
 
@@ -62,16 +63,10 @@ def magician(time_group, credit_limit):
             # 이 코드가 startmin과 endmin사이의 모든 분을 만들어서 각 요일 리스트에 추가
     for i in range(len(compare_time)):  # 일-토까지
         if len(compare_time[i]) != len(set(compare_time[i])):  # 겹치는 시간이 있는 지 비교
+            print(len(compare_time[i]))
+            print(len(set(compare_time[i])))
             return False
     return True
-
-
-# lecture_list = []
-# DB = CourseDB.CourseDB()
-# with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
-#     lecture_data = f.readlines()
-#     for i in range(len(lecture_data)):
-#         DB.add(Course.Course(lecture_data[i].strip().split("$")))
 
 lecture_list = []
 DB = CourseDB.CourseDB()
@@ -147,7 +142,7 @@ class Notification(QWidget):
         self.delay_timer.timeout.connect(self.start_fade_out)
 
         # Set up initial properties
-        self.setGeometry(300, 300, 200, 100)
+        self.setGeometry(940, 520, 200, 50)
         self.setStyleSheet("background-color: rgba(0, 0, 0, 200); color: white;")
 
     def show_notification(self):
