@@ -31,8 +31,6 @@ def time_table_maker(must_group, prefer_group, credit_limit):
     possible_table = []  # 꼭에 관한 가능한 시간표를 담아서 나중에 반환
     prefer_combinations = []  # 들으면 좋음에 관한 모든 경우의 수를 찾아서 반환
     must_combinations = list(product(*must_group))  # 가능한 모든 경우의 수를 뽑음
-    print(must_group)
-    print(prefer_group)
 
     for combination in product(*prefer_group):
         for mask in product(range(2), repeat=len(prefer_group)):
@@ -43,8 +41,8 @@ def time_table_maker(must_group, prefer_group, credit_limit):
     for i in must_combinations:  # 모든 경우에 수에 대해서
         for j in prefer_combinations:
             if magician(list(i) + list(j), credit_limit):  # 가능한 시간표인지 판단
-                possible_table.append(list(i) + list(j))  # 가능한 시간표라면 추가
-    print(possible_table)
+                if len(list(i) + list(j)) != 0:
+                    possible_table.append(list(i) + list(j))  # 가능한 시간표라면 추가
     return possible_table  # 반환
 
 
@@ -141,7 +139,7 @@ class Notification(QWidget):
         self.delay_timer.timeout.connect(self.start_fade_out)
 
         # Set up initial properties
-        self.setGeometry(300, 300, 200, 100)
+        self.setGeometry(940, 520, 200, 50)
         self.setStyleSheet("background-color: rgba(0, 0, 0, 200); color: white;")
 
     def show_notification(self):
@@ -211,7 +209,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
     # 조건 넣고 검색 버튼 누르면 강의 검색 테이블 만들어짐
     def Button_SearchFunction(self):
         global searched_course
-        print(condition)
+        #print(condition)
         self.Table_Course.setRowCount(0)
         searched_course.clear()
         searched_course = DB.search(condition)
@@ -308,7 +306,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
             if row != -1:
                 del selected_course[row]
                 self.Course_Basket.removeRow(row)
-                print(selected_course)
+                #print(selected_course)
 
     # 시간표 버튼 눌렀을 때 (최종 시간표 보는 창으로 이동)
     def Button_ScheduleFunction(self):
@@ -447,7 +445,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if c_button:
             index = self.Course_Basket.indexAt(c_button.pos())
             self.row = index.row()
-            print(self.row)
+            #print(self.row)
 
             if self.row != -1:
                 course = selected_course[self.row]
@@ -749,7 +747,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         group_layout.addWidget(button_magic)
 
         header_layout.addWidget(group)
-        print(f"possible schedules : {self.time_tables}")
+        #print(f"possible schedules : {self.time_tables}")
         if len(self.time_tables) > 1:
             label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
             label.setAlignment(Qt.AlignCenter)
@@ -1148,7 +1146,8 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     for s in set([c.department for c in DB.course_list]):
-        print(s)
+        #print(s)
+        pass
     # 각 창의 인스턴스 생성
     myWindow1 = courseSearch()
     myWindow2 = Magic()
