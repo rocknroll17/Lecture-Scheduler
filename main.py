@@ -185,7 +185,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         self.comboBoxCollege.addItems([""]+list(set(course.college for course in DB.course_list)))  # 대학 검색
         self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
-        self.comboBoxCollege.setCurrentIndex(4)  # 대학(전체)
+        self.comboBoxCollege.setCurrentIndex(0)  # 대학(전체)
         self.college = self.comboBoxCollege.currentText()
 
         self.comboBoxDepartment.addItems(
