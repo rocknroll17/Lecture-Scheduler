@@ -426,6 +426,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if self.must_button_group.isVisible():
             # 이미 눌렀으면 아무 것도 안함
             return
+        if self.prefer_button_group.isVisible():
+            # 꼭, 들으면 좋음 동시에 못하게
+            return
         self.layout().removeWidget(self.must_button_group)
         while self.must_group_layout.count():
             item = self.must_group_layout.takeAt(0)
@@ -464,6 +467,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     #def inGroupButton2(self):
         if self.prefer_button_group.isVisible():
             # 이미 눌렀으면 아무 것도 안함
+            return
+        if self.must_button_group.isVisible():
+            # 꼭, 들으면 좋음 동시에 못하게
             return
         c_button = self.sender()
 
