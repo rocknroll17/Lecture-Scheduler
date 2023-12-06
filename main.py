@@ -178,10 +178,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         self.Button_Magic.clicked.connect(self.Button_MagicFunction)  # 마법사 창으로 이동하는 버튼
 
         # 조건 검색
-        # self.comboBoxCollege.addItems([""] + list(set(course.college for course in DB.course_list)))  # 대학 검색
-        # self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
-        # self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
-
         self.comboBoxCollege.addItems([""]+list(set(course.college for course in DB.course_list)))  # 대학 검색
         self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
@@ -542,7 +538,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 button.clicked.connect(partial(self.removeFunction1, i))
                 self.delete_must_group_layout.addWidget(button)
 
-            self.layout().addWidget(self.buttdelete_must_button_grouponGroup3)
+            self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
             self.delete_must_button_group.move(650, 500)
             self.delete_must_button_group.show()
@@ -608,6 +604,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             self.delete_prefer_button_group.adjustSize()
             self.delete_prefer_button_group.move(1450, 500)
             self.delete_prefer_button_group.show()
+
+            
 
     # 들으면 좋음에서 그룹 삭제 버튼 -> 그룹 번호 선택
     def removeFunction2(self, i):
