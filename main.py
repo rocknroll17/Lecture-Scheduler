@@ -31,6 +31,8 @@ def time_table_maker(must_group, prefer_group, credit_limit):
     possible_table = []  # 꼭에 관한 가능한 시간표를 담아서 나중에 반환
     prefer_combinations = []  # 들으면 좋음에 관한 모든 경우의 수를 찾아서 반환
     must_combinations = list(product(*must_group))  # 가능한 모든 경우의 수를 뽑음
+    print(must_group)
+    print(prefer_group)
 
     for combination in product(*prefer_group):
         for mask in product(range(2), repeat=len(prefer_group)):
@@ -38,11 +40,11 @@ def time_table_maker(must_group, prefer_group, credit_limit):
             prefer_combinations.append(result)
     prefer_combinations = list(
         set(tuple(filter(lambda x: x is not None, combination)) for combination in prefer_combinations))
-
     for i in must_combinations:  # 모든 경우에 수에 대해서
         for j in prefer_combinations:
             if magician(list(i) + list(j), credit_limit):  # 가능한 시간표인지 판단
                 possible_table.append(list(i) + list(j))  # 가능한 시간표라면 추가
+    print(possible_table)
     return possible_table  # 반환
 
 
@@ -64,14 +66,6 @@ def magician(time_group, credit_limit):
         if len(compare_time[i]) != len(set(compare_time[i])):  # 겹치는 시간이 있는 지 비교
             return False
     return True
-
-
-# lecture_list = []
-# DB = CourseDB.CourseDB()
-# with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
-#     lecture_data = f.readlines()
-#     for i in range(len(lecture_data)):
-#         DB.add(Course.Course(lecture_data[i].strip().split("$")))
 
 lecture_list = []
 DB = CourseDB.CourseDB()
@@ -188,7 +182,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         # self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         # self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
 
-        self.comboBoxCollege.addItems(list(set(course.college for course in DB.course_list)))  # 대학 검색
+        self.comboBoxCollege.addItems([""]+list(set(course.college for course in DB.course_list)))  # 대학 검색
         self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
         self.comboBoxCollege.setCurrentIndex(4)  # 대학(전체)
@@ -213,10 +207,15 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         self.Table_Course.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setTable()  # 처음 생성할 때에도 장바구니 로드
-
+    
+    def keyPressEvent(self, qKeyEvent): # 키보드 이벤트 핸들러
+        if qKeyEvent.key() == Qt.Key_Return: 
+            self.Button_SearchFunction() 
+ 
     # 조건 넣고 검색 버튼 누르면 강의 검색 테이블 만들어짐
     def Button_SearchFunction(self):
         global searched_course
+        print(condition)
         self.Table_Course.setRowCount(0)
         searched_course.clear()
         searched_course = DB.search(condition)
