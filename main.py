@@ -38,7 +38,6 @@ def time_table_maker(must_group, prefer_group, credit_limit):
             prefer_combinations.append(result)
     prefer_combinations = list(
         set(tuple(filter(lambda x: x is not None, combination)) for combination in prefer_combinations))
-
     for i in must_combinations:  # 모든 경우에 수에 대해서
         for j in prefer_combinations:
             if magician(list(i) + list(j), credit_limit):  # 가능한 시간표인지 판단
@@ -63,8 +62,6 @@ def magician(time_group, credit_limit):
             # 이 코드가 startmin과 endmin사이의 모든 분을 만들어서 각 요일 리스트에 추가
     for i in range(len(compare_time)):  # 일-토까지
         if len(compare_time[i]) != len(set(compare_time[i])):  # 겹치는 시간이 있는 지 비교
-            print(len(compare_time[i]))
-            print(len(set(compare_time[i])))
             return False
     return True
 
@@ -183,10 +180,10 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         # self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         # self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
 
-        self.comboBoxCollege.addItems(list(set(course.college for course in DB.course_list)))  # 대학 검색
+        self.comboBoxCollege.addItems([""]+list(set(course.college for course in DB.course_list)))  # 대학 검색
         self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
-        self.comboBoxCollege.setCurrentIndex(4)  # 대학(전체)
+        self.comboBoxCollege.setCurrentIndex(0)  # 대학(전체)
         self.college = self.comboBoxCollege.currentText()
 
         self.comboBoxDepartment.addItems(
@@ -208,10 +205,15 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         self.Table_Course.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setTable()  # 처음 생성할 때에도 장바구니 로드
-
+    
+    def keyPressEvent(self, qKeyEvent): # 키보드 이벤트 핸들러
+        if qKeyEvent.key() == Qt.Key_Return: 
+            self.Button_SearchFunction() 
+ 
     # 조건 넣고 검색 버튼 누르면 강의 검색 테이블 만들어짐
     def Button_SearchFunction(self):
         global searched_course
+        #print(condition)
         self.Table_Course.setRowCount(0)
         searched_course.clear()
         searched_course = DB.search(condition)
@@ -308,7 +310,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
             if row != -1:
                 del selected_course[row]
                 self.Course_Basket.removeRow(row)
-                print(selected_course)
+                #print(selected_course)
 
     # 시간표 버튼 눌렀을 때 (최종 시간표 보는 창으로 이동)
     def Button_ScheduleFunction(self):
@@ -447,7 +449,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if c_button:
             index = self.Course_Basket.indexAt(c_button.pos())
             self.row = index.row()
-            print(self.row)
+            #print(self.row)
 
             if self.row != -1:
                 course = selected_course[self.row]
@@ -747,7 +749,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         group_layout.addWidget(button_magic)
 
         header_layout.addWidget(group)
-        print(f"possible schedules : {self.time_tables}")
+        #print(f"possible schedules : {self.time_tables}")
         if len(self.time_tables) > 1:
             label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
             label.setAlignment(Qt.AlignCenter)
@@ -1146,7 +1148,8 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     for s in set([c.department for c in DB.course_list]):
-        print(s)
+        #print(s)
+        pass
     # 각 창의 인스턴스 생성
     myWindow1 = courseSearch()
     myWindow2 = Magic()
