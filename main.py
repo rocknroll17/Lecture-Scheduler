@@ -191,7 +191,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         self.comboBoxCollege.addItems(list(set(course.college for course in DB.course_list)))  # 대학 검색
         self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
-        self.comboBoxCollege.setCurrentIndex(4)
+        self.comboBoxCollege.setCurrentIndex(4)  # 대학(전체)
         self.college = self.comboBoxCollege.currentText()
 
         self.comboBoxDepartment.addItems(
@@ -942,8 +942,8 @@ class Schedule_table(QTableWidget):
                     item.setTextAlignment(Qt.AlignCenter)
                     self.setItem(row, day_column, item)
 
-        fixed_row_height = 15
-        fixed_column_width = 300
+        fixed_row_height = 5
+        fixed_column_width = 265
         for row in range(self.rowCount()):
             self.setRowHeight(row, fixed_row_height)
         for column in range(self.columnCount()):
