@@ -24,6 +24,7 @@ class Timeblock:
         self.endmin = Timeblock.time_to_int(end_time)
         #self.periods = periods -> 안쓸 예정. 주석처리
 
+
     def intersects_with(self, other):
         # 해당 timeblock과 other timeblock이 겹치는가? -> True False
         if self.day != other.day:
