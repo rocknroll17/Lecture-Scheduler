@@ -246,6 +246,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
                 for j in range(1, 14):
                     item_text = selected_course[i].total[j - 1]
                     item = QTableWidgetItem(item_text)
+                    item.setstylesheet
                     item.setTextAlignment(Qt.AlignCenter)
                     self.Course_Basket.setItem(i, j, item)
                 self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
@@ -355,12 +356,40 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         for i in range(len(selected_course)):
             must_button = QPushButton("꼭")
-            must_button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            must_button.setStyleSheet("""
+                        QPushButton {
+            	background-color: #42454c;
+            	color: #fff;
+
+            }
+
+            QPushButton:hover {
+            	background-color: #383b40;
+            }
+
+            QPushButton:pressed {
+            	background-color: #1d1e21;
+            }
+            """)
             must_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             must_button.clicked.connect(self.onMustButtonPress)
 
             prefer_button = QPushButton("들으면 좋음")
-            prefer_button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            prefer_button.setStyleSheet("""
+                        QPushButton {
+            	background-color: #42454c;
+            	color: #fff;
+
+            }
+
+            QPushButton:hover {
+            	background-color: #383b40;
+            }
+
+            QPushButton:pressed {
+            	background-color: #1d1e21;
+            }
+            """)
             prefer_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             prefer_button.clicked.connect(self.onPreferButtonPress)
 
@@ -370,6 +399,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             for j in range(2, 15):
                 item_text = selected_course[i].total[j - 2]
                 item = QTableWidgetItem(item_text)
+
                 item.setTextAlignment(Qt.AlignCenter)
                 self.Course_Basket.setItem(i, j, item)
             self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
@@ -458,16 +488,61 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 course = selected_course[self.row]
 
                 xButton = QPushButton('추가 안 함')
+                xButton.setStyleSheet("""
+                            QPushButton {
+                	background-color: #42454c;
+                	color: #fff;
+
+                }
+
+                QPushButton:hover {
+                	background-color: #383b40;
+                }
+
+                QPushButton:pressed {
+                	background-color: #1d1e21;
+                }
+                """)
                 xButton.clicked.connect(self.must_removeGroup1)
                 self.must_group_layout.addWidget(xButton)
                 for i in range(len(Must_layout)):
                     button = QPushButton('그룹' + str(i + 1))
                     button.clicked.connect(partial(self.addCourse1, i, course))
                     self.must_group_layout.addWidget(button)
+                    button.setStyleSheet("""
+                                                QPushButton {
+                                    	background-color: #42454c;
+                                    	color: #fff;
+
+                                    }
+
+                                    QPushButton:hover {
+                                    	background-color: #383b40;
+                                    }
+
+                                    QPushButton:pressed {
+                                    	background-color: #1d1e21;
+                                    }
+                                    """)
 
                 button = QPushButton('그룹 추가')
                 button.clicked.connect(partial(self.must_AddFunction, course))
                 self.must_group_layout.addWidget(button)
+                button.setStyleSheet("""
+                                            QPushButton {
+                                	background-color: #42454c;
+                                	color: #fff;
+
+                                }
+
+                                QPushButton:hover {
+                                	background-color: #383b40;
+                                }
+
+                                QPushButton:pressed {
+                                	background-color: #1d1e21;
+                                }
+                                """)
 
                 self.layout().addWidget(self.must_button_group)
                 self.must_button_group.adjustSize()
@@ -509,14 +584,59 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 xButton = QPushButton('추가 안 함')
                 xButton.clicked.connect(self.prefer_removeGroup1)
                 self.prefer_group_layout.addWidget(xButton)
+                xButton.setStyleSheet("""
+                                            QPushButton {
+                                	background-color: #42454c;
+                                	color: #fff;
+
+                                }
+
+                                QPushButton:hover {
+                                	background-color: #383b40;
+                                }
+
+                                QPushButton:pressed {
+                                	background-color: #1d1e21;
+                                }
+                                """)
                 for i in range(len(Prefer_layout)):
                     button = QPushButton('그룹 ' + str(i + 1))
                     button.clicked.connect(partial(self.addCourse2, i, course))
                     self.prefer_group_layout.addWidget(button)
+                    button.setStyleSheet("""
+                                                QPushButton {
+                                    	background-color: #42454c;
+                                    	color: #fff;
+
+                                    }
+
+                                    QPushButton:hover {
+                                    	background-color: #383b40;
+                                    }
+
+                                    QPushButton:pressed {
+                                    	background-color: #1d1e21;
+                                    }
+                                    """)
 
                 button = QPushButton('그룹 추가')
                 button.clicked.connect(partial(self.prefer_AddFunction, course))
                 self.prefer_group_layout.addWidget(button)
+                button.setStyleSheet("""
+                                            QPushButton {
+                                	background-color: #42454c;
+                                	color: #fff;
+
+                                }
+
+                                QPushButton:hover {
+                                	background-color: #383b40;
+                                }
+
+                                QPushButton:pressed {
+                                	background-color: #1d1e21;
+                                }
+                                """)
 
                 self.layout().addWidget(self.prefer_button_group)
                 self.prefer_button_group.adjustSize()
@@ -586,11 +706,41 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             xButton = QPushButton('삭제 안 함')
             xButton.clicked.connect(self.must_removeGroup2)
             self.delete_must_group_layout.addWidget(xButton)
+            xButton.setStyleSheet("""
+                                        QPushButton {
+                            	background-color: #42454c;
+                            	color: #fff;
+
+                            }
+
+                            QPushButton:hover {
+                            	background-color: #383b40;
+                            }
+
+                            QPushButton:pressed {
+                            	background-color: #1d1e21;
+                            }
+                            """)
 
             for i in range(len(Must_layout)):
                 button = QPushButton('그룹' + str(i + 1))
                 button.clicked.connect(partial(self.removeFunction1, i))
                 self.delete_must_group_layout.addWidget(button)
+                button.setStyleSheet("""
+                                            QPushButton {
+                                	background-color: #42454c;
+                                	color: #fff;
+
+                                }
+
+                                QPushButton:hover {
+                                	background-color: #383b40;
+                                }
+
+                                QPushButton:pressed {
+                                	background-color: #1d1e21;
+                                }
+                                """)
 
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
@@ -682,10 +832,40 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             xButton = QPushButton('삭제 안 함')
             xButton.clicked.connect(self.prefer_removeGroup2)
             self.delete_prefer_group_layout.addWidget(xButton)
+            xButton.setStyleSheet("""
+                                        QPushButton {
+                            	background-color: #42454c;
+                            	color: #fff;
+
+                            }
+
+                            QPushButton:hover {
+                            	background-color: #383b40;
+                            }
+
+                            QPushButton:pressed {
+                            	background-color: #1d1e21;
+                            }
+                            """)
             for i in range(len(Prefer_layout)):
                 button = QPushButton('그룹' + str(i + 1))
                 button.clicked.connect(partial(self.removeFunction2, i))
                 self.delete_prefer_group_layout.addWidget(button)
+                button.setStyleSheet("""
+                                            QPushButton {
+                                	background-color: #42454c;
+                                	color: #fff;
+
+                                }
+
+                                QPushButton:hover {
+                                	background-color: #383b40;
+                                }
+
+                                QPushButton:pressed {
+                                	background-color: #1d1e21;
+                                }
+                                """)
 
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
@@ -1092,7 +1272,40 @@ class Table(QTableWidget):
         Table.widget_counts += 1
         self.setColumnCount(5)
         self.setHorizontalHeaderLabels(["", '과목명', '과목번호', '담당교수', '강의시간'])
+        self.setStyleSheet("""
+toQHeaderView {
+	border-radius: 10px;
+}
 
+QHeaderView::section {
+	background-color: #1e1f23;
+    color: white;
+    border-style: none;
+    font-family: 'Montserrat', sans-serif;
+	/*border-bottom: 2px solid #fffff8;
+    border-top: 2px solid #fffff8;*/
+}
+
+QTableWidget {
+	border-radius: 10px;
+    border: 2px solid #ccc;
+	background-color: #2b2d31;
+}
+
+QHeaderView::section:horizontal {
+	background-color: #1e1f23;
+	default-background-color: #3d5673;
+    margin: 0px;
+    padding: 0px;
+}
+
+QHeaderView::section:vertical {
+	background-color: #1e1f23;
+	default-background-color: #3d5673;
+    margin: 0px;
+    padding: 0px;
+}
+        """)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -1105,7 +1318,21 @@ class Table(QTableWidget):
         # for i in range(len(Must_group[index])):
         for i in range(len(Must_group.get_groups()[index])):
             button = QPushButton("X")
-            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setStyleSheet("""
+QPushButton {
+	background-color: #42454c;
+	color: #fff;
+
+}
+
+QPushButton:hover {
+	background-color: #383b40;
+}
+
+QPushButton:pressed {
+	background-color: #1d1e21;
+}
+""")
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -1140,7 +1367,21 @@ class Table(QTableWidget):
 
         for i in range(len(courses)):
             button = QPushButton("X")
-            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setStyleSheet("""
+            QPushButton {
+            	background-color: #42454c;
+            	color: #fff;
+
+            }
+
+            QPushButton:hover {
+            	background-color: #383b40;
+            }
+
+            QPushButton:pressed {
+            	background-color: #1d1e21;
+            }
+            """)
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -1173,7 +1414,21 @@ class Table(QTableWidget):
         # for i in range(len(Prefer_group[index])):
         for i in range(len(Prefer_group.get_group(index))):
             button = QPushButton("X")
-            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setStyleSheet("""
+            QPushButton {
+            	background-color: #42454c;
+            	color: #fff;
+
+            }
+
+            QPushButton:hover {
+            	background-color: #383b40;
+            }
+
+            QPushButton:pressed {
+            	background-color: #1d1e21;
+            }
+            """)
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -1204,7 +1459,21 @@ class Table(QTableWidget):
 
         for i in range(len(courses)):
             button = QPushButton("X")
-            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setStyleSheet("""
+            QPushButton {
+            	background-color: #42454c;
+            	color: #fff;
+
+            }
+
+            QPushButton:hover {
+            	background-color: #383b40;
+            }
+
+            QPushButton:pressed {
+            	background-color: #1d1e21;
+            }
+            """)
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
