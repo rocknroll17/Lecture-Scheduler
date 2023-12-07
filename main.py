@@ -33,10 +33,11 @@ Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음
 Prefer_group = Candidate(True)  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
-tot_credits = 20 # 최대 학점
+tot_credits = 50 # 최대 학점
 
 DB = CourseDB.CourseDB('Data/lecture.txt')
-        
+
+
 TABLE_ROW_SIZE = 40  # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
 width = 0 # 해상도
@@ -741,25 +742,15 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
     # 시간표 생성 창 initialize
     def create_Header(self):
-        # print(tot_credits)
         while self.main_layout.count():
             item = self.main_layout.takeAt(0)
             if item.widget():
                 item.widget().deleteLater()
-
-        #print(tot_credits)
-        #self.time_tables = time_table_maker(Must_group, Prefer_group, tot_credits)
-        #self.time_tables.sort(key=lambda x: len(x), reverse=True)
-
         self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group, int(tot_credits))
         
         self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
         self.time_tables.sort(key=lambda x: len(x[1]), reverse=True)
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> e855de448f17b818c38f9c6eda01caca60534638
         header = QGroupBox()
         header_layout = QVBoxLayout(header)
 
@@ -806,7 +797,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             num_of_table.setEditable(True)
             num_of_table.lineEdit().setAlignment(Qt.AlignCenter)
             num_of_table.lineEdit().setReadOnly(True)
-            num_of_table.setMaximumWidth(150)
+            num_of_table.setMaximumWidth(300)
             num_of_table.setMinimumHeight(30)
 
             button_layout.addWidget(left_button)
