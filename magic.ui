@@ -353,6 +353,29 @@
     </item>
    </layout>
   </widget>
+  <widget class="QLineEdit" name="credit_edit">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>10</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>10</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>최대 학점 : </string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
