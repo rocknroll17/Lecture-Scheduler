@@ -1,8 +1,5 @@
 import Course
 from ScheduleManager import ScheduleManager
-
-from functools import partial
-from itertools import product
 import CourseDB
 from Basket import Candidate
 from Basket import Basket
@@ -1037,13 +1034,11 @@ class Schedule_table(QTableWidget):
 
         fixed_row_height = 5
         fixed_column_width = 265
+
         for row in range(self.rowCount()):
             self.setRowHeight(row, fixed_row_height)
         for column in range(self.columnCount()):
-            if column == 0 or column == 1:
-                self.setColumnWidth(column, 50)
-            else:
-                self.setColumnWidth(column, fixed_column_width)
+            self.resizeColumnToContents(column) if column in (0, 1) else self.setColumnWidth(column, int(self.width()/6*2.6))
 
         self.setSelectionMode(QAbstractItemView.NoSelection)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
