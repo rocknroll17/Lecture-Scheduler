@@ -17,7 +17,6 @@ class Course:
         
     
     def parse_line(self, line):
-        print(line)
         self.college = line[0]  # 대학
         self.department = line[1]  # 개설학과
         self.campus = line[2]  # 캠퍼스
