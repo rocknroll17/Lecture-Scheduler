@@ -33,8 +33,6 @@ Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음
 Prefer_group = Candidate(True)  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
-width = 0 # 해상도
-height = 0 # 해상도
 
 DB = CourseDB.CourseDB('Data/lecture.txt')
         
@@ -397,11 +395,13 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     # 장바구니에서 꼭 버튼 눌렀을 때
     def onMustButtonPress(self):
         if self.must_button_group.isVisible():
-            # 이미 눌렀으면 아무 것도 안함
+            # 그룹박스 이미 띄워져있으면 창 지움
+            self.must_button_group.setVisible(False)
             return
         if self.prefer_button_group.isVisible():
-            # 꼭, 들으면 좋음 동시에 못하게
+            self.prefer_button_group.setVisible(False)
             return
+
         self.layout().removeWidget(self.must_button_group)
         while self.must_group_layout.count():
             item = self.must_group_layout.takeAt(0)
@@ -432,18 +432,20 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.layout().addWidget(self.must_button_group)
                 self.must_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                self.must_button_group.move(int((width*(c_button_pos.x() - 50))/1920), int((height*(c_button_pos.y() - 150))/1080))
+                self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
                 self.must_button_group.show()
 
     # 장바구니에서 들으면 좋음 버튼 눌렀을 때
     def onPreferButtonPress(self):
-        # def inGroupButton2(self):
         if self.prefer_button_group.isVisible():
-            # 이미 눌렀으면 아무 것도 안함
+            # 그룹박스 이미 띄워져있으면 창 지움
+            self.prefer_button_group.setVisible(False)
             return
         if self.must_button_group.isVisible():
-            # 꼭, 들으면 좋음 동시에 못하게
+            # 꼭 눌러져있으면 그 창 지움
+            self.must_button_group.setVisible(False)
             return
+        self.layout().removeWidget(self.prefer_button_group)
         c_button = self.sender()
 
         if c_button:
@@ -465,7 +467,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.layout().addWidget(self.prefer_button_group)
                 self.prefer_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                self.prefer_button_group.move(int((width*(c_button_pos.x() - 100))/1920), int((height*(c_button_pos.y() - 150))/1080))
+                self.prefer_button_group.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
                 self.prefer_button_group.show()
 
     # 장바구니에서 꼭 버튼 -> 그룹 번호 선택
@@ -508,7 +510,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
-            self.delete_must_button_group.move(int((width*650)/1920), int((height*500)/1080))
+            self.delete_must_button_group.move(650, 500)
             self.delete_must_button_group.show()
 
     # 꼭에서 그룹 삭제 버튼 -> 그룹 번호 선택
@@ -570,7 +572,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
-            self.delete_prefer_button_group.move(int((width*1200)/1920), int((height*500)/1080))
+            self.delete_prefer_button_group.move(1450, 500)
             self.delete_prefer_button_group.show()
 
             
@@ -645,7 +647,7 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
         group_layout.addWidget(self.button_search)
         group_layout.addWidget(self.button_candidate)
 
-        table = Schedule_table(selected_schedule, rank = [])
+        table = Schedule_table(selected_schedule)
 
         self.central_layout.addWidget(group)
         self.central_layout.addWidget(table)
@@ -721,7 +723,8 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         self.time_tables.sort(key=lambda x: len(x[1]), reverse=True)
         '''
         for i in range(len(self.time_tables)):
-            print(self.time_tables[i][1])'''
+            print(self.time_tables[i][1])
+            '''
 
         header = QGroupBox()
         header_layout = QVBoxLayout(header)
@@ -896,17 +899,17 @@ class Schedule_table(QTableWidget):
     def __init__(self, courses, rank=[]):
         super().__init__()
         self.setColumnCount(8)
-        self.setRowCount(56)
+        self.setRowCount(64)
         self.setHorizontalHeaderLabels(
             ['교시', '시간', '월요일(Mon)', '화요일(Tue)', '수요일(Wed)', '목요일(Thu)', '금요일(Fri)', '토요일(Sat)'])
-        h = [''] * 56
+        h = [''] * 64
         self.setVerticalHeaderLabels(h)
 
-        for row in range(0, 56, 4):
+        for row in range(0, 64, 4):
             self.setSpan(row, 0, 4, 1)
 
         count = 0
-        for row in range(0, 56, 4):
+        for row in range(0, 64, 4):
             item = QTableWidgetItem(str(count))
             item.setTextAlignment(Qt.AlignCenter)
             self.setItem(row, 0, item)
@@ -916,7 +919,7 @@ class Schedule_table(QTableWidget):
         count_hours = 8
         count_minutes = 0
 
-        for row in range(0, 56):
+        for row in range(0, 64):
             time_item = QTableWidgetItem(time_format.format(count_hours, count_minutes))
             time_item.setTextAlignment(Qt.AlignCenter)
             self.setItem(row, 1, time_item)
@@ -1176,9 +1179,6 @@ if __name__ == "__main__":
     suppress_qt_warnings()
     # QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
-    screen_rect = app.desktop().screenGeometry()
-    width = screen_rect.width()
-    height = screen_rect.height()
 
     for s in set([c.department for c in DB.course_list]):
         #print(s)
