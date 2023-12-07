@@ -1055,7 +1055,7 @@ class Schedule_table(QTableWidget):
         for row in range(self.rowCount()):
             self.setRowHeight(row, fixed_row_height)
         for column in range(self.columnCount()):
-            self.resizeColumnToContents(column) if column in (0, 1) else self.setColumnWidth(column, int(self.width()/6*2.6))
+            self.resizeColumnToContents(column) if column in (0, 1) else self.setColumnWidth(column, fixed_column_width)
 
         self.setSelectionMode(QAbstractItemView.NoSelection)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
