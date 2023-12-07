@@ -308,7 +308,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 창으로 이동하는 버튼
         self.Button_Courses.clicked.connect(self.Button_CoursesFunction)  # 강의 검색 창으로 이동하는 버튼
         self.Button_Create.clicked.connect(self.Button_CreateFunction)  # 시간표 생성 창으로 이동하는 버튼
-        self.Must_Remove.clicked.connect(self.must_RemoveFunction)  # 꼭 그룹에서 그룹 삭제 버튼
+        self.Must_Remove.clicked.connect(self.must_RemoveFunction)      # 꼭 그룹에서 그룹 삭제 버튼
         self.Prefer_Remove.clicked.connect(self.prefer_RemoveFunction)  # 들으면 좋음 그룹에서 그룹 삭제 버튼
         self.credit_edit.textChanged.connect(self.text_changed)         # 최대 학점 입력하는 칸
 
@@ -337,7 +337,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if text != "":
             global tot_credits
             tot_credits = int(text)
-
 
     #  장바구니 테이블 생성하는 메소드
     def setTable(self):
@@ -524,6 +523,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         course_group = []
         Must_group.add(course_group)
         Must_layout.append(new_group)
+
         self.groupMust.layout().addWidget(new_group)
 
         self.addCourse1(self.groupMust.layout().count() - 1, course)
@@ -741,15 +741,10 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
     # 시간표 생성 창 initialize
     def create_Header(self):
-        # print(tot_credits)
         while self.main_layout.count():
             item = self.main_layout.takeAt(0)
             if item.widget():
                 item.widget().deleteLater()
-
-        #print(tot_credits)
-        #self.time_tables = time_table_maker(Must_group, Prefer_group, tot_credits)
-        #self.time_tables.sort(key=lambda x: len(x), reverse=True)
 
         self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group, int(tot_credits))
         
@@ -802,8 +797,9 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             num_of_table.setEditable(True)
             num_of_table.lineEdit().setAlignment(Qt.AlignCenter)
             num_of_table.lineEdit().setReadOnly(True)
-            num_of_table.setMaximumWidth(150)
+            num_of_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             num_of_table.setMinimumHeight(30)
+
 
             button_layout.addWidget(left_button)
             button_layout.addWidget(tableBox)
@@ -922,7 +918,6 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         selected_schedule.clear()
         for course in self.time_tables[index][0]:
             selected_schedule.append(course)
-
 
 # 시간표 테이블 1개에 대한 class
 class Schedule_table(QTableWidget):
@@ -1055,6 +1050,13 @@ class Table(QTableWidget):
             self.setRowHeight(i, TABLE_ROW_SIZE)
 
         # self.resizeRowsToContents()
+        # table_number_label = QLabel(f"Table {index}")
+        # table_number_label.setAlignment(Qt.AlignCenter)
+        # table_number_label.setStyleSheet("background-color: rgb(242, 255, 255);")
+        # table_number_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+        # Add the QLabel to the left side of the table
+        # self.setCellWidget(0, 0, table_number_label)
         self.resizeColumnsToContents()
 
     # 꼭에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
