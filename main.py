@@ -109,7 +109,6 @@ if SAVE_AND_LOAD_FILE:
             Must_layout = fm.get("Must_layout")
         if fm.get("Prefer_group"):
             Prefer_group = fm.get("Prefer_group")
-        print(fm)
 
 class Notification(QWidget):
     def __init__(self, message):
@@ -166,7 +165,7 @@ class SaveOnClose:
             # fm.add("Must_layout", Must_layout)
             # fm.add("Prefer_layout", Prefer_layout)
             fm.save()
-            print(fm)
+
 
 
 # 강의 검색 창
