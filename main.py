@@ -33,6 +33,8 @@ Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음
 Prefer_group = Candidate(True)  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
+width = 0 # 해상도
+height = 0 # 해상도
 
 DB = CourseDB.CourseDB('Data/lecture.txt')
         
@@ -430,7 +432,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.layout().addWidget(self.must_button_group)
                 self.must_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
+                self.must_button_group.move(int((width*(c_button_pos.x() - 50))/1920), int((height*(c_button_pos.y() - 150))/1080))
                 self.must_button_group.show()
 
     # 장바구니에서 들으면 좋음 버튼 눌렀을 때
@@ -463,7 +465,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.layout().addWidget(self.prefer_button_group)
                 self.prefer_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                self.prefer_button_group.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
+                self.prefer_button_group.move(int((width*(c_button_pos.x() - 100))/1920), int((height*(c_button_pos.y() - 150))/1080))
                 self.prefer_button_group.show()
 
     # 장바구니에서 꼭 버튼 -> 그룹 번호 선택
@@ -506,7 +508,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
-            self.delete_must_button_group.move(650, 500)
+            self.delete_must_button_group.move(int((width*650)/1920), int((height*500)/1080))
             self.delete_must_button_group.show()
 
     # 꼭에서 그룹 삭제 버튼 -> 그룹 번호 선택
@@ -568,7 +570,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
-            self.delete_prefer_button_group.move(1450, 500)
+            self.delete_prefer_button_group.move(int((width*1200)/1920), int((height*500)/1080))
             self.delete_prefer_button_group.show()
 
             
@@ -1174,6 +1176,9 @@ if __name__ == "__main__":
     suppress_qt_warnings()
     # QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
+    screen_rect = app.desktop().screenGeometry()
+    width = screen_rect.width()
+    height = screen_rect.height()
 
     for s in set([c.department for c in DB.course_list]):
         #print(s)
