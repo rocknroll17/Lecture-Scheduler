@@ -28,9 +28,9 @@ form_class4 = uic.loadUiType("create.ui")[0]
 condition = ["", "", "", "", ""]  # 검색 조건
 searched_course = []  # 검색 조건에 부합하는 강의 리스트
 selected_course = []  # 장바구니에 담을 강의 리스트
-Must_group = Candidate()  # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
-Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음
-Prefer_group = Candidate()  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
+Must_group = Candidate()  # 꼭 그룹 (그룹 하나: Course 객체의 리스트, 그룹들의 리스트)
+Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음 (Table 객체의 리스트)
+Prefer_group = Candidate()  # 들으면 좋음 그룹 (그룹 하나 = Course 객체의 리스트, 그룹들의 리스트)
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
 tot_credits = 50 # 최대 학점
@@ -39,10 +39,10 @@ DB = CourseDB.CourseDB('Data/lecture.txt')
 
 
 TABLE_ROW_SIZE = 40  # 테이블 행 크기
-TABLE_COL_SIZE_COLLEGE = 80
-TABLE_COL_SIZE_DEPARTMENT = 100
-TABLE_COL_SIZE_TITLE = 180
-SAVE_AND_LOAD_FILE = True
+TABLE_COL_SIZE_COLLEGE = 80 # 대학 열 너비
+TABLE_COL_SIZE_DEPARTMENT = 100 # 학과 열 너비
+TABLE_COL_SIZE_TITLE = 180 # 과목명 열 너비
+SAVE_AND_LOAD_FILE = True # 저장 여부
 width = 0 # 해상도
 height = 0 # 해상도
 

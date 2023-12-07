@@ -3,8 +3,8 @@ import Course # 나중에 지워 test
 
 class CourseDB():
     def __init__(self, path=""):
-        self.course_list = []
-        self.load_path = "Data/lecture.txt"
+        self.course_list = [] # 여기에 강의 저장
+        self.load_path = "Data/lecture.txt" # 강의 파일 저장 장소
         if path:
             self.load_path = path
         self.load_courses(self.load_path)
@@ -12,14 +12,17 @@ class CourseDB():
     def add(self, lecture):
         self.course_list.append(lecture)
 
+    # 인자로 준 변수 기준 정렬.  ex) sort("course_id")
     def sort(self, option):
         self.course_list.sort(key=lambda x: getattr(x, option))
     
+    # id로 강의검색 (테스트용으로 쓰임)
     def search_by_id(self, id):
         for c in self.course_list:
             if c.course_id == id:
                 return c
     
+    # 파일 읽어서 Course객체로 파싱 & 저장
     def load_courses(self, path=""):
         if path:
             _path = path
@@ -27,8 +30,8 @@ class CourseDB():
             _path = self.load_path
         with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
             lecture_data = f.readlines()
+            # 파일을 한 줄씩 읽어서 Course 객체한테 넘겨줌 -> Course 객체 안에서 파싱
             for i in range(len(lecture_data)):
-                # for i in range(300):
                 course = Course.Course(lecture_data[i].strip().split("$"))
                 self.add(course)
 
@@ -40,16 +43,16 @@ class CourseDB():
         college = condition[0]
         #   condition[1] : 학과명
         dept_name = condition[1]
-        #   condition[2] : 이게 강의명인듯
+        #   condition[2] : 강의명
         title = condition[2]
         #   condition[3] : 요일 "일" ~ "월"
         day = condition[3]
         #   condition[4] : 교시
         period = condition[4]
         
-        # search 방식
+        # 검색 방식
         # 일단 모든 강의를 담아두고,
-        # condition[0]부터 condition[4]까지 차례차례 필터링한다
+        # condition[0]부터 condition[4]까지 차례차례 필터링한다 (일치하는 것만 거른다)
 
         # result : 리턴할 강의목록. 일단 모든 강의를 담아두고 시작함
         result = self.course_list[:]
@@ -103,7 +106,7 @@ class CourseDB():
         return result
 
 if __name__ == "__main__":
-    # DB 테스트
+    # DB 테스트 코드
     db = CourseDB()
     # DB 로드
     with open('Data/lecture.txt', 'r', encoding='utf-8') as f:

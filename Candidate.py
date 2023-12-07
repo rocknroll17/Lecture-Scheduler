@@ -1,16 +1,17 @@
-from collections import defaultdict
+from collections import defaultdict # key가 존재하지 않으면 디폴트값 반환
 
 class Candidate:
     # 꼭 or 들으면 좋음 목록을 가리키는 클래스
     #def __init__(self, isPrefer = False):
     def __init__(self):
         self.__groups = [] # 그룹 단위로 저장함 (Course 리스트의 리스트)
-        self.__ids = [] # 강의 존재하는지 확인용 -> 근데 여기 add는 어떻게 돌아가는지 몰겟음
+        self.__ids = [] # 강의 존재하는지 확인용. (defaultdict의 리스트)
 
-    def add(self, group):
+    def add(self, group): 
+        # group을 더함
         # group : course의 리스트
         self.__groups.append(group)
-        __id = defaultdict(bool)
+        __id = defaultdict(bool)  # defaultdict(bool) : 존재하지 않는 key로 검색하면 False 반환
         for c in group:
             __id[c.course_id] = True
         self.__ids.append(__id)
@@ -26,8 +27,6 @@ class Candidate:
     def delete(self, index):
         del self.__groups[index]
 
-    #def remove(self, group):
-        #self.__groups.remove(group)
     def remove(self, index):
         if not isinstance(index, int) or not (0 <= index < len(self.__groups)):
             return
@@ -59,7 +58,7 @@ class Candidate:
 
 
 class Basket:
-    # 장바구니
+    # 장바구니 -> 폐기
     def __init__(self):
         self.data = []
         self.__ids = defaultdict(bool) # 강의 존재하는지 확인용
