@@ -1,15 +1,36 @@
 from Timeblock import *
-from Course import * # 나중에 지워 test
+import Course # 나중에 지워 test
 
 class CourseDB():
-    def __init__(self):
+    def __init__(self, path=""):
         self.course_list = []
+        self.load_path = "Data/lecture.txt"
+        if path:
+            self.load_path = path
+        self.load_courses(self.load_path)
 
     def add(self, lecture):
         self.course_list.append(lecture)
 
     def sort(self, option):
         self.course_list.sort(key=lambda x: getattr(x, option))
+    
+    def search_by_id(self, id):
+        for c in self.course_list:
+            if c.course_id == id:
+                return c
+    
+    def load_courses(self, path=""):
+        if path:
+            _path = path
+        else:
+            _path = self.load_path
+        with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
+            lecture_data = f.readlines()
+            for i in range(len(lecture_data)):
+                # for i in range(300):
+                course = Course.Course(lecture_data[i].strip().split("$"))
+                self.add(course)
 
 
     def search(self, condition):

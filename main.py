@@ -18,11 +18,6 @@ from PyQt5.QtGui import QFont
 
 from os import environ  # 환경변수 조절 용
 
-
-
-
-
-
 # UI파일 연결
 form_class1 = uic.loadUiType("test.ui")[0]
 form_class2 = uic.loadUiType("magic.ui")[0]
@@ -39,14 +34,8 @@ Prefer_group = Candidate(True)  # 들으면 좋음 그룹 (한 그룹 = 강의[]
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
 
-DB = CourseDB.CourseDB()
-with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
-    lecture_data = f.readlines()
-    for i in range(len(lecture_data)):
-        # for i in range(300):
-        course = Course.Course(lecture_data[i].strip().split("$"))
-        DB.add(course)
-
+DB = CourseDB.CourseDB('Data/lecture.txt')
+        
 TABLE_ROW_SIZE = 40  # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
 
@@ -119,8 +108,6 @@ class SaveOnClose:
             prefers = Candidate()
             prefers.set_groups([p for p in Prefer_group.get_groups() if p])
             fm.add("Prefer_group", prefers)
-            # fm.add("Must_layout", Must_layout)
-            # fm.add("Prefer_layout", Prefer_layout)
             fm.save()
 
 
