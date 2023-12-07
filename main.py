@@ -104,23 +104,26 @@ class Notification(QWidget):
         self.fade_animation.start()
 
 
-# 닫을 때 Event 호출하게 하려면 이거 상속받으면 됨
+# 창 닫을 때 Event 호출하게 해주는 클래스 -> 창 닫힐때 저장하도록 만듬
+# 닫을 때 정보 저장하고 싶은 창은 이 클래스 상속받으면 됨
 class SaveOnClose:
     def closeEvent(self, event):
+        # QMainWindow 클래스는 창 닫을 때 closeEvent를 호출하도록 짜여있다.
+        # -> closeEvent 재정의하면 창 닫힐 때 원하는 작업 실행 가능.  여기선 파일 저장하도록 재정의함
         if SAVE_AND_LOAD_FILE:
             fm.add("selected_course", selected_course)
-            # 빈 칸 제거
             musts = Candidate()
-            musts.set_groups([m for m in Must_group.get_groups() if m])
+            musts.set_groups([m for m in Must_group.get_groups() if m]) # 빈 리스트 제거
             fm.add("Must_group", musts)
             prefers = Candidate()
-            prefers.set_groups([p for p in Prefer_group.get_groups() if p])
+            prefers.set_groups([p for p in Prefer_group.get_groups() if p]) # 빈 리스트 제거
             fm.add("Prefer_group", prefers)
             fm.save()
 
 
 # 강의 검색 창
 class courseSearch(QMainWindow, form_class1, SaveOnClose):
+    # 세가지 클래스 상속. QMainWindow : 윈도우창 / form_class1 : ui파일 / SaveOnClose : 닫을 때 저장 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
