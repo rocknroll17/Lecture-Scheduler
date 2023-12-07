@@ -510,7 +510,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
-            self.delete_must_button_group.move(650, 500)
+            self.delete_must_button_group.move(int((width*(self.Must_Remove.pos().x() + 50))/1920), int((height*(self.Must_Remove.pos().y() - 50))/1080))
             self.delete_must_button_group.show()
 
     # 꼭에서 그룹 삭제 버튼 -> 그룹 번호 선택
@@ -572,7 +572,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
-            self.delete_prefer_button_group.move(1450, 500)
+            self.delete_prefer_button_group.move(int((width*(self.Prefer_Remove.pos().x() - 100))/1920), int((height*(self.Prefer_Remove.pos().y() - 50))/1080))
             self.delete_prefer_button_group.show()
 
             
