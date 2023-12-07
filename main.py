@@ -719,9 +719,6 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         
         self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
         self.time_tables.sort(key=lambda x: len(x[1]), reverse=True)
-        '''
-        for i in range(len(self.time_tables)):
-            print(self.time_tables[i][1])'''
 
         header = QGroupBox()
         header_layout = QVBoxLayout(header)
