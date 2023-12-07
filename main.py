@@ -69,7 +69,7 @@ if SAVE_AND_LOAD_FILE:
             Must_layout = fm.get("Must_layout")
         if fm.get("Prefer_group"):
             Prefer_group = fm.get("Prefer_group")
-        print(fm)
+        #print(fm)
 
 class Notification(QWidget):
     def __init__(self, message):
@@ -126,7 +126,7 @@ class SaveOnClose:
             # fm.add("Must_layout", Must_layout)
             # fm.add("Prefer_layout", Prefer_layout)
             fm.save()
-            print(fm)
+            #print(fm)
 
 
 # 강의 검색 창
@@ -663,7 +663,7 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
         group_layout.addWidget(self.button_search)
         group_layout.addWidget(self.button_candidate)
 
-        table = Schedule_table(selected_schedule)
+        table = Schedule_table(selected_schedule, )
 
         self.central_layout.addWidget(group)
         self.central_layout.addWidget(table)
@@ -734,10 +734,12 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         #print(tot_credits)
 
         self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group, int(tot_credits))
+        
         self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
         self.time_tables.sort(key=lambda x: len(x[1]), reverse=True)
+        '''
         for i in range(len(self.time_tables)):
-            print(self.time_tables[i][1])
+            print(self.time_tables[i][1])'''
 
         header = QGroupBox()
         header_layout = QVBoxLayout(header)
@@ -799,7 +801,10 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             items = ['']
             for i in range(len(self.time_tables)):
                 preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
-                items.append('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+                if not self.time_tables[i][1]:
+                    items.append('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
+                else:
+                    items.append('후보 ' + str(i + 1)+" - "+preferences+" 반영")
             num_of_table.addItems(items)
             header_layout.addWidget(label)
             header_layout.addLayout(button_layout)
@@ -821,8 +826,12 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             i = num - 1
         else:
             i = i - 1
+
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
-        lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+        if not self.time_tables[i][1]:
+            lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
+        else:
+            lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
         comboBox.setCurrentIndex(i + 1)
         self.create_Table(i)
 
@@ -834,7 +843,10 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         else:
             i = i + 1
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
-        lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+        if not self.time_tables[i][1]:
+            lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
+        else:
+            lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
         comboBox.setCurrentIndex(i + 1)
         self.create_Table(i)
 
@@ -843,7 +855,10 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         if sender.currentText() != '':
             i = int(sender.currentText().split()[1]) - 1
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
-            lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+            if not self.time_tables[i][1]:
+                lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
+            else:
+                lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
             self.create_Table(i)
 
     # 시간표 보여주기 (초기화)

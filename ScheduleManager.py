@@ -46,6 +46,6 @@ class ScheduleManager:
                     list(range(time_group[i].time[j].startmin, time_group[i].time[j].endmin)))
                 # 이 코드가 startmin과 endmin사이의 모든 분을 만들어서 각 요일 리스트에 추가
         for i in range(len(compare_time)):  # 일-토까지
-            if len(compare_time[i]) != len(set(compare_time[i])):  # 겹치는 시간이 있는 지 비교[1,2,3,4,5,6,7][1,2,3,4,5,6]
+            if len(compare_time[i]) != len(set(compare_time[i])):  # 겹치는 시간이 있는 지 비교
                 return False
         return True
