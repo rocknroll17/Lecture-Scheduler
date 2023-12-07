@@ -110,7 +110,7 @@ if __name__ == "__main__":
         lecture_data = f.readlines()
         for i in range(len(lecture_data)):
         #for i in range(600, 900):
-            course = Course(lecture_data[i].strip().split("$"))
+            course = Course.Course(lecture_data[i].strip().split("$"))
             db.add(course)
     # 검색 수행
     # 대학 학과명 강의명 요일 교시
