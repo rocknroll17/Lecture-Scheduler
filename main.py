@@ -38,6 +38,9 @@ DB = CourseDB.CourseDB('Data/lecture.txt')
         
 TABLE_ROW_SIZE = 40  # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
+width = 0 # 해상도
+height = 0 # 해상도
+
 
 # 파일 로드
 fm = FileManager.FileManager()
@@ -446,6 +449,12 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             self.must_button_group.setVisible(False)
             return
         self.layout().removeWidget(self.prefer_button_group)
+        while self.prefer_group_layout.count():
+            item = self.prefer_group_layout.takeAt(0)
+            if item:
+                widget = item.widget()
+                if widget:
+                    widget.deleteLater()
         c_button = self.sender()
 
         if c_button:
@@ -1179,6 +1188,9 @@ if __name__ == "__main__":
     suppress_qt_warnings()
     # QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
+    screen_rect = app.desktop().screenGeometry()
+    width = screen_rect.width()
+    height = screen_rect.height()
 
     for s in set([c.department for c in DB.course_list]):
         #print(s)
@@ -1188,6 +1200,7 @@ if __name__ == "__main__":
     myWindow2 = Magic()
     myWindow3 = timeTable()
     myWindow4 = ScheduleCandidates()
+    
 
     # 프로그램 화면을 보여주는 코드
     myWindow1.show()
