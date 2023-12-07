@@ -793,7 +793,11 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
             button_layout.addStretch()
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[0][1])
-            tableBox = QLineEdit('후보 ' + str(1)+" - "+preferences+" 반영");
+            if not self.time_tables[0][1]:
+                tableBox = QLineEdit('후보 ' + str(1)+" - 들으면 좋음 반영 안됌")
+            else:
+                tableBox = QLineEdit('후보 ' + str(1)+" - "+preferences+" 반영")
+            #tableBox = QLineEdit('후보 ' + str(1)+" - "+preferences+" 반영")
             tableBox.setAlignment(Qt.AlignCenter)
             tableBox.setReadOnly(True)
             tableBox.setMaximumWidth(300)
