@@ -4,6 +4,7 @@ import CourseDB
 from Basket import Candidate
 from Basket import Basket
 import FileManager
+import random
 
 from functools import partial
 
@@ -13,7 +14,7 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem, QCursor
 from PyQt5.QtCore import Qt, QTime, QTimer, QPropertyAnimation
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QColor
 
 from os import environ  # 환경변수 조절 용
 
@@ -1055,6 +1056,8 @@ class Schedule_table(QTableWidget):
                     item = QTableWidgetItem(info_text)
                     item.setTextAlignment(Qt.AlignCenter)
                     self.setItem(row, day_column, item)
+                    color = self.random_color()
+                    self.item(row, day_column).setBackground(QColor(color[0], color[1], color[2]))
 
         fixed_row_height = 5
         fixed_column_width = 265
@@ -1066,6 +1069,11 @@ class Schedule_table(QTableWidget):
 
         self.setSelectionMode(QAbstractItemView.NoSelection)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+    
+    def random_color(self):
+        color = [255, 117, random.randint(117, 255)]
+        random.shuffle(color)
+        return color
 
     def get_day_index(self, day):
         day_mapping = {'월': 2, '화': 3, '수': 4, '목': 5, '금': 6, '토': 7}
