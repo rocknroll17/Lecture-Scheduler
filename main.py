@@ -969,7 +969,7 @@ class Schedule_table(QTableWidget):
 
 # 꼭, 들으면 좋음에서 추가되는 하나의 그룹을 테이블로 표현함
 class Table(QTableWidget):
-    counts = 0 # 클래스변수 - Table객체 개수 셈 -> Table객체에 하나씩 매치해서 id 역할 가능
+    widget_counts = 0 # 클래스변수 - Table객체 개수 셈 -> Table객체에 하나씩 매치해서 id 역할 가능
     @staticmethod
     def initializeMustLayout():
         # 전역변수 Must_Layout 비우고 재생성
@@ -990,8 +990,8 @@ class Table(QTableWidget):
 
     def __init__(self):
         super().__init__()
-        self.id = counts # 객체의 id : 몇 번째 Table 객체인지
-        counts += 1
+        self.id = widget_counts # 객체의 id : 몇 번째 Table 객체인지
+        widget_counts += 1
         self.setColumnCount(5)
         self.setHorizontalHeaderLabels(["", '과목명', '과목번호', '담당교수', '강의시간'])
 
