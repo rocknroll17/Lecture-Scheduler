@@ -407,12 +407,19 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
 
+
+    def drawMust(self):
+        pass
+
+    def drawPrefer(self):
+        pass
+
     # 기존에 저장된 그룹들 꼭이랑 들으면 좋음에 나타내기(initialize) : 프로그램 아예 재실행했을 때만 이니셜라이즈하게 재작성해야함
     def setGroup(self):
         for course_group in Must_group.get_groups():
             if course_group:
                 new_group = Table()
-                new_group.createTable_1(course_group)
+                new_group.creatTableAtMust2(course_group)
                 # Must_layout.append(new_group)
                 self.groupMust.layout().addWidget(new_group)
 
@@ -422,6 +429,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 new_group.createTable_2(course_group)
                 # Prefer_layout.append(new_group)
                 self.groupPrefer.layout().addWidget(new_group)
+
 
     # 장바구니에서 꼭 버튼 눌렀을 때
     def onMustButtonPress(self):
@@ -575,7 +583,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         widget = Prefer_layout[i]
         Prefer_group.add_course(i, course)
-        widget.createTable2(i)
+        widget.createTableAtPrefer(i)
 
     # 장바구니에서 들으면 좋음 버튼 -> 그룹 추가 버튼
     def prefer_AddFunction(self, course):
@@ -961,8 +969,29 @@ class Schedule_table(QTableWidget):
 
 # 꼭, 들으면 좋음에서 추가되는 하나의 그룹을 테이블로 표현함
 class Table(QTableWidget):
+    counts = 0 # 클래스변수 - Table객체 개수 셈 -> Table객체에 하나씩 매치해서 id 역할 가능
+    @staticmethod
+    def initializeMustLayout():
+        # 전역변수 Must_Layout 비우고 재생성
+        global Must_Layout
+        Must_Layout = []
+        for _ in range(len(Must_group)):
+            Must_Layout.append(Table())
+
+
+    @staticmethod
+    def initializePreferLayout():
+        # 전역변수 Prefer_Layout 비우고 재생성
+        global Prefer_layout
+        Prefer_layout = []
+        for _ in range(len(Prefer_group)):
+            Prefer_layout.append(Table())
+
+
     def __init__(self):
         super().__init__()
+        self.id = counts # 객체의 id : 몇 번째 Table 객체인지
+        counts += 1
         self.setColumnCount(5)
         self.setHorizontalHeaderLabels(["", '과목명', '과목번호', '담당교수', '강의시간'])
 
@@ -971,7 +1000,8 @@ class Table(QTableWidget):
         self.setSelectionMode(QAbstractItemView.SingleSelection)
 
     # 꼭에서 그룹 생성
-    def createTable1(self, index):
+    def createTableAtMust(self, index):
+    #def createTable(self, index):
         # self.setRowCount(len(Must_group[index]))
         self.setRowCount(len(Must_group.get_groups()[index]))
 
@@ -1008,7 +1038,8 @@ class Table(QTableWidget):
         self.resizeColumnsToContents()
 
     # 꼭에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
-    def createTable_1(self, courses):
+    def creatTableAtMust2(self, courses):
+    #def createTable_1(self, courses):
         self.setRowCount(len(courses))
 
         for i in range(len(courses)):
@@ -1039,7 +1070,8 @@ class Table(QTableWidget):
         self.resizeColumnsToContents()
 
     # 들으면 좋음에서 그룹 생성
-    def createTable2(self, index):
+    def createTableAtPrefer(self, index):
+    #def createTable2(self, index):
         # self.setRowCount(len(Prefer_group[index]))
         self.setRowCount(len(Prefer_group.get_group(index)))
 
@@ -1076,7 +1108,8 @@ class Table(QTableWidget):
         self.resizeColumnsToContents()  # 칸 크기 맞추기
 
     # 들으면 좋음에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
-    def createTable_2(self, courses):
+    def createTableAtPrefer2(self, courses):
+    #def createTable_2(self, courses):
         self.setRowCount(len(courses))
 
         for i in range(len(courses)):
@@ -1112,7 +1145,15 @@ class Table(QTableWidget):
         if button:
             index = self.indexAt(button.pos())
             row = index.row()
-            idx = Must_layout.index(self)  # 오류
+            idx = Must_layout.index(self)  # 오류의 원인 -> 바꿀예정
+            # 몇 번째 idx인지 찾는다- 일단 id로 찾아볼지
+            '''
+            idx = 0
+            for table_widget in Must_layout:
+                idx += 1
+                if table_widget.id == self.id:
+                    break
+            '''
 
             if row != -1:
                 # selected_course.append(Must_group[idx][row])
@@ -1159,3 +1200,6 @@ if __name__ == "__main__":
 
     # 프로그램을 이벤트루프로 진입시키는(프로그램을 작동시키는) 코드
     app.exec_()
+
+
+# TODO: Table() 객체 만들때 순서도 주기
