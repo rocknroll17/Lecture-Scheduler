@@ -173,7 +173,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         self.Table_Course.setRowCount(len(searched_course))
 
         for i in range(0, len(searched_course)):
-            button = QPushButton("장바구니")
+            button = QPushButton("담기")
             button.setStyleSheet("background-color: rgb(242, 255, 255);")
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
@@ -797,7 +797,6 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
                 tableBox = QLineEdit('후보 ' + str(1)+" - 들으면 좋음 반영 안됌")
             else:
                 tableBox = QLineEdit('후보 ' + str(1)+" - "+preferences+" 반영")
-            #tableBox = QLineEdit('후보 ' + str(1)+" - "+preferences+" 반영")
             tableBox.setAlignment(Qt.AlignCenter)
             tableBox.setReadOnly(True)
             tableBox.setMaximumWidth(300)
@@ -805,19 +804,23 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
             left_button = QPushButton('<')
             left_button.clicked.connect(lambda: self.leftbuttonClicked(tableBox, num_of_table))
-            left_button.setMaximumWidth(100)
-            left_button.setMinimumHeight(30)
+            left_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
+            left_button.setFixedSize(100, 30)
+            #left_button.setMaximumWidth(100)
+            #left_button.setMinimumHeight(30)
             right_button = QPushButton('>')
             right_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
-            right_button.setMaximumWidth(100)
-            right_button.setMinimumHeight(30)
+            left_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            left_button.setFixedSize(100, 30)
+            #right_button.setMaximumWidth(100)
+            #right_button.setMinimumHeight(30)
 
             num_of_table = QComboBox()
             num_of_table.setEditable(True)
             num_of_table.lineEdit().setAlignment(Qt.AlignCenter)
             num_of_table.lineEdit().setReadOnly(True)
-            num_of_table.setMaximumWidth(300)
-            num_of_table.setMinimumHeight(30)
+            num_of_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            num_of_table.setFixedSize(300, 30)
 
             button_layout.addWidget(left_button)
             button_layout.addWidget(tableBox)
