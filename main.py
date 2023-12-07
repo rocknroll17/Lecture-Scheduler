@@ -731,7 +731,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
     # 시간표 생성 창 initialize
     def create_Header(self, tot_credits):
-        print(tot_credits)
+        #print(tot_credits)
 
         self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group, int(tot_credits))
         self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
@@ -769,7 +769,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             tableBox = QLineEdit('그룹 1');
             tableBox.setAlignment(Qt.AlignCenter)
             tableBox.setReadOnly(True)
-            tableBox.setMaximumWidth(150)
+            tableBox.setMaximumWidth(300)
             tableBox.setMinimumHeight(30)
 
             left_button = QPushButton('<')
@@ -798,7 +798,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             num_of_table.currentIndexChanged.connect(lambda: self.comboBoxFunction(tableBox))
             items = ['']
             for i in range(len(self.time_tables)):
-                items.append('그룹 ' + str(i + 1))
+                items.append('후보 ' + str(i + 1))
             num_of_table.addItems(items)
 
             header_layout.addWidget(label)
