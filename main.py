@@ -125,7 +125,8 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         super().__init__()
         self.setupUi(self)
         self.college = ""  # 대학 검색 조건
-
+        self.setWindowTitle("Custom Title Bar Color")
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         # 버튼
         self.Button_Search.clicked.connect(self.Button_SearchFunction)  # 강의 검색하는 버튼
         self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 창으로 이동하는 버튼
