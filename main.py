@@ -404,6 +404,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.groupPrefer.layout().addWidget(groupbox)
 
+    '''
     # 기존에 저장된 그룹들 꼭이랑 들으면 좋음에 나타내기(initialize) : 프로그램 아예 재실행했을 때만 이니셜라이즈하게 재작성해야함
     def setGroup(self):
         # 안씀 -> 테스트 후 없앨 예정
@@ -420,7 +421,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 new_group.createTable_2(course_group)
                 # Prefer_layout.append(new_group)
                 self.groupPrefer.layout().addWidget(new_group)
-
+    '''
     # 장바구니에서 꼭 버튼 눌렀을 때
     def onMustButtonPress(self):
         if self.must_button_group.isVisible():
