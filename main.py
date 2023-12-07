@@ -990,8 +990,8 @@ class Table(QTableWidget):
 
     def __init__(self):
         super().__init__()
-        self.id = widget_counts # 객체의 id : 몇 번째 Table 객체인지
-        widget_counts += 1
+        self.id = Table.widget_counts # 객체의 id : 몇 번째 Table 객체인지
+        Table.widget_counts += 1
         self.setColumnCount(5)
         self.setHorizontalHeaderLabels(["", '과목명', '과목번호', '담당교수', '강의시간'])
 
@@ -1145,15 +1145,15 @@ class Table(QTableWidget):
         if button:
             index = self.indexAt(button.pos())
             row = index.row()
-            idx = Must_layout.index(self)  # 오류의 원인 -> 바꿀예정
-            # 몇 번째 idx인지 찾는다- 일단 id로 찾아볼지
-            '''
+            # idx = Must_layout.index(self)  # 오류의 원인 -> 바꿀예정
+            # 몇 번째 idx인지 찾아본다 - 일단 idx로
+            
             idx = 0
             for table_widget in Must_layout:
                 idx += 1
                 if table_widget.id == self.id:
                     break
-            '''
+            
 
             if row != -1:
                 # selected_course.append(Must_group[idx][row])
