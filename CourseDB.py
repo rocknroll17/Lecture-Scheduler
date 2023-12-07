@@ -37,10 +37,15 @@ class CourseDB():
         # 검색 버튼 누르면 호출되는 메서드
         #   condition : gui에서 사용자가 설정한 검색조건
         #   condition[0] : 대학명
+        college = condition[0]
         #   condition[1] : 학과명
+        dept_name = condition[1]
         #   condition[2] : 이게 강의명인듯
+        title = condition[2]
         #   condition[3] : 요일 "일" ~ "월"
+        day = condition[3]
         #   condition[4] : 교시
+        period = condition[4]
         
         # search 방식
         # 일단 모든 강의를 담아두고,
@@ -51,26 +56,27 @@ class CourseDB():
 
         # 필터 함수 : 함수에 적힌 대로 강의 필터링 진행
         def checkCollege(course): # 대학 필터 : 강의와 전체 일치하면 True
-            return course.college == condition[0]
+            return course.college == college
         
         def checkDepartment(course): # 학과명 필터 : 강의와 전체 일치하면 True
-            return course.department == condition[1]
+            return course.department == dept_name
         
         def checkTitle(course): # 강의명 필터 : 강의명과 일부만 일치하면 True
-            return condition[2] in course.title
+            return title in course.title
 
         def checkDay(course): # 요일 필터 : 해당 요일이 강의 요일과 하나라도 일치하면 True
             for t in course.time:
-                if t.day == condition[3]:
+                if t.day == day:
                     return True
             return False
         
         def checkPeriod(course): # 교시 필터 : 해당 교시가 course의 강의시간에 껴있으면 True
-            period_to_min = (int(condition[4]) + 8) * 60
+            period_to_min = (int(period) + 8) * 60
             for t in course.time:
                 if t.startmin <= period_to_min < t.endmin:
-                    if (not condition[3]) or (condition[3] and t.day == condition[3]):
-                        # 요일도 설정된 경우, 교시+요일 둘 다 겹쳐야 함
+                    # 해당 교시가 강의시간에 낀 경우
+                    if (not day) or (day and t.day == day):
+                        # 요일이 설정된 경우, 교시+요일 둘 다 겹치면 True
                         return True
             return False
         
@@ -90,7 +96,7 @@ class CourseDB():
         if condition[4]:
             result = list(filter(checkPeriod, result))
 
-        # 강의명 (ex. ACT, AC) -> 연산 젤 많을 거 같아서 뒤로 뺐음
+        # 강의명 (ex. ACT, AC, A) -> 연산 젤 많을 거 같아서 뒤로 뺐음
         if condition[2]:
             result = list(filter(checkTitle, result))
 
