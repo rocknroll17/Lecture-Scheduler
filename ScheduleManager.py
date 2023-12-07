@@ -7,6 +7,8 @@ class ScheduleManager:
     def time_table_maker(must_group, prefer_group, credit_limit):
         must_group = [i for i in must_group.get_groups() if i != []]
         prefer_group = [i for i in prefer_group.get_groups() if i != []]
+        for i in range(len(prefer_group)):
+            prefer_group[i].prefer_rank = i
         possible_table = []  # 꼭에 관한 가능한 시간표를 담아서 나중에 반환
         prefer_combinations = []  # 들으면 좋음에 관한 모든 경우의 수를 찾아서 반환
         must_combinations = list(product(*must_group))  # 가능한 모든 경우의 수를 뽑음
