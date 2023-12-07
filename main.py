@@ -234,7 +234,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
             for i in range(len(selected_course)):
                 button = QPushButton("삭제")
-                button.setStyleSheet("QPushButton {margin-left: 10%; margin-right: 10%;}")
                 button.setStyleSheet("QPushButton {background-color: #42454c;color: #fff;}QPushButton:hover {background-color: #383b40;}QPushButton:pressed {background-color: #1d1e21;}")
                 button.setSizePolicy(
                     QSizePolicy.Expanding, QSizePolicy.Expanding
@@ -245,7 +244,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
                 for j in range(1, 14):
                     item_text = selected_course[i].total[j - 1]
                     item = QTableWidgetItem(item_text)
-                    item.setstylesheet
                     item.setTextAlignment(Qt.AlignCenter)
                     self.Course_Basket.setItem(i, j, item)
                 self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
@@ -507,7 +505,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 for i in range(len(Must_layout)):
                     button = QPushButton('그룹' + str(i + 1))
                     button.clicked.connect(partial(self.addCourse1, i, course))
-                    self.must_group_layout.addWidget(button)
                     button.setStyleSheet("""
                                                 QPushButton {
                                     	background-color: #42454c;
@@ -523,10 +520,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                                     	background-color: #1d1e21;
                                     }
                                     """)
+                    self.must_group_layout.addWidget(button)
 
                 button = QPushButton('그룹 추가')
                 button.clicked.connect(partial(self.must_AddFunction, course))
-                self.must_group_layout.addWidget(button)
                 button.setStyleSheet("""
                                             QPushButton {
                                 	background-color: #42454c;
@@ -542,6 +539,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                                 	background-color: #1d1e21;
                                 }
                                 """)
+                self.must_group_layout.addWidget(button)
 
                 self.layout().addWidget(self.must_button_group)
                 self.must_button_group.adjustSize()
@@ -582,7 +580,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
                 xButton = QPushButton('추가 안 함')
                 xButton.clicked.connect(self.prefer_removeGroup1)
-                self.prefer_group_layout.addWidget(xButton)
                 xButton.setStyleSheet("""
                                             QPushButton {
                                 	background-color: #42454c;
@@ -598,10 +595,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                                 	background-color: #1d1e21;
                                 }
                                 """)
+                self.prefer_group_layout.addWidget(xButton)
                 for i in range(len(Prefer_layout)):
                     button = QPushButton('그룹 ' + str(i + 1))
                     button.clicked.connect(partial(self.addCourse2, i, course))
-                    self.prefer_group_layout.addWidget(button)
                     button.setStyleSheet("""
                                                 QPushButton {
                                     	background-color: #42454c;
@@ -617,10 +614,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                                     	background-color: #1d1e21;
                                     }
                                     """)
+                    self.prefer_group_layout.addWidget(button)
 
                 button = QPushButton('그룹 추가')
                 button.clicked.connect(partial(self.prefer_AddFunction, course))
-                self.prefer_group_layout.addWidget(button)
                 button.setStyleSheet("""
                                             QPushButton {
                                 	background-color: #42454c;
@@ -636,6 +633,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                                 	background-color: #1d1e21;
                                 }
                                 """)
+                self.prefer_group_layout.addWidget(button)
 
                 self.layout().addWidget(self.prefer_button_group)
                 self.prefer_button_group.adjustSize()
@@ -704,7 +702,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if Must_layout:
             xButton = QPushButton('삭제 안 함')
             xButton.clicked.connect(self.must_removeGroup2)
-            self.delete_must_group_layout.addWidget(xButton)
             xButton.setStyleSheet("""
                                         QPushButton {
                             	background-color: #42454c;
@@ -720,11 +717,11 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                             	background-color: #1d1e21;
                             }
                             """)
+            self.delete_must_group_layout.addWidget(xButton)
 
             for i in range(len(Must_layout)):
                 button = QPushButton('그룹' + str(i + 1))
                 button.clicked.connect(partial(self.removeFunction1, i))
-                self.delete_must_group_layout.addWidget(button)
                 button.setStyleSheet("""
                                             QPushButton {
                                 	background-color: #42454c;
@@ -740,6 +737,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                                 	background-color: #1d1e21;
                                 }
                                 """)
+                self.delete_must_group_layout.addWidget(button)
 
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
@@ -830,7 +828,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if Prefer_layout:
             xButton = QPushButton('삭제 안 함')
             xButton.clicked.connect(self.prefer_removeGroup2)
-            self.delete_prefer_group_layout.addWidget(xButton)
             xButton.setStyleSheet("""
                                         QPushButton {
                             	background-color: #42454c;
@@ -846,10 +843,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                             	background-color: #1d1e21;
                             }
                             """)
+            self.delete_prefer_group_layout.addWidget(xButton)
             for i in range(len(Prefer_layout)):
                 button = QPushButton('그룹' + str(i + 1))
                 button.clicked.connect(partial(self.removeFunction2, i))
-                self.delete_prefer_group_layout.addWidget(button)
                 button.setStyleSheet("""
                                             QPushButton {
                                 	background-color: #42454c;
@@ -865,6 +862,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                                 	background-color: #1d1e21;
                                 }
                                 """)
+                self.delete_prefer_group_layout.addWidget(button)
 
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
