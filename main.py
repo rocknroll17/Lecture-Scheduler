@@ -19,20 +19,9 @@ from PyQt5.QtGui import QFont
 from os import environ  # 환경변수 조절 용
 
 
-def suppress_qt_warnings():  # 해상도 별 UI크기 강제 고정
-    environ["QT_DEVICE_PIXEL_RATIO"] = "0"
-    environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "2"
-    environ["QT_SCREEN_SCALE_FACTORS"] = "1"
-    environ["QT_SCALE_FACTOR"] = "1"
 
-lecture_list = []
-DB = CourseDB.CourseDB()
-with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
-    lecture_data = f.readlines()
-    for i in range(len(lecture_data)):
-        # for i in range(300):
-        course = Course.Course(lecture_data[i].strip().split("$"))
-        DB.add(course)
+
+
 
 # UI파일 연결
 form_class1 = uic.loadUiType("test.ui")[0]
@@ -49,6 +38,14 @@ Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음
 Prefer_group = Candidate(True)  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
+
+DB = CourseDB.CourseDB()
+with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
+    lecture_data = f.readlines()
+    for i in range(len(lecture_data)):
+        # for i in range(300):
+        course = Course.Course(lecture_data[i].strip().split("$"))
+        DB.add(course)
 
 TABLE_ROW_SIZE = 40  # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
@@ -1171,6 +1168,12 @@ class Table(QTableWidget):
 
         myWindow2.setTable()
 
+
+def suppress_qt_warnings():  # 해상도 별 UI크기 강제 고정
+    environ["QT_DEVICE_PIXEL_RATIO"] = "0"
+    environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "2"
+    environ["QT_SCREEN_SCALE_FACTORS"] = "1"
+    environ["QT_SCALE_FACTOR"] = "1"
 
 if __name__ == "__main__":
     suppress_qt_warnings()
