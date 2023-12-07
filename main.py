@@ -1303,6 +1303,9 @@ QHeaderView::section:vertical {
     margin: 0px;
     padding: 0px;
 }
+QHeaderView {
+    background-color: #1e1f23;
+}
         """)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)

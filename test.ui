@@ -390,6 +390,9 @@ QHeaderView::section:vertical {
 	default-background-color: #3d5673;
     margin: 0px;
     padding: 0px;
+}
+QHeaderView {
+    background-color: #1e1f23;
 }</string>
    </property>
    <property name="dragEnabled">
@@ -764,6 +767,9 @@ QHeaderView::section:vertical {
     margin: 0px;
     padding: 0px;
 	gridline-color: #747678;
+}
+QHeaderView {
+    background-color: #1e1f23;
 }
 
 
