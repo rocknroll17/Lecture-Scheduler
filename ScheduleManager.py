@@ -49,3 +49,28 @@ class ScheduleManager:
             if len(compare_time[i]) != len(set(compare_time[i])):  # 겹치는 시간이 있는 지 비교
                 return False
         return True
+    
+if __name__ == "__main__":
+    import Course, CourseDB
+    import Basket
+    lecture_list = []
+    DB = CourseDB.CourseDB()
+    with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
+        lecture_data = f.readlines()
+        for i in range(len(lecture_data)):
+            # for i in range(300):
+            course = Course.Course(lecture_data[i].strip().split("$"))
+            DB.add(course)
+    prefers = [
+        [DB.search_by_id("49361-01")],
+        [DB.search_by_id("52320-01")],
+        [DB.search_by_id("47710-07")],
+        [DB.search_by_id("17182-01")]
+    ]
+    p = Basket.Candidate()
+    p.set_groups(prefers)
+    for t in ScheduleManager.time_table_maker(p, Basket.Candidate(), 21):
+        print(t)
+    print()
+
+    
