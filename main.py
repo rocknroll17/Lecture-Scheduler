@@ -309,7 +309,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 창으로 이동하는 버튼
         self.Button_Courses.clicked.connect(self.Button_CoursesFunction)  # 강의 검색 창으로 이동하는 버튼
         self.Button_Create.clicked.connect(self.Button_CreateFunction)  # 시간표 생성 창으로 이동하는 버튼
-        self.Must_Remove.clicked.connect(self.must_RemoveFunction)  # 꼭 그룹에서 그룹 삭제 버튼
+        self.Must_Remove.clicked.connect(self.must_RemoveFunction)      # 꼭 그룹에서 그룹 삭제 버튼
         self.Prefer_Remove.clicked.connect(self.prefer_RemoveFunction)  # 들으면 좋음 그룹에서 그룹 삭제 버튼
         self.credit_edit.textChanged.connect(self.text_changed)         # 최대 학점 입력하는 칸
 
@@ -452,7 +452,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.must_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
                 #self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
-                self.must_button_group.move(QCursor.pos().x(), QCursor.pos().y())
+                self.must_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
                 self.must_button_group.show()
 
     # 꼭 버튼 눌렀을 때 나오는 그룹리스트 버튼
@@ -501,7 +501,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.prefer_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
                 #self.prefer_button_group.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
-                self.prefer_button_group.move(QCursor.pos().x(), QCursor.pos().y())
+                self.prefer_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
                 self.prefer_button_group.show()
 
     # 꼭 버튼 눌렀을 때 나오는 그룹리스트 버튼 삭제
@@ -527,12 +527,20 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 꼭 버튼 -> 그룹 추가 버튼
     def must_AddFunction(self, course):
+        groupbox = QGroupBox()
+        box_layout = QHBoxLayout(groupbox)
+        label = QLabel('그룹' + str(self.groupMust.layout().count()+1))
+        box_layout.addWidget(label, alignment=Qt.AlignLeft)
+
         new_group = Table()
         course_group = []
         Must_group.add(course_group)
         Must_layout.append(new_group)
-        self.groupMust.layout().addWidget(new_group)
 
+        box_layout.addWidget(new_group)
+
+        # self.groupMust.layout().addWidget(new_group)
+        self.groupMust.layout().addWidget(groupbox)
         self.addCourse1(self.groupMust.layout().count() - 1, course)
 
     # 꼭에서 그룹 삭제 버튼 클릭
@@ -566,7 +574,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
             #self.delete_must_button_group.move(int((width*(self.Must_Remove.pos().x() + 50))/1920), int((height*(self.Must_Remove.pos().y() - 50))/1080))
-            self.delete_must_button_group.move(QCursor.pos().x(), QCursor.pos().y())
+            self.delete_must_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
             self.delete_must_button_group.show()
 
     def must_removeGroup2(self):
@@ -581,6 +589,14 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         widget = item.widget()
         if widget:
             widget.deleteLater()
+
+        # 그룹 번호 최신화
+        for index in range(self.groupMust.layout().count()):
+            item = self.groupMust.layout().itemAt(index)
+            if item and isinstance(item.widget(), QGroupBox):
+                label = item.widget().layout().itemAt(0).widget()
+                if label and isinstance(label, QLabel):
+                    label.setText('그룹' + str(index + 1))
 
         self.layout().removeWidget(self.delete_must_button_group)
         while self.delete_must_group_layout.count():
@@ -610,12 +626,18 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 들으면 좋음 버튼 -> 그룹 추가 버튼
     def prefer_AddFunction(self, course):
+        groupbox = QGroupBox()
+        box_layout = QHBoxLayout(groupbox)
+        label = QLabel('그룹' + str(self.groupPrefer.layout().count() + 1))
+        box_layout.addWidget(label, alignment=Qt.AlignLeft)
+
         new_group = Table()
         course_group = []
         Prefer_group.add(course_group)
         Prefer_layout.append(new_group)
-        self.groupPrefer.layout().addWidget(new_group)
 
+        box_layout.addWidget(new_group)
+        self.groupPrefer.layout().addWidget(groupbox)
         self.addCourse2(self.groupPrefer.layout().count() - 1, course)
 
     # 들으면 좋음에서 그룹 삭제 버튼 클릭
@@ -647,7 +669,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
             #self.delete_prefer_button_group.move(int((width*(self.Prefer_Remove.pos().x() - 100))/1920), int((height*(self.Prefer_Remove.pos().y() - 50))/1080))
-            self.delete_prefer_button_group.move(QCursor.pos().x() - 100, QCursor.pos().y())
+            self.delete_prefer_button_group.move(QCursor.pos().x()-self.pos().x()-100, QCursor.pos().y()-self.pos().y()-59)
             self.delete_prefer_button_group.show()
 
     def prefer_removeGroup2(self):
@@ -662,6 +684,14 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         widget = item.widget()
         if widget:
             widget.deleteLater()
+
+        # 그룹 번호 최신화
+        for index in range(self.groupPrefer.layout().count()):
+            item = self.groupPrefer.layout().itemAt(index)
+            if item and isinstance(item.widget(), QGroupBox):
+                label = item.widget().layout().itemAt(0).widget()
+                if label and isinstance(label, QLabel):
+                    label.setText('그룹' + str(index + 1))
 
         self.layout().removeWidget(self.delete_prefer_button_group)
         while self.delete_prefer_group_layout.count():
@@ -689,7 +719,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         myWindow4.create_Header()
         myWindow4.show()
         self.close()
-
 
 # 최종 시간표 보여주는 창
 class timeTable(QMainWindow, form_class3, SaveOnClose):
@@ -765,6 +794,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             item = self.main_layout.takeAt(0)
             if item.widget():
                 item.widget().deleteLater()
+
         self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group, int(tot_credits))
         
         self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
