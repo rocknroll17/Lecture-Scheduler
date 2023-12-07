@@ -740,7 +740,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         header_layout.addWidget(group)
         #print(f"possible schedules : {self.time_tables}")
-        if len(self.time_tables) > 1:
+        if len(self.time_tables) > 0:
             label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
             label.setAlignment(Qt.AlignCenter)
 
