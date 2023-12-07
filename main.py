@@ -218,9 +218,9 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
             self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)  # 테이블 행 높이
         self.Course_Basket.resizeColumnsToContents()
-        self.Table_Course.setColumnWidth(1, TABLE_COL_SIZE_COLLEGE)
-        self.Table_Course.setColumnWidth(2, TABLE_COL_SIZE_DEPARTMENT)
-        self.Table_Course.setColumnWidth(8, TABLE_COL_SIZE_TITLE)
+        self.Course_Basket.setColumnWidth(1, TABLE_COL_SIZE_COLLEGE)
+        self.Course_Basket.setColumnWidth(2, TABLE_COL_SIZE_DEPARTMENT)
+        self.Course_Basket.setColumnWidth(8, TABLE_COL_SIZE_TITLE)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
 
     # 강의 검색 창에서 장바구니 버튼 누르면 해당 강의가 장바구니로 이동
@@ -249,6 +249,9 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
                     self.Course_Basket.setItem(i, j, item)
                 self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
             self.Course_Basket.resizeColumnsToContents()
+            self.Course_Basket.setColumnWidth(1, TABLE_COL_SIZE_COLLEGE)
+            self.Course_Basket.setColumnWidth(2, TABLE_COL_SIZE_DEPARTMENT)
+            self.Course_Basket.setColumnWidth(8, TABLE_COL_SIZE_TITLE)
             self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
         else:
             # QMessageBox.information(self, 'note', '이미 장바구니에 담았습니다.')
