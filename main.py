@@ -315,10 +315,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         # 꼭 버튼 누르면 뜨는 버튼 그룹
         self.must_button_group = QGroupBox()
-        self.must_group_layout = QFormLayout(self.must_button_group)
+        self.must_group_layout = QHBoxLayout(self.must_button_group)
         # 들으면 좋음 버튼 누르면 뜨는 버튼 그룹
         self.prefer_button_group = QGroupBox()
-        self.prefer_group_layout = QFormLayout(self.prefer_button_group)
+        self.prefer_group_layout = QHBoxLayout(self.prefer_button_group)
         # 꼭에서 그룹삭제 누르면 뜨는 버튼 그룹
         self.delete_must_button_group = QGroupBox()
         self.delete_must_group_layout = QFormLayout(self.delete_must_button_group)
