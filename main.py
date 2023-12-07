@@ -1,8 +1,8 @@
 import Course
 from ScheduleManager import ScheduleManager
 import CourseDB
-from Basket import Candidate
-from Basket import Basket
+from Candidate import Candidate
+from Candidate import Basket
 import FileManager
 import random
 

@@ -52,7 +52,7 @@ class ScheduleManager:
     
 if __name__ == "__main__":
     import Course, CourseDB
-    import Basket
+    import Candidate
     lecture_list = []
     DB = CourseDB.CourseDB()
     with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
