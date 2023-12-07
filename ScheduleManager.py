@@ -67,13 +67,13 @@ if __name__ == "__main__":
         [DB.search_by_id("47710-07")],
         [DB.search_by_id("17182-01")]
     ]
-    M = Basket.Candidate()
+    M = Candidate.Candidate()
     M.set_groups(musts)
 
     prefers = [
         [DB.search_by_id("56424-08")]
     ]
-    P = Basket.Candidate()
+    P = Candidate.Candidate()
     P.set_groups(prefers)
 
     schedules = ScheduleManager.time_table_maker(M, P, 21)
