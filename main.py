@@ -1,4 +1,5 @@
 import Course
+from ScheduleManager import ScheduleManager
 
 from functools import partial
 from itertools import product
@@ -24,47 +25,6 @@ def suppress_qt_warnings():  # 해상도 별 UI크기 강제 고정
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     environ["QT_SCALE_FACTOR"] = "1"
 
-
-def time_table_maker(must_group, prefer_group, credit_limit):
-    must_group = [i for i in must_group.get_groups() if i != []]
-    prefer_group = [i for i in prefer_group.get_groups() if i != []]
-    possible_table = []  # 꼭에 관한 가능한 시간표를 담아서 나중에 반환
-    prefer_combinations = []  # 들으면 좋음에 관한 모든 경우의 수를 찾아서 반환
-    must_combinations = list(product(*must_group))  # 가능한 모든 경우의 수를 뽑음
-
-    for combination in product(*prefer_group):
-        for mask in product(range(2), repeat=len(prefer_group)):
-            result = [item if flag else None for item, flag in zip(combination, mask)]
-            prefer_combinations.append(result)
-    prefer_combinations = list(
-        set(tuple(filter(lambda x: x is not None, combination)) for combination in prefer_combinations))
-    for i in must_combinations:  # 모든 경우에 수에 대해서
-        for j in prefer_combinations:
-            if magician(list(i) + list(j), credit_limit):  # 가능한 시간표인지 판단
-                if len(list(i) + list(j)) != 0:
-                    possible_table.append(list(i) + list(j))  # 가능한 시간표라면 추가
-    return possible_table  # 반환
-
-
-# 후보 하나가 주어지면 이 후보로 시간표가 작성이 가능한지 판단
-def magician(time_group, credit_limit):
-    day = {'일': 0, '월': 1, '화': 2, '수': 3, '목': 4, '금': 5, '토': 6}
-    compare_time = [[], [], [], [], [], [], []]  # 리스트에 넣고 돌리려면 필요했음.
-    credit_sum = 0
-    for i in range(len(time_group)):
-        credit_sum += float(time_group[i].credit.split("-")[0])
-    if credit_sum > credit_limit:
-        return False
-    for i in range(len(time_group)):  # 주어진 수업의 갯수만큼
-        for j in range(len(time_group[i].time)):  # 한 수업이 가진 분할 수업의 갯수만큼
-            compare_time[day[time_group[i].time[j].day]].extend(
-                list(range(time_group[i].time[j].startmin, time_group[i].time[j].endmin)))
-            # 이 코드가 startmin과 endmin사이의 모든 분을 만들어서 각 요일 리스트에 추가
-    for i in range(len(compare_time)):  # 일-토까지
-        if len(compare_time[i]) != len(set(compare_time[i])):  # 겹치는 시간이 있는 지 비교
-            return False
-    return True
-
 lecture_list = []
 DB = CourseDB.CourseDB()
 with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
@@ -86,7 +46,7 @@ searched_course = []  # 검색 조건에 부합하는 강의 리스트
 selected_course = []  # 장바구니에 담을 강의 리스트
 Must_group = Candidate()  # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음
-Prefer_group = Candidate()  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
+Prefer_group = Candidate(True)  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
 
@@ -665,7 +625,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 시간표 만들기 (시간표 생성 창으로 이동)
     def Button_CreateFunction(self):
-        myWindow4.create_Header()
+        # myWindow4.create_Header()
+        myWindow4.set_tot_Credits()
         myWindow4.show()
         self.close()
 
@@ -721,16 +682,10 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
 
     # 시간표 생성 버튼 클릭 (시간표 생성 창으로 이동)
     def button_Candidate(self):
-        myWindow4.create_Header()
+        # myWindow4.create_Header()
+        myWindow4.set_tot_Credits()
         myWindow4.show()
         self.close()
-
-
-class CenterAlignDelegate(QStyledItemDelegate):
-    def paint(self, painter, option, index):
-        option.displayAlignment = Qt.AlignCenter
-        super().paint(painter, option, index)
-
 
 # 시간표 후보 생성 창
 class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
@@ -745,16 +700,43 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         self.central_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.central_widget)
 
-    # 시간표 생성 창에서 위쪽 글씨랑 버튼 모음
-    def create_Header(self):
+    # 시간표 생성 전 듣고 싶은 학점 수를 입력
+    def set_tot_Credits(self):
         while self.main_layout.count():
             item = self.main_layout.takeAt(0)
-            if item.layout():
-                item.layout().deleteLater()
+            if item.widget():
+                item.widget().deleteLater()
 
-        self.time_tables = time_table_maker(Must_group, Prefer_group,
-                                            20)  # 시간표 후보들 임의로 학점 제한 20인데 이거 나중에 설정할 수 있게 바꿔야 함.
-        self.time_tables.sort(key=lambda x: len(x), reverse=True)
+        label = QLabel(f"시간표 생성 전, 최대 학점 수를 입력하세요")
+        label.setAlignment(Qt.AlignCenter)
+        tot_credits = QLineEdit()
+        tot_credits.returnPressed.connect(lambda: self.enter_Pressed(tot_credits))
+
+        groupbox = QGroupBox()
+        group_layout = QVBoxLayout(groupbox)
+        group_layout.addWidget(label)
+        group_layout.addWidget(tot_credits)
+
+        self.main_layout.addWidget(groupbox, alignment=Qt.AlignCenter)
+
+    def enter_Pressed(self, tot_credits):
+        while self.main_layout.count():
+            item = self.main_layout.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+
+        tot_credits_value = tot_credits.text()
+        self.create_Header(tot_credits_value)
+
+    # 시간표 생성 창 initialize
+    def create_Header(self, tot_credits):
+        print(tot_credits)
+
+        self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group, int(tot_credits))
+        self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
+        self.time_tables.sort(key=lambda x: len(x[1]), reverse=True)
+        for i in range(len(self.time_tables)):
+            print(self.time_tables[i][1])
 
         header = QGroupBox()
         header_layout = QVBoxLayout(header)
@@ -781,29 +763,36 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
             button_layout = QHBoxLayout()
 
+            button_layout.addStretch()
+
             tableBox = QLineEdit('그룹 1');
             tableBox.setAlignment(Qt.AlignCenter)
             tableBox.setReadOnly(True)
+            tableBox.setMaximumWidth(150)
+            tableBox.setMinimumHeight(30)
 
             left_button = QPushButton('<')
             left_button.clicked.connect(lambda: self.leftbuttonClicked(tableBox, num_of_table))
+            left_button.setMaximumWidth(100)
+            left_button.setMinimumHeight(30)
             right_button = QPushButton('>')
             right_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
+            right_button.setMaximumWidth(100)
+            right_button.setMinimumHeight(30)
 
             num_of_table = QComboBox()
             num_of_table.setEditable(True)
             num_of_table.lineEdit().setAlignment(Qt.AlignCenter)
             num_of_table.lineEdit().setReadOnly(True)
+            num_of_table.setMaximumWidth(150)
+            num_of_table.setMinimumHeight(30)
 
             button_layout.addWidget(left_button)
             button_layout.addWidget(tableBox)
             button_layout.addWidget(right_button)
             button_layout.addWidget(num_of_table)
 
-            # num_of_table = QComboBox()
-            # num_of_table.setEditable(True)
-            # num_of_table.lineEdit().setAlignment(Qt.AlignCenter)
-            # num_of_table.lineEdit().setReadOnly(True)
+            button_layout.addStretch()
 
             num_of_table.currentIndexChanged.connect(lambda: self.comboBoxFunction(tableBox))
             items = ['']
@@ -813,7 +802,6 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
             header_layout.addWidget(label)
             header_layout.addLayout(button_layout)
-            # header_layout.addWidget(num_of_table)
 
             self.main_layout.addWidget(header)
             self.create_Table(0)
@@ -867,7 +855,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         group = QGroupBox()
         group.setLayout(QVBoxLayout(group))
 
-        schedule = Schedule_table(self.time_tables[index])
+        schedule = Schedule_table(self.time_tables[index][0],self.time_tables[index][1])
 
         button = QPushButton('저장')
         button.clicked.connect(lambda _, idx=index: self.select_Table(idx))
@@ -899,13 +887,13 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
     # 시간표 후보 중 최종 시간표를 저장
     def select_Table(self, index):
         selected_schedule.clear()
-        for course in self.time_tables[index]:
+        for course in self.time_tables[index][0]:
             selected_schedule.append(course)
 
 
 # 시간표 테이블 1개에 대한 class
 class Schedule_table(QTableWidget):
-    def __init__(self, courses):
+    def __init__(self, courses, rank):
         super().__init__()
         self.setColumnCount(8)
         self.setRowCount(64)
@@ -984,7 +972,6 @@ class Schedule_table(QTableWidget):
     def get_time_index(self, time_str):
         hours, minutes = map(int, time_str.split(':'))
         return (hours - 8) * 4 + (1 if minutes == 15 else 0)
-
 
 # 꼭, 들으면 좋음에서 추가되는 하나의 그룹을 테이블로 표현함
 class Table(QTableWidget):
