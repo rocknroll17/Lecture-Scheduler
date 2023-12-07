@@ -156,11 +156,17 @@ class SaveOnClose:
     def closeEvent(self, event):
         if SAVE_AND_LOAD_FILE:
             fm.add("selected_course", selected_course)
-            fm.add("Must_group", Must_group)
-            fm.add("Prefer_group", Prefer_group)
+            # 빈 칸 제거
+            musts = Candidate()
+            musts.set_groups([m for m in Must_group.get_groups() if m])
+            fm.add("Must_group", musts)
+            prefers = Candidate()
+            prefers.set_groups([p for p in Prefer_group.get_groups() if p])
+            fm.add("Prefer_group", prefers)
             # fm.add("Must_layout", Must_layout)
             # fm.add("Prefer_layout", Prefer_layout)
             fm.save()
+            print(fm)
 
 
 # 강의 검색 창
@@ -413,21 +419,21 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         global Must_layout
         Must_layout = []
         for i in range(len(Must_group.get_groups())):
-            if Must_group.get_groups()[i]:
-                table = Table()
-                table.createTable1(i)
-                Must_layout.append(table)
-                self.groupMust.layout().addWidget(table)
+            #if Must_group.get_groups()[i]:
+            table = Table()
+            table.createTable1(i)
+            Must_layout.append(table)
+            self.groupMust.layout().addWidget(table)
             
     def initializePreferLayout(self):
         global Prefer_layout
         Prefer_layout = []
         for i in range(len(Prefer_group.get_groups())):
-            if Prefer_group.get_groups()[i]:
-                table = Table()
-                table.createTable2(i)
-                Prefer_layout.append(table)
-                self.groupPrefer.layout().addWidget(table)
+            #if Prefer_group.get_groups()[i]:
+            table = Table()
+            table.createTable2(i)
+            Prefer_layout.append(table)
+            self.groupPrefer.layout().addWidget(table)
 
     # 기존에 저장된 그룹들 꼭이랑 들으면 좋음에 나타내기(initialize) : 프로그램 아예 재실행했을 때만 이니셜라이즈하게 재작성해야함
     def setGroup(self):
@@ -448,7 +454,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 꼭 버튼 눌렀을 때
     def onMustButtonPress(self):
-        # def inGroupButton1(self):
         if self.must_button_group.isVisible():
             # 이미 눌렀으면 아무 것도 안함
             return
@@ -1138,13 +1143,14 @@ class Table(QTableWidget):
         if button:
             index = self.indexAt(button.pos())
             row = index.row()
-            #idx = Must_layout.index(self)  # 오류
+            idx = Must_layout.index(self)  # 오류?
+            '''
             idx = 0
             for i in range(len(Must_layout)):
                 if Must_layout[i].id == self.id:
                     break
                 idx += 1
-            
+            '''
 
             if row != -1:
                 # selected_course.append(Must_group[idx][row])
@@ -1152,7 +1158,11 @@ class Table(QTableWidget):
                 # del Must_group[idx][row]
                 del Must_group.get_group(idx)[row]
                 self.removeRow(row)
-
+        # 개수 0이면 삭제
+        #if self.rowCount() == 0:
+        #    self.deleteLater()
+        #    del Must_layout[idx]
+            
         myWindow2.setTable()
 
     # 들으면 좋음 그룹에서 X 버튼 누르면 강의가 장바구니로 이동함
@@ -1168,6 +1178,10 @@ class Table(QTableWidget):
                 selected_course.append(Prefer_group.get_group(idx)[row])
                 del Prefer_group.get_group(idx)[row]
                 self.removeRow(row)
+        # 개수 0이면 삭제
+        #if self.rowCount() == 0:
+        #    self.deleteLater()
+        #    del Prefer_layout[idx]
 
         myWindow2.setTable()
 
