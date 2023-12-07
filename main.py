@@ -5,6 +5,8 @@ from Basket import Candidate
 from Basket import Basket
 import FileManager
 
+from functools import partial
+
 import sys
 
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QCursor
