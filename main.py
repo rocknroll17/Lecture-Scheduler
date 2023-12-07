@@ -39,6 +39,9 @@ DB = CourseDB.CourseDB('Data/lecture.txt')
 
 
 TABLE_ROW_SIZE = 40  # 테이블 행 크기
+TABLE_COL_SIZE_COLLEGE = 80
+TABLE_COL_SIZE_DEPARTMENT = 100
+TABLE_COL_SIZE_TITLE = 180
 SAVE_AND_LOAD_FILE = True
 width = 0 # 해상도
 height = 0 # 해상도
@@ -181,15 +184,17 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
             button.clicked.connect(lambda _, index=i: self.inBasketButton(index))
             self.Table_Course.setCellWidget(i, 0, button)
 
+            # 인덱스 : 버튼 0 대학 1 개설학과 2 과목명 8 담당교수 10 강의시간 12 비고 13
             for j in range(1, 13):
                 item_text = searched_course[i].total[j - 1]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.Table_Course.setItem(i, j, item)
             self.Table_Course.setRowHeight(i, TABLE_ROW_SIZE)
-
-        # self.Table_Course.resizeRowsToContents()
         self.Table_Course.resizeColumnsToContents()
+        self.Table_Course.setColumnWidth(1, TABLE_COL_SIZE_COLLEGE)
+        self.Table_Course.setColumnWidth(2, TABLE_COL_SIZE_DEPARTMENT)
+        self.Table_Course.setColumnWidth(8, TABLE_COL_SIZE_TITLE)
         self.Table_Course.setSelectionMode(QAbstractItemView.NoSelection)
 
     # 장바구니 테이블 생성(최신화)
@@ -212,8 +217,10 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
                 self.Course_Basket.setItem(i, j, item)
 
             self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)  # 테이블 행 높이
-        # self.Course_Basket.resizeRowsToContents()
         self.Course_Basket.resizeColumnsToContents()
+        self.Table_Course.setColumnWidth(1, TABLE_COL_SIZE_COLLEGE)
+        self.Table_Course.setColumnWidth(2, TABLE_COL_SIZE_DEPARTMENT)
+        self.Table_Course.setColumnWidth(8, TABLE_COL_SIZE_TITLE)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
 
     # 강의 검색 창에서 장바구니 버튼 누르면 해당 강의가 장바구니로 이동
