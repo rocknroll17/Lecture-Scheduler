@@ -342,7 +342,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             global tot_credits
             tot_credits = int(text)
 
-
     #  장바구니 테이블 생성하는 메소드
     def setTable(self):
         self.Course_Basket.setRowCount(len(selected_course))
@@ -375,11 +374,19 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     def initializeMustLayout(self):
         global Must_layout
         Must_layout = []
+
         for i in range(len(Must_group.get_groups())):
             table = Table()
             table.createTable1(i)
             Must_layout.append(table)
-            self.groupMust.layout().addWidget(table)
+
+            groupbox = QGroupBox()
+            box_layout = QHBoxLayout(groupbox)
+            label = QLabel('그룹' + str(self.groupMust.layout().count() + 1))
+            box_layout.addWidget(label, alignment=Qt.AlignLeft)
+            box_layout.addWidget(table)
+
+            self.groupMust.layout().addWidget(groupbox)
             
     def initializePreferLayout(self):
         global Prefer_layout
@@ -388,7 +395,14 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             table = Table()
             table.createTable2(i)
             Prefer_layout.append(table)
-            self.groupPrefer.layout().addWidget(table)
+
+            groupbox = QGroupBox()
+            box_layout = QHBoxLayout(groupbox)
+            label = QLabel(str(self.groupPrefer.layout().count() + 1) + '순위')
+            box_layout.addWidget(label, alignment=Qt.AlignLeft)
+            box_layout.addWidget(table)
+
+            self.groupPrefer.layout().addWidget(groupbox)
 
     # 기존에 저장된 그룹들 꼭이랑 들으면 좋음에 나타내기(initialize) : 프로그램 아예 재실행했을 때만 이니셜라이즈하게 재작성해야함
     def setGroup(self):
@@ -627,7 +641,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     def prefer_AddFunction(self, course):
         groupbox = QGroupBox()
         box_layout = QHBoxLayout(groupbox)
-        label = QLabel('그룹' + str(self.groupPrefer.layout().count() + 1))
+        label = QLabel(str(self.groupPrefer.layout().count() + 1) + '순위')
         box_layout.addWidget(label, alignment=Qt.AlignLeft)
 
         new_group = Table()
@@ -690,7 +704,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             if item and isinstance(item.widget(), QGroupBox):
                 label = item.widget().layout().itemAt(0).widget()
                 if label and isinstance(label, QLabel):
-                    label.setText('그룹' + str(index + 1))
+                    label.setText(str(index + 1) + '순위')
 
         self.layout().removeWidget(self.delete_prefer_button_group)
         while self.delete_prefer_group_layout.count():
