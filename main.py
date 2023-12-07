@@ -695,7 +695,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group,
                                             20)  # 시간표 후보들 임의로 학점 제한 20인데 이거 나중에 설정할 수 있게 바꿔야 함.
-        self.time_tables.sort(key=lambda x: len(x), reverse=True)
+        self.time_tables.sort(key=lambda x: len(x[0]), reverse=True)
 
         header = QGroupBox()
         header_layout = QVBoxLayout(header)

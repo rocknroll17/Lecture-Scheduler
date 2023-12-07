@@ -23,7 +23,13 @@ class ScheduleManager:
             for j in prefer_combinations:
                 if ScheduleManager.magician(list(i) + list(j), credit_limit):  # 가능한 시간표인지 판단
                     if len(list(i) + list(j)) != 0:
-                        possible_table.append(list(i) + list(j))  # 가능한 시간표라면 추가
+                        rank_list = []
+                        for i in list(j):
+                            for j in prefer_group.get_groups:
+                                if i in j:
+                                    rank_list.append(prefer_group.get_prefer_rank())
+                                    break;
+                        possible_table.append([list(i) + list(j), rank_list])  # 가능한 시간표라면 추가
         return possible_table  # 반환
 
 
