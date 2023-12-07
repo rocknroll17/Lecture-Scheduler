@@ -451,7 +451,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.must_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
                 #self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
-                self.must_button_group.move(QCursor.pos().x(), QCursor.pos().y())
+                self.must_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
                 self.must_button_group.show()
 
     # 꼭 버튼 눌렀을 때 나오는 그룹리스트 버튼
@@ -500,7 +500,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.prefer_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
                 #self.prefer_button_group.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
-                self.prefer_button_group.move(QCursor.pos().x(), QCursor.pos().y())
+                self.prefer_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
                 self.prefer_button_group.show()
 
     # 꼭 버튼 눌렀을 때 나오는 그룹리스트 버튼 삭제
@@ -565,7 +565,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
             #self.delete_must_button_group.move(int((width*(self.Must_Remove.pos().x() + 50))/1920), int((height*(self.Must_Remove.pos().y() - 50))/1080))
-            self.delete_must_button_group.move(QCursor.pos().x(), QCursor.pos().y())
+            self.delete_must_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
             self.delete_must_button_group.show()
 
     def must_removeGroup2(self):
@@ -646,7 +646,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
             #self.delete_prefer_button_group.move(int((width*(self.Prefer_Remove.pos().x() - 100))/1920), int((height*(self.Prefer_Remove.pos().y() - 50))/1080))
-            self.delete_prefer_button_group.move(QCursor.pos().x() - 100, QCursor.pos().y())
+            self.delete_prefer_button_group.move(QCursor.pos().x()-self.pos().x()-100, QCursor.pos().y()-self.pos().y()-59)
             self.delete_prefer_button_group.show()
 
     def prefer_removeGroup2(self):
