@@ -362,7 +362,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         global Must_layout
         Must_layout = []
         for i in range(len(Must_group.get_groups())):
-            #if Must_group.get_groups()[i]:
             table = Table()
             table.createTable1(i)
             Must_layout.append(table)
@@ -372,7 +371,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         global Prefer_layout
         Prefer_layout = []
         for i in range(len(Prefer_group.get_groups())):
-            #if Prefer_group.get_groups()[i]:
             table = Table()
             table.createTable2(i)
             Prefer_layout.append(table)
@@ -749,7 +747,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
             button_layout.addStretch()
 
-            tableBox = QLineEdit('그룹 1');
+            tableBox = QLineEdit('그룹 1')
             tableBox.setAlignment(Qt.AlignCenter)
             tableBox.setReadOnly(True)
             tableBox.setMaximumWidth(300)
@@ -789,8 +787,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             header_layout.addLayout(button_layout)
 
             self.main_layout.addWidget(header)
-            self.create_Table(0)
-
+            self.create_Table(0)           
         else:
             label = QLabel('만들어진 시간표가 없습니다. 강의를 그룹에 추가하세요')
             label.setAlignment(Qt.AlignCenter)
@@ -880,7 +877,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
 # 시간표 테이블 1개에 대한 class
 class Schedule_table(QTableWidget):
-    def __init__(self, courses, rank):
+    def __init__(self, courses, rank=[]):
         super().__init__()
         self.setColumnCount(8)
         self.setRowCount(64)
@@ -1060,16 +1057,12 @@ class Table(QTableWidget):
             for j in range(1, 5):
                 item_text = ""
                 if j == 1:
-                    # item_text = Prefer_group[index][i].total[7]
                     item_text = Prefer_group.get_group(index)[i].total[7]
                 elif j == 2:
-                    # item_text = Prefer_group[index][i].total[6]
                     item_text = Prefer_group.get_group(index)[i].total[6]
                 elif j == 3:
-                    # item_text = Prefer_group[index][i].total[9]
                     item_text = Prefer_group.get_group(index)[i].total[9]
                 elif j == 4:
-                    # item_text = Prefer_group[index][i].total[11]
                     item_text = Prefer_group.get_group(index)[i].total[11]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
@@ -1126,9 +1119,7 @@ class Table(QTableWidget):
             '''
 
             if row != -1:
-                # selected_course.append(Must_group[idx][row])
                 selected_course.append(Must_group.get_group(idx)[row])
-                # del Must_group[idx][row]
                 del Must_group.get_group(idx)[row]
                 self.removeRow(row)
         # 개수 0이면 삭제
