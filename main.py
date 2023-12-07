@@ -63,6 +63,8 @@ if SAVE_AND_LOAD_FILE:
             Must_layout = fm.get("Must_layout")
         if fm.get("Prefer_group"):
             Prefer_group = fm.get("Prefer_group")
+        if fm.get("selected_schedule"):
+            selected_schedule = fm.get("selected_schedule")
 
 class Notification(QWidget):
     def __init__(self, message):
@@ -119,6 +121,7 @@ class SaveOnClose:
             prefers = Candidate()
             prefers.set_groups([p for p in Prefer_group.get_groups() if p]) # 빈 리스트 제거
             fm.add("Prefer_group", prefers)
+            fm.add("selected_schedule", selected_schedule)
             fm.save()
 
 
