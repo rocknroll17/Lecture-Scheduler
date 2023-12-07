@@ -93,6 +93,7 @@ class Notification(QWidget):
 
         # Set up initial properties
         self.setGeometry(940, 520, 200, 50)
+        #self.setGeometry(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y(), 200, 50)
         self.setStyleSheet("background-color: rgba(0, 0, 0, 200); color: white;")
 
     def show_notification(self):
@@ -329,9 +330,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.groupMust.setLayout(QVBoxLayout(self.groupMust))
         self.groupPrefer.setLayout(QVBoxLayout(self.groupPrefer))
 
-        # 장바구니 테이블 각 행 저장되는곳 -> 일단 보류
-        #self.selectedCourseTupleList = []
-
         # 꼭 버튼 누르면 뜨는 버튼 그룹
         self.must_button_group = QGroupBox()
         self.must_group_layout = QHBoxLayout(self.must_button_group)
@@ -347,7 +345,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.initializeMustLayout()
         self.initializePreferLayout()
         self.setTable()
-        #self.setGroup()
 
     def text_changed(self):
         text = self.credit_edit.text()
@@ -413,57 +410,45 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
     
+    # 저장된 Must_group이 있는 경우, 이를 바탕으로 관련 변수 초기화 & 화면에 그림
     def initializeMustLayout(self):
         global Must_layout
         Must_layout = []
 
+        # 꼭 그룹의 각 강의그룹에 대해서
         for i in range(len(Must_group.get_groups())):
+            # Table 객체를 만들고
             table = Table()
             table.createTable1(i)
-            Must_layout.append(table)
-
+            Must_layout.append(table) # Must_layout : 전역변수
+            # 맨 앞에 몇 번째 그룹인지 표시해주고
             groupbox = QGroupBox()
             box_layout = QHBoxLayout(groupbox)
             label = QLabel('그룹' + str(self.groupMust.layout().count() + 1))
             box_layout.addWidget(label, alignment=Qt.AlignLeft)
             box_layout.addWidget(table)
-
+            # 레이아웃에 추가
             self.groupMust.layout().addWidget(groupbox)
-            
+
+    # 저장된 Prefer_group이 있는 경우, 이를 바탕으로 관련 변수 초기화 & 화면에 그림
     def initializePreferLayout(self):
         global Prefer_layout
         Prefer_layout = []
+        # 들으면 좋음 그룹의 각 강의그룹에 대해서
         for i in range(len(Prefer_group.get_groups())):
+            # Table 객체를 만들고
             table = Table()
             table.createTable2(i)
             Prefer_layout.append(table)
-
+            # 맨 앞에 몇 번째 그룹인지 표시해주고
             groupbox = QGroupBox()
             box_layout = QHBoxLayout(groupbox)
             label = QLabel(str(self.groupPrefer.layout().count() + 1) + '순위')
             box_layout.addWidget(label, alignment=Qt.AlignLeft)
             box_layout.addWidget(table)
-
+            # 레이아웃에 추가
             self.groupPrefer.layout().addWidget(groupbox)
 
-    '''
-    # 기존에 저장된 그룹들 꼭이랑 들으면 좋음에 나타내기(initialize) : 프로그램 아예 재실행했을 때만 이니셜라이즈하게 재작성해야함
-    def setGroup(self):
-        # 안씀 -> 테스트 후 없앨 예정
-        for course_group in Must_group.get_groups():
-            if course_group:
-                new_group = Table()
-                new_group.createTable_1(course_group)
-                # Must_layout.append(new_group)
-                self.groupMust.layout().addWidget(new_group)
-
-        for course_group in Prefer_group.get_groups():
-            if course_group:
-                new_group = Table()
-                new_group.createTable_2(course_group)
-                # Prefer_layout.append(new_group)
-                self.groupPrefer.layout().addWidget(new_group)
-    '''
     # 장바구니에서 꼭 버튼 눌렀을 때
     def onMustButtonPress(self):
         if self.must_button_group.isVisible():
@@ -471,9 +456,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             self.must_button_group.setVisible(False)
             return
         if self.prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
             self.prefer_button_group.setVisible(False)
             return
-
+        # 원래 들어가있었던 버튼 그룹 삭제  (ex) ['추가하지 않음','그룹 1','그룹 추가'])
         self.layout().removeWidget(self.must_button_group)
         while self.must_group_layout.count():
             item = self.must_group_layout.takeAt(0)
@@ -553,6 +539,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.must_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
                 #self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
+                # 커서 위치에 뜨도록 한다
                 self.must_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
                 self.must_button_group.show()
 
@@ -567,7 +554,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             self.prefer_button_group.setVisible(False)
             return
         if self.must_button_group.isVisible():
-            # 꼭 눌러져있으면 그 창 지움
+            # 이미 띄워져 있으면 창 지움 2
             self.must_button_group.setVisible(False)
             return
         self.layout().removeWidget(self.prefer_button_group)
