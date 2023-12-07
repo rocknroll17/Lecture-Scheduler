@@ -1,8 +1,9 @@
 from collections import defaultdict
 
 class Candidate:
-    # 꼭, 들으면 좋음
-    def __init__(self, isPrefer = False):
+    # 꼭 or 들으면 좋음 목록을 가리키는 클래스
+    #def __init__(self, isPrefer = False):
+    def __init__(self):
         self.__groups = [] # 그룹 단위로 저장함 (Course 리스트의 리스트)
         self.__ids = [] # 강의 존재하는지 확인용 -> 근데 여기 add는 어떻게 돌아가는지 몰겟음
 
