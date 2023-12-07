@@ -794,7 +794,8 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             num_of_table.currentIndexChanged.connect(lambda: self.comboBoxFunction(tableBox))
             items = ['']
             for i in range(len(self.time_tables)):
-                items.append('후보 ' + str(i + 1))
+                preferences = ', '.join(f'{j}순위' for j in self.time_tables[1])
+                items.append('후보 ' + str(i + 1)+"-"+preferences+" 반영")
             num_of_table.addItems(items)
 
             header_layout.addWidget(label)
@@ -817,7 +818,8 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             i = num - 1
         else:
             i = i - 1
-        lineEdit.setText('그룹 ' + str(i + 1))
+        preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
+        lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
         comboBox.setCurrentIndex(i + 1)
         self.create_Table(i)
 
@@ -828,15 +830,16 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             i = 0
         else:
             i = i + 1
-        lineEdit.setText('그룹 ' + str(i + 1))
-        comboBox.setCurrentIndex(i + 1)
+        preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
+        lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
         self.create_Table(i)
 
     def comboBoxFunction(self, lineEdit):
         sender = self.sender()
         if sender.currentText() != '':
             i = int(sender.currentText().split()[-1]) - 1
-            lineEdit.setText('그룹 ' + str(i + 1))
+            preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
+            lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
             self.create_Table(i)
 
     # 시간표 보여주기 (초기화)
