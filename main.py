@@ -18,11 +18,6 @@ from PyQt5.QtGui import QFont
 
 from os import environ  # 환경변수 조절 용
 
-
-
-
-
-
 # UI파일 연결
 form_class1 = uic.loadUiType("test.ui")[0]
 form_class2 = uic.loadUiType("magic.ui")[0]
@@ -39,14 +34,8 @@ Prefer_group = Candidate(True)  # 들으면 좋음 그룹 (한 그룹 = 강의[]
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
 
-DB = CourseDB.CourseDB()
-with open('Data/lecture.txt', 'r', encoding='utf-8') as f:
-    lecture_data = f.readlines()
-    for i in range(len(lecture_data)):
-        # for i in range(300):
-        course = Course.Course(lecture_data[i].strip().split("$"))
-        DB.add(course)
-
+DB = CourseDB.CourseDB('Data/lecture.txt')
+        
 TABLE_ROW_SIZE = 40  # 테이블 행 크기
 SAVE_AND_LOAD_FILE = True
 
@@ -119,8 +108,6 @@ class SaveOnClose:
             prefers = Candidate()
             prefers.set_groups([p for p in Prefer_group.get_groups() if p])
             fm.add("Prefer_group", prefers)
-            # fm.add("Must_layout", Must_layout)
-            # fm.add("Prefer_layout", Prefer_layout)
             fm.save()
 
 
@@ -374,7 +361,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         global Must_layout
         Must_layout = []
         for i in range(len(Must_group.get_groups())):
-            #if Must_group.get_groups()[i]:
             table = Table()
             table.createTable1(i)
             Must_layout.append(table)
@@ -384,7 +370,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         global Prefer_layout
         Prefer_layout = []
         for i in range(len(Prefer_group.get_groups())):
-            #if Prefer_group.get_groups()[i]:
             table = Table()
             table.createTable2(i)
             Prefer_layout.append(table)
@@ -755,7 +740,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         header_layout.addWidget(group)
         #print(f"possible schedules : {self.time_tables}")
-        if len(self.time_tables) > 1:
+        if len(self.time_tables) > 0:
             label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
             label.setAlignment(Qt.AlignCenter)
 
@@ -805,8 +790,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             header_layout.addLayout(button_layout)
 
             self.main_layout.addWidget(header)
-            self.create_Table(0)
-
+            self.create_Table(0)           
         else:
             label = QLabel('만들어진 시간표가 없습니다. 강의를 그룹에 추가하세요')
             label.setAlignment(Qt.AlignCenter)
@@ -907,7 +891,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
 # 시간표 테이블 1개에 대한 class
 class Schedule_table(QTableWidget):
-    def __init__(self, courses, rank):
+    def __init__(self, courses, rank=[]):
         super().__init__()
         self.setColumnCount(8)
         self.setRowCount(56)
@@ -1087,16 +1071,12 @@ class Table(QTableWidget):
             for j in range(1, 5):
                 item_text = ""
                 if j == 1:
-                    # item_text = Prefer_group[index][i].total[7]
                     item_text = Prefer_group.get_group(index)[i].total[7]
                 elif j == 2:
-                    # item_text = Prefer_group[index][i].total[6]
                     item_text = Prefer_group.get_group(index)[i].total[6]
                 elif j == 3:
-                    # item_text = Prefer_group[index][i].total[9]
                     item_text = Prefer_group.get_group(index)[i].total[9]
                 elif j == 4:
-                    # item_text = Prefer_group[index][i].total[11]
                     item_text = Prefer_group.get_group(index)[i].total[11]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
@@ -1153,9 +1133,7 @@ class Table(QTableWidget):
             '''
 
             if row != -1:
-                # selected_course.append(Must_group[idx][row])
                 selected_course.append(Must_group.get_group(idx)[row])
-                # del Must_group[idx][row]
                 del Must_group.get_group(idx)[row]
                 self.removeRow(row)
         # 개수 0이면 삭제

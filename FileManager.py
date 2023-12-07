@@ -10,25 +10,25 @@ class FileManager:
     # (1) 저장하기
     #   FileManager를 선언한다.
     #   - ex) fm = FileManager()
-    #   FileManager에 파일을 넣는다.
-    #   - ex) fm.must_group = Must_group
+    #   FileManager에 key:value 쌍으로 파일을 넣는다.
+    #   - ex) fm.add("must_group") = Must_group
     #   save 호출
     #   - ex) fm.save()  -> scheduleManagerSaveFile.pickle이 생성될거임
     # (2) 로드하기
     #   load를 호출한다
     #   - ex) fm.load()
     #   그럼 멤버변수에 객체가 로드된다.
-    #   갖다 쓰면 된다.
-    #   - ex) Must_group = fm.must_group
+    #   저장한 키값으로 갖다 쓰면 된다.
+    #   - ex) Must_group = fm.get("must_group")
 
     # 대충 만든거라 아직 테스트 안해봄
     def __init__(self):
-        self.basket = None
-        self.must_group = None
-        self.prefer_group = None
-        self.schedules = None
-        self.must_layout = None
-        self.prefer_layout = None
+        #self.basket = None
+        #self.must_group = None
+        #self.prefer_group = None
+        #self.schedules = None
+        #self.must_layout = None
+        #self.prefer_layout = None
         self.filename = "scheduleManagerSaveFile.pickle"
         self.data_list = {}
         self.save_and_load = True
@@ -58,6 +58,7 @@ class FileManager:
 
 
     # data_list 파일로 저장
+    # pickle
     def save(self):
         if not self.save_and_load:
             return
