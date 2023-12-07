@@ -27,10 +27,6 @@ QTableWidget {
 	color: white;
 }
 
-QTableWidget::item:selected {
-	background-color: lightblue;
-}
-
 QScrollBar:vertical {
 	boder: none;
 	background-color: transparent;
@@ -175,6 +171,7 @@ QScrollBar::add-page:horizontal, QScrollBar:sub-page:horizontal {
 
 QTableView QTableCornerButton::section {
     background-color: #1e1f23;
+	gridline-color: #747678;
 }
 </string>
   </property>
@@ -378,6 +375,7 @@ QHeaderView::section {
 	border-radius: 10px;
     border: 2px solid #ccc;
 	background-color: #2b2d31;
+	gridlineColor = QColor(255, 0, 0)
 }
 
 QHeaderView::section:horizontal {
@@ -741,7 +739,7 @@ QHeaderView::section {
 	background-color: #1e1f23;
     color: white;
     border-style: none;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;;
 	/*border-bottom: 2px solid #fffff8;
     border-top: 2px solid #fffff8;*/
 }
@@ -751,6 +749,7 @@ QHeaderView::section {
     border: 2px solid #ccc;
 	background-color: #2b2d31;
 }
+
 
 QHeaderView::section:horizontal {
 	background-color: #1e1f23;
@@ -764,6 +763,13 @@ QHeaderView::section:vertical {
 	default-background-color: #3d5673;
     margin: 0px;
     padding: 0px;
+	gridline-color: #747678;
+}
+
+
+#Course_Basket::item {
+    border-style: solid;
+    border-color: #000;
 }</string>
    </property>
    <property name="dragEnabled">
