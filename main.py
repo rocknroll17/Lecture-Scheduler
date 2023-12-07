@@ -658,7 +658,7 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
         group_layout.addWidget(self.button_search)
         group_layout.addWidget(self.button_candidate)
 
-        table = Schedule_table(selected_schedule, )
+        table = Schedule_table(selected_schedule, rank = [])
 
         self.central_layout.addWidget(group)
         self.central_layout.addWidget(table)
@@ -910,17 +910,17 @@ class Schedule_table(QTableWidget):
     def __init__(self, courses, rank):
         super().__init__()
         self.setColumnCount(8)
-        self.setRowCount(64)
+        self.setRowCount(56)
         self.setHorizontalHeaderLabels(
             ['교시', '시간', '월요일(Mon)', '화요일(Tue)', '수요일(Wed)', '목요일(Thu)', '금요일(Fri)', '토요일(Sat)'])
-        h = [''] * 64
+        h = [''] * 56
         self.setVerticalHeaderLabels(h)
 
-        for row in range(0, 64, 4):
+        for row in range(0, 56, 4):
             self.setSpan(row, 0, 4, 1)
 
         count = 0
-        for row in range(0, 64, 4):
+        for row in range(0, 56, 4):
             item = QTableWidgetItem(str(count))
             item.setTextAlignment(Qt.AlignCenter)
             self.setItem(row, 0, item)
@@ -930,7 +930,7 @@ class Schedule_table(QTableWidget):
         count_hours = 8
         count_minutes = 0
 
-        for row in range(0, 64):
+        for row in range(0, 56):
             time_item = QTableWidgetItem(time_format.format(count_hours, count_minutes))
             time_item.setTextAlignment(Qt.AlignCenter)
             self.setItem(row, 1, time_item)
