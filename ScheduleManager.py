@@ -61,16 +61,25 @@ if __name__ == "__main__":
             # for i in range(300):
             course = Course.Course(lecture_data[i].strip().split("$"))
             DB.add(course)
-    prefers = [
+    musts = [
         [DB.search_by_id("49361-01")],
         [DB.search_by_id("52320-01")],
         [DB.search_by_id("47710-07")],
         [DB.search_by_id("17182-01")]
     ]
-    p = Basket.Candidate()
-    p.set_groups(prefers)
-    for t in ScheduleManager.time_table_maker(p, Basket.Candidate(), 21):
-        print(t)
+    M = Basket.Candidate()
+    M.set_groups(musts)
+
+    prefers = [
+        [DB.search_by_id("56424-08")]
+    ]
+    P = Basket.Candidate()
+    P.set_groups(prefers)
+
+    schedules = ScheduleManager.time_table_maker(M, P, 21)
+    for s in schedules:
+        print(s)
+        print()
     print()
 
     
