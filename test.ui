@@ -14,7 +14,169 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(255, 255, 255)</string>
+   <string notr="true">/* 스크롤바 필요한 widget stylesheet에 입력 */
+
+#Dialog {
+	
+	background-color: #1e1f22;
+
+}
+
+QTableWidget {
+	border-radius: 10px;
+	color: white;
+}
+
+QTableWidget::item:selected {
+	background-color: lightblue;
+}
+
+QScrollBar:vertical {
+	boder: none;
+	background-color: transparent;
+	width: 14px;
+	margin: 0px 0 0px 0;
+	boder-radius: 0px;
+}
+
+QScrollBar::handle:vertical {
+	background-color: #1e1f23;
+	min-height: 30px;
+	border-radius: 7px;
+}
+
+QScrollBar::handle:vertical:hover {
+	background-color: #1a1b1e;
+}
+
+QScrollBar::handle:vertical:pressed {
+	background-color: #141416;
+}
+
+QScrollBar::sub-line:vertical {
+	border: none;
+	/*
+	background-color: rgb(59, 59, 90);
+	height: 15px;
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;
+	subcontrol-position: top;
+	subcontrol-origin: margin;
+	*/
+}
+/*
+QScrollBar::sub-line:vertical:hover {
+	background-color: rgb(255, 0, 127);
+}
+
+QScrollBar::sub-line:vertical:pressed {
+	background-color: rgb(185, 0, 92);
+}
+*/
+QScrollBar::add-line:vertical {
+	border: none;
+	/*
+	background-color: rgb(59, 59, 90);
+	height: 15px;
+	border-bottom-left-radius: 7px;
+	border-bottom-right-radius: 7px;
+	subcontrol-position: top;
+	subcontrol-origin: margin;
+	*/
+}
+/*
+QScrollBar::add-line:vertical:hover {
+	background-color: rgb(255, 0, 127);
+}
+
+QScrollBar::add-line:vertical:pressed {
+	background-color: rgb(185, 0, 92);
+}
+*/
+QScrollBar::up-arrow:vertical, QScrollBar:down-arrow:vertical {
+	background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar:sub-page:vertical {
+	background: none;
+}
+
+/* horizontal */
+
+QScrollBar:horizontal {
+	boder: none;
+	background-color: transparent;
+	height: 14px;
+	margin: 0 0px 0 0px;
+	boder-radius: 0px;
+}
+
+QScrollBar::handle:horizontal {
+	background-color: #1e1f23;
+	min-height: 30px;
+	border-radius: 7px;
+}
+
+QScrollBar::handle:horizontal:hover {
+	background-color: #1a1b1e;
+}
+
+QScrollBar::handle:horizontal:pressed {
+	background-color: #141416;
+}
+
+QScrollBar::sub-line:horizontal {
+	border: none;
+	/*
+	background-color: rgb(59, 59, 90);
+	width: 15px;
+	border-top-left-radius: 7px;
+	border-bottom-left-radius: 7px;
+	subcontrol-position: left;
+	subcontrol-origin: margin;
+	*/
+}
+/*
+QScrollBar::sub-line:horizontal:hover {
+	background-color: rgb(255, 0, 127);
+}
+
+QScrollBar::sub-line:horizontal:pressed {
+	background-color: rgb(185, 0, 92);
+}
+*/
+QScrollBar::add-line:horizontal {
+	border: none;
+	/*
+	background-color: rgb(59, 59, 90);
+	width: 15px;
+	border-top-right-radius: 7px;
+	border-bottom-right-radius: 7px;
+	subcontrol-position: right;
+	subcontrol-origin: margin;
+	*/
+}
+/*
+QScrollBar::add-line:horizontal:hover {
+	background-color: rgb(255, 0, 127);
+}
+
+QScrollBar::add-line:horizontal:pressed {
+	background-color: rgb(185, 0, 92);
+}
+*/
+QScrollBar::up-arrow:horizontal, QScrollBar:down-arrow:horizontal {
+	background: none;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar:sub-page:horizontal {
+	background: none;
+}
+
+QTableView QTableCornerButton::section {
+    background-color: #1e1f23;
+}
+</string>
   </property>
   <widget class="Line" name="line">
    <property name="geometry">
@@ -143,6 +305,9 @@
      </disabled>
     </palette>
    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <property name="orientation">
     <enum>Qt::Vertical</enum>
    </property>
@@ -158,13 +323,29 @@
    </property>
    <property name="font">
     <font>
-     <family>Arial</family>
-     <weight>75</weight>
-     <bold>true</bold>
+     <family>휴먼엑스포</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color : rgb(238, 238, 238)</string>
+    <string notr="true">QPushButton {
+	background-color: #42454c;
+	color: #fff;
+	padding: 6px;
+
+}
+
+QPushButton:hover {
+	background-color: #383b40;
+}
+
+QPushButton:pressed {
+	background-color:#1d1e21;
+}
+</string>
    </property>
    <property name="text">
     <string>시간표</string>
@@ -179,6 +360,40 @@
      <height>331</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">toQHeaderView {
+	border-radius: 10px;
+}
+
+QHeaderView::section {
+	background-color: #1e1f23;
+    color: white;
+    border-style: none;
+    font-family: 'Montserrat', sans-serif;
+	/*border-bottom: 2px solid #fffff8;
+    border-top: 2px solid #fffff8;*/
+}
+
+#Table_Course {
+	border-radius: 10px;
+    border: 2px solid #ccc;
+	background-color: #2b2d31;
+}
+
+QHeaderView::section:horizontal {
+	background-color: #1e1f23;
+	default-background-color: #3d5673;
+    margin: 0px;
+    padding: 0px;
+}
+
+QHeaderView::section:vertical {
+	background-color: #1e1f23;
+	default-background-color: #3d5673;
+    margin: 0px;
+    padding: 0px;
+}</string>
+   </property>
    <property name="dragEnabled">
     <bool>true</bool>
    </property>
@@ -187,6 +402,9 @@
    </property>
    <property name="defaultDropAction">
     <enum>Qt::CopyAction</enum>
+   </property>
+   <property name="alternatingRowColors">
+    <bool>false</bool>
    </property>
    <property name="gridStyle">
     <enum>Qt::SolidLine</enum>
@@ -287,6 +505,18 @@
      <height>101</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QGroupBox  {
+    border: 1px solid gray;
+    border-color: #FF17365D;
+    font-size: 14px;
+    border-radius: 15px;
+}
+
+QLabel { 
+	color: white;
+}</string>
+   </property>
    <property name="title">
     <string/>
    </property>
@@ -327,9 +557,29 @@
     </property>
     <property name="font">
      <font>
-      <family>Agency FB</family>
-      <pointsize>16</pointsize>
+      <family>휴먼엑스포</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	background-color: #42454c;
+	color: white;
+	padding: 6px;
+
+}
+
+QPushButton:hover {
+	background-color: #383b40;
+}
+
+QPushButton:pressed {
+	background-color: #1d1e21;
+}
+</string>
     </property>
     <property name="text">
      <string>검색</string>
@@ -344,6 +594,23 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">/*style for the QComboBox*/
+#comboBox {
+	background-color: #0d6efd;
+	border: 1px solid #ced4da;
+	border-radius: 10px;
+}
+#comboBox::drop-down {
+	border: 0px;
+}
+#comboBox::down-arrow {
+	image: url(:/Icon/chevron-down.svg);
+	width: 12px;
+	height: 12px;
+	margin-right: 30px;
+}</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="titleInput">
     <property name="geometry">
@@ -353,6 +620,9 @@
       <width>141</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -383,7 +653,7 @@
      <rect>
       <x>360</x>
       <y>60</y>
-      <width>71</width>
+      <width>61</width>
       <height>22</height>
      </rect>
     </property>
@@ -410,6 +680,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
    </widget>
   </widget>
   <widget class="QPushButton" name="Button_Magic">
@@ -423,13 +696,28 @@
    </property>
    <property name="font">
     <font>
-     <family>Arial</family>
-     <weight>75</weight>
-     <bold>true</bold>
+     <family>휴먼엑스포</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color : rgb(238, 238, 238)</string>
+    <string notr="true">QPushButton {
+	background-color: #42454c;
+	color: #fff;
+
+}
+
+QPushButton:hover {
+	background-color: #383b40;
+}
+
+QPushButton:pressed {
+	background-color: #1d1e21;
+}
+</string>
    </property>
    <property name="text">
     <string>마법사</string>
@@ -443,6 +731,40 @@
      <width>1011</width>
      <height>331</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">toQHeaderView {
+	border-radius: 10px;
+}
+
+QHeaderView::section {
+	background-color: #1e1f23;
+    color: white;
+    border-style: none;
+    font-family: 'Montserrat', sans-serif;
+	/*border-bottom: 2px solid #fffff8;
+    border-top: 2px solid #fffff8;*/
+}
+
+#Course_Basket {
+	border-radius: 10px;
+    border: 2px solid #ccc;
+	background-color: #2b2d31;
+}
+
+QHeaderView::section:horizontal {
+	background-color: #1e1f23;
+	default-background-color: #3d5673;
+    margin: 0px;
+    padding: 0px;
+}
+
+QHeaderView::section:vertical {
+	background-color: #1e1f23;
+	default-background-color: #3d5673;
+    margin: 0px;
+    padding: 0px;
+}</string>
    </property>
    <property name="dragEnabled">
     <bool>true</bool>
