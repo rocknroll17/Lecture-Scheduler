@@ -39,10 +39,16 @@ class Candidate:
     def get_groups(self):
         return self.__groups
     
+    def set_groups(self, group):
+        self.__groups = group
+
     def get_group(self, index):
         if not isinstance(index, int) or not (0 <= index < len(self.__groups)):
             return None
         return self.__groups[index]
+    
+    def empty(self):
+        return len(self.__groups) == 0
     
     def pop(self):
         return self.__groups.pop()
