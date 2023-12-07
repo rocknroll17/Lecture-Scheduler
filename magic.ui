@@ -39,9 +39,6 @@ QTableWidget {
 	color: white;
 }
 
-QTableWidget::item:selected {
-	background-color: lightblue;
-}
 
 QScrollBar:vertical {
 	boder: none;
