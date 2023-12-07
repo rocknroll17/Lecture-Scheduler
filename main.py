@@ -765,8 +765,8 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             button_layout = QHBoxLayout()
 
             button_layout.addStretch()
-
-            tableBox = QLineEdit('그룹 1');
+            preferences = ', '.join(f'{j}순위' for j in self.time_tables[0][1])
+            tableBox = QLineEdit('후보 ' + str(1)+" - "+preferences+" 반영");
             tableBox.setAlignment(Qt.AlignCenter)
             tableBox.setReadOnly(True)
             tableBox.setMaximumWidth(300)
@@ -798,10 +798,9 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             num_of_table.currentIndexChanged.connect(lambda: self.comboBoxFunction(tableBox))
             items = ['']
             for i in range(len(self.time_tables)):
-                preferences = ', '.join(f'{j}순위' for j in self.time_tables[1])
-                items.append('후보 ' + str(i + 1)+"-"+preferences+" 반영")
+                preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
+                items.append('후보 ' + str(i + 1)+" - "+preferences+" 반영")
             num_of_table.addItems(items)
-
             header_layout.addWidget(label)
             header_layout.addLayout(button_layout)
 
@@ -816,7 +815,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             self.main_layout.addWidget(header)
 
     def leftbuttonClicked(self, lineEdit, comboBox):
-        i = int(lineEdit.text().split()[-1]) - 1
+        i = int(lineEdit.text().split()[1]) - 1
         num = len(self.time_tables)
         if i == 0:
             i = num - 1
@@ -828,7 +827,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         self.create_Table(i)
 
     def rightbuttonClicked(self, lineEdit, comboBox):
-        i = int(lineEdit.text().split()[-1]) - 1
+        i = int(lineEdit.text().split()[1]) - 1
         num = len(self.time_tables)
         if i == num - 1:
             i = 0
@@ -836,12 +835,13 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             i = i + 1
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
         lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+        comboBox.setCurrentIndex(i + 1)
         self.create_Table(i)
 
     def comboBoxFunction(self, lineEdit):
         sender = self.sender()
         if sender.currentText() != '':
-            i = int(sender.currentText().split()[-1]) - 1
+            i = int(sender.currentText().split()[1]) - 1
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
             lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
             self.create_Table(i)
