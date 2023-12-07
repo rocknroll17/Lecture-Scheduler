@@ -531,6 +531,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 꼭에서 그룹 삭제 버튼 클릭
     def must_RemoveFunction(self):
+        self.layout().removeWidget(self.delete_must_button_group)
         while self.delete_must_group_layout.count():
             item = self.delete_must_group_layout.takeAt(0)
             if item:
@@ -539,7 +540,12 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                     widget.deleteLater()
 
         if self.delete_must_button_group.isVisible():
-            # 이미 눌러져있으면 아무것도 안함
+            # 이미 삭제창 띄워져있으면 창 지움
+            self.delete_must_button_group.setVisible(False)
+            return
+        if self.delete_prefer_button_group.isVisible():
+            # 들으면좋음 삭제창 띄워져있으면 지움
+            self.delete_prefer_button_group.setVisible(False)
             return
         if Must_layout:
             xButton = QPushButton('삭제 안 함')
@@ -607,12 +613,21 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 들으면 좋음에서 그룹 삭제 버튼 클릭
     def prefer_RemoveFunction(self):
+        self.layout().removeWidget(self.delete_prefer_button_group)
         while self.delete_prefer_group_layout.count():
             item = self.delete_prefer_group_layout.takeAt(0)
             if item:
                 widget = item.widget()
                 if widget:
                     widget.deleteLater()
+        if self.delete_prefer_button_group.isVisible():
+            # 이미 삭제창 띄워져있으면 지움
+            self.delete_prefer_button_group.setVisible(False)
+            return
+        if self.delete_must_button_group.isVisible():
+            # 꼭 삭제창 띄워져있어도 창 지움
+            self.delete_must_button_group.setVisible(False)
+            return
 
         if self.delete_prefer_button_group.isVisible():
             # 이미 눌러져있으면 아무것도 안함
