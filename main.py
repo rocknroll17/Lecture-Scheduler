@@ -30,7 +30,7 @@ searched_course = []  # 검색 조건에 부합하는 강의 리스트
 selected_course = []  # 장바구니에 담을 강의 리스트
 Must_group = Candidate()  # 꼭 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음
-Prefer_group = Candidate(True)  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
+Prefer_group = Candidate()  # 들으면 좋음 그룹 (한 그룹 = 강의[], 그룹들의 [])
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
 tot_credits = 50 # 최대 학점
