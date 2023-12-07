@@ -35,8 +35,6 @@ class FileManager:
 
     # "key":data 쌍으로 data_list에 저장
     def add(self, key, data):
-        if key in self.data_list.keys():
-            return
         self.data_list[key] = data
 
     # "key"로 저장된 데이터 꺼냄
@@ -69,6 +67,14 @@ class FileManager:
                 return True
             except:
                 return False
+            
+    def __str__(self):
+        #return str(self.basket) + str(self.must_group) + str(self.prefer_group) + str(self.schedules)
+        s = ''
+        for key, val in self.data_list.items():
+            s += f"'{key}':'{val}'"
+            s += ' $ '
+        return s
         
         '''
     def save(self, basket=None, must_group=None, prefer_group=None, must_layout=None, prefer_layout=None, schedules=None):
@@ -93,8 +99,7 @@ class FileManager:
             self.schedules = None
             return False
     '''
-    def __str__(self):
-        return str(self.basket) + str(self.must_group) + str(self.prefer_group) + str(self.schedules)
+
     
 if __name__ == "__main__":
     f = FileManager()
