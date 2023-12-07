@@ -521,7 +521,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         widget = Must_layout[i]
         Must_group.add_course(i, course)
-        widget.createTable1(i)
+        widget.createTableAtPrefer(i)
 
     # 장바구니에서 꼭 버튼 -> 그룹 추가 버튼
     def must_AddFunction(self, course):
