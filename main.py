@@ -176,7 +176,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
         for i in range(0, len(searched_course)):
             button = QPushButton("담기")
-            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setStyleSheet("QPushButton {background-color: #42454c;color: #fff;}QPushButton:hover {background-color: #383b40;}QPushButton:pressed {background-color: #1d1e21;}")
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -202,7 +202,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
         for i in range(len(selected_course)):
             button = QPushButton("삭제")
-            button.setStyleSheet("background-color: rgb(242, 255, 255);")
+            button.setStyleSheet("QPushButton {background-color: #42454c;color: #fff;}QPushButton:hover {background-color: #383b40;}QPushButton:pressed {background-color: #1d1e21;}")
             button.setSizePolicy(
                 QSizePolicy.Fixed, QSizePolicy.Fixed
             )
