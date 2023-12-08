@@ -674,6 +674,9 @@ QPushButton:pressed {
    <property name="text">
     <string>필수강의</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
@@ -689,6 +692,9 @@ QPushButton:pressed {
    </property>
    <property name="text">
     <string>희망강의</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>

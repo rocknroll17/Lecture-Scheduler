@@ -659,6 +659,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             Must_layout.append(table) # Must_layout : 전역변수
             # 맨 앞에 몇 번째 그룹인지 표시해주고
             groupbox = QGroupBox()
+            groupbox.setStyleSheet("border: 0px;")
             box_layout = QHBoxLayout(groupbox)
             label = QLabel('그룹' + str(self.must_scroll_layout.count() + 1))
 
@@ -681,6 +682,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             Prefer_layout.append(table)
             # 맨 앞에 몇 번째 그룹인지 표시해주고
             groupbox = QGroupBox()
+            groupbox.setStyleSheet("border: 0px;")
             box_layout = QHBoxLayout(groupbox)
             label = QLabel(str(self.prefer_scroll_layout.count() + 1) + '순위')
 
@@ -919,6 +921,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     # 장바구니에서 꼭 버튼 -> 그룹 추가 버튼
     def must_AddFunction(self, course):
         groupbox = QGroupBox()
+        groupbox.setStyleSheet("border: 0px;")
         box_layout = QHBoxLayout(groupbox)
         label = QLabel('그룹' + str(self.must_scroll_layout.count()+1))
         box_layout.addWidget(label, alignment=Qt.AlignLeft)
@@ -1063,6 +1066,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     # 장바구니에서 들으면 좋음 버튼 -> 그룹 추가 버튼
     def prefer_AddFunction(self, course):
         groupbox = QGroupBox()
+        groupbox.setStyleSheet("border: 0px;")
         box_layout = QHBoxLayout(groupbox)
         label = QLabel(str(self.prefer_scroll_layout.count() + 1) + '순위')
         box_layout.addWidget(label, alignment=Qt.AlignLeft)
