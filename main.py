@@ -46,6 +46,223 @@ SAVE_AND_LOAD_FILE = True # 저장 여부
 width = 0 # 해상도
 height = 0 # 해상도
 
+# window 스타일시트
+window_stylesheet = """
+        /* 스크롤바 필요한 widget stylesheet에 입력 */
+
+#Dialog {
+
+	background-color: #1e1f22;
+
+}
+
+QTableWidget {
+	border-radius: 10px;
+	color: white;
+	border: 2px solid #ccc;
+	background-color: #2b2d31;
+}
+
+QScrollBar:vertical {
+	boder: none;
+	background-color: transparent;
+	width: 14px;
+	margin: 0px 0 0px 0;
+	boder-radius: 0px;
+}
+
+QScrollBar::handle:vertical {
+	background-color: #1e1f23;
+	min-height: 30px;
+	border-radius: 7px;
+}
+
+QScrollBar::handle:vertical:hover {
+	background-color: #1a1b1e;
+}
+
+QScrollBar::handle:vertical:pressed {
+	background-color: #141416;
+}
+
+QScrollBar::sub-line:vertical {
+	border: none;
+	/*
+	background-color: rgb(59, 59, 90);
+	height: 15px;
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;
+	subcontrol-position: top;
+	subcontrol-origin: margin;
+	*/
+}
+/*
+QScrollBar::sub-line:vertical:hover {
+	background-color: rgb(255, 0, 127);
+}
+
+QScrollBar::sub-line:vertical:pressed {
+	background-color: rgb(185, 0, 92);
+}
+*/
+QScrollBar::add-line:vertical {
+	border: none;
+	/*
+	background-color: rgb(59, 59, 90);
+	height: 15px;
+	border-bottom-left-radius: 7px;
+	border-bottom-right-radius: 7px;
+	subcontrol-position: top;
+	subcontrol-origin: margin;
+	*/
+}
+/*
+QScrollBar::add-line:vertical:hover {
+	background-color: rgb(255, 0, 127);
+}
+
+QScrollBar::add-line:vertical:pressed {
+	background-color: rgb(185, 0, 92);
+}
+*/
+QScrollBar::up-arrow:vertical, QScrollBar:down-arrow:vertical {
+	background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar:sub-page:vertical {
+	background: none;
+}
+
+/* horizontal */
+
+QScrollBar:horizontal {
+	boder: none;
+	background-color: transparent;
+	height: 14px;
+	margin: 0 0px 0 0px;
+	boder-radius: 0px;
+}
+
+QScrollBar::handle:horizontal {
+	background-color: #1e1f23;
+	min-height: 30px;
+	border-radius: 7px;
+}
+
+QScrollBar::handle:horizontal:hover {
+	background-color: #1a1b1e;
+}
+
+QScrollBar::handle:horizontal:pressed {
+	background-color: #141416;
+}
+
+QScrollBar::sub-line:horizontal {
+	border: none;
+	/*
+	background-color: rgb(59, 59, 90);
+	width: 15px;
+	border-top-left-radius: 7px;
+	border-bottom-left-radius: 7px;
+	subcontrol-position: left;
+	subcontrol-origin: margin;
+	*/
+}
+/*
+QScrollBar::sub-line:horizontal:hover {
+	background-color: rgb(255, 0, 127);
+}
+
+QScrollBar::sub-line:horizontal:pressed {
+	background-color: rgb(185, 0, 92);
+}
+*/
+QScrollBar::add-line:horizontal {
+	border: none;
+	/*
+	background-color: rgb(59, 59, 90);
+	width: 15px;
+	border-top-right-radius: 7px;
+	border-bottom-right-radius: 7px;
+	subcontrol-position: right;
+	subcontrol-origin: margin;
+	*/
+}
+/*
+QScrollBar::add-line:horizontal:hover {
+	background-color: rgb(255, 0, 127);
+}
+
+QScrollBar::add-line:horizontal:pressed {
+	background-color: rgb(185, 0, 92);
+}
+*/
+QScrollBar::up-arrow:horizontal, QScrollBar:down-arrow:horizontal {
+	background: none;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar:sub-page:horizontal {
+	background: none;
+}
+
+QTableView QTableCornerButton::section {
+    background-color: #1e1f23;
+}
+
+QGroupBox{
+	color: white;
+}
+
+QLabel {
+	color: white;
+}
+
+QPushButton {
+	background-color: #42454c;
+	color: white;
+	padding: 6px;
+
+}
+
+QPushButton:hover {
+	background-color: #383b40;
+}
+
+QPushButton:pressed {
+	background-color: #1d1e21;
+}
+
+toQHeaderView {
+	border-radius: 10px;
+}
+
+QHeaderView::section {
+	background-color: #1e1f23;
+    color: white;
+    border-style: none;
+    font-family: 'Montserrat', sans-serif;
+	/*border-bottom: 2px solid #fffff8;
+    border-top: 2px solid #fffff8;*/
+}
+
+QHeaderView::section:horizontal {
+	background-color: #1e1f23;
+	default-background-color: #3d5673;
+    margin: 0px;
+    padding: 0px;
+}
+
+QHeaderView::section:vertical {
+	background-color: #1e1f23;
+	default-background-color: #3d5673;
+    margin: 0px;
+    padding: 0px;
+}
+QHeaderView {
+    background-color: #1e1f23;
+}
+
+"""
 
 # 파일 로드
 fm = FileManager.FileManager()
@@ -1004,6 +1221,8 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
         self.button_magic.clicked.connect(self.button_Magic)
         self.button_candidate.clicked.connect(self.button_Candidate)
 
+        self.setStyleSheet(window_stylesheet)
+
     # 최종 시간표를 생성하는 메소드
     def create_Table(self):
         while self.central_layout.count():
@@ -1054,6 +1273,8 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         self.central_widget = QWidget()
         self.central_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.central_widget)
+
+        self.setStyleSheet(window_stylesheet)
 
     # 시간표 생성 창 initialize
     def create_Header(self):
