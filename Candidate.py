@@ -78,7 +78,8 @@ class Candidate:
 #class Basket:
 class CourseGroup:
     # 생성자 - course 리스트 객체로 받음
-    def __init__(self, courses=None):
+    def __init__(self, courses=None, filter_by_id=True):
+        self.filter_by_id = filter_by_id 
         self.__courses = []
         self.__ids = [] # 강의 존재하는지 확인용
         if courses:
@@ -92,7 +93,7 @@ class CourseGroup:
             print(f"{course} is not course")
             return
         # 이미 그룹에 존재하면 기각
-        if course.course_id in self.__ids:
+        if self.filter_by_id and course.course_id in self.__ids:
             return
         self.__courses.append(course)
         self.__ids.append(course.course_id)
