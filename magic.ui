@@ -278,7 +278,8 @@ QHeaderView::section:vertical {
 }
 QHeaderView {
     background-color: #1e1f23;
-}</string>
+}
+</string>
     </property>
     <property name="dragEnabled">
      <bool>true</bool>
