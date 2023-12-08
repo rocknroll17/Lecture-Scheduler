@@ -1500,9 +1500,12 @@ class Schedule_table(QTableWidget):
                 count_hours += 1
             if count_hours == 24:
                 count_hours = 0
-
+        used_colors = []
         for course in courses:
             color = self.random_color() # 시간표 블럭에 칠할 색 -> 랜덤으로 정한다
+            while color in used_colors:
+                color = self.random_color()
+            used_colors.append(color)
             for time_block in course.time:
                 day_column = self.get_day_index(time_block.day)
                 start_row = self.get_time_index(time_block.start_time)
@@ -1543,7 +1546,7 @@ class Schedule_table(QTableWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
     
     def random_color(self):
-        color = [255, 117, 115+10*random.randint(1,14)]
+        color = [255, 117, 115+35*random.randint(1,4)]
         random.shuffle(color)
         return color
 
