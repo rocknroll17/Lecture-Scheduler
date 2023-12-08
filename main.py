@@ -4,6 +4,7 @@ import CourseDB
 from Candidate import Candidate
 #from Candidate import Basket
 from Candidate import CourseGroup
+from Schedule import Schedule
 import FileManager
 import random
 
@@ -34,7 +35,7 @@ Must_group = Candidate()  # 꼭 그룹 (그룹 하나: Course 객체의 리스�
 Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음 (Table 객체의 리스트)
 Prefer_group = Candidate()  # 들으면 좋음 그룹 (그룹 하나 = Course 객체의 리스트, 그룹들의 리스트)
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
-selected_schedule = []  # 선택한 최종 시간표
+selected_schedule = Schedule()  # 선택한 최종 시간표
 tot_credits = 50  # 최대 학점
 
 DB = CourseDB.CourseDB('Data/lecture.txt')
@@ -905,6 +906,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             if item.widget():
                 item.widget().deleteLater()
 
+        # Schedule의 리스트
         self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group, int(tot_credits))
 
         self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
