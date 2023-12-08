@@ -762,8 +762,14 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 꼭에서 그룹 삭제 버튼 -> 그룹 번호 선택
     def removeFunction1(self, i):
+        # 안에 있는 강의 그룹을 장바구니로 돌린다
+        for course in Must_group.get_group(i):
+            selected_course.append(course) 
+        # 그룹 삭제
         Must_group.delete(i)
         del Must_layout[i]
+        # 장바구니 최신화
+        self.setTable()
 
         item = self.groupMust.layout().takeAt(i)
         widget = item.widget()
@@ -887,8 +893,15 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 들으면 좋음에서 그룹 삭제 버튼 -> 그룹 번호 선택
     def removeFunction2(self, i):
+        # TODO: 그룹삭제시 해당 강의그룹 장바구니로 돌려야됨
+        # 안에 있는 강의 그룹을 장바구니로 돌린다
+        for course in Prefer_group.get_group(i):
+            selected_course.append(course) 
+        # 그룹 삭제
         Prefer_group.delete(i)
         del Prefer_layout[i]
+        # 장바구니 최신화
+        self.setTable()
 
         item = self.groupPrefer.layout().takeAt(i)
         widget = item.widget()
