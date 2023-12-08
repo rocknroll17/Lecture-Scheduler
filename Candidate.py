@@ -74,7 +74,6 @@ class Candidate:
 #   append 가능 : a.append(course)  ->  course를 그룹에 추가
 # - 리스트처럼 활용하되, Course 객체만 담을 수 있도록 타입체킹 기능 + 중복 강의는 담지 않는 등의 편의기능 추가
 
-#class Basket:
 
 #class Basket:
 class CourseGroup:
