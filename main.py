@@ -1548,6 +1548,7 @@ class Schedule_table(QTableWidget):
             self.resizeColumnToContents(column) if column in (0, 1) else self.setColumnWidth(column, fixed_column_width)
 
         self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.setFocusPolicy(0)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
     
     def random_color(self):
