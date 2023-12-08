@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
+    <width>1375</width>
     <height>877</height>
    </rect>
   </property>
@@ -351,9 +351,9 @@ QPushButton:pressed {
   <widget class="QTableWidget" name="Table_Course">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>150</x>
      <y>140</y>
-     <width>1011</width>
+     <width>1211</width>
      <height>331</height>
     </rect>
    </property>
@@ -500,9 +500,9 @@ QHeaderView {
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>150</x>
      <y>30</y>
-     <width>1011</width>
+     <width>1211</width>
      <height>101</height>
     </rect>
    </property>
@@ -550,7 +550,7 @@ QLabel {
    <widget class="QPushButton" name="Button_Search">
     <property name="geometry">
      <rect>
-      <x>880</x>
+      <x>1080</x>
       <y>50</y>
       <width>121</width>
       <height>41</height>
@@ -727,9 +727,9 @@ QPushButton:pressed {
   <widget class="QTableWidget" name="Course_Basket">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>150</x>
      <y>500</y>
-     <width>1011</width>
+     <width>1211</width>
      <height>331</height>
     </rect>
    </property>
