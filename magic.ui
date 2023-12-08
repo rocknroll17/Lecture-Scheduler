@@ -192,6 +192,19 @@ QGroupBox{
 
 QLabel {
 	color: white;
+}
+
+QPushButton {
+	background-color: #42454c;
+	color: #fff;
+}
+
+QPushButton:hover {
+	background-color: #383b40;
+}
+
+QPushButton:pressed {
+	background-color: #1d1e21;
 }</string>
   </property>
   <widget class="QGroupBox" name="groupBox_3">

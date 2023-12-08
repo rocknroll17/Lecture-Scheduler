@@ -174,7 +174,19 @@ QTableView QTableCornerButton::section {
     background-color: #1e1f23;
 	gridline-color: #747678;
 }
-</string>
+
+QPushButton {
+	background-color: #42454c;
+	color: #fff;
+}
+
+QPushButton:hover {
+	background-color: #383b40;
+}
+
+QPushButton:pressed {
+	background-color: #1d1e21;
+}</string>
   </property>
   <widget class="Line" name="line">
    <property name="geometry">

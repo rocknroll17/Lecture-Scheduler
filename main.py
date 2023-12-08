@@ -17,6 +17,7 @@ from PyQt5 import uic
 from PyQt5.QtGui import QColor
 
 from os import environ  # 환경변수 조절 용
+import MainStyleSheet
 
 # UI파일 연결
 form_class1 = uic.loadUiType("test.ui")[0]
@@ -33,237 +34,17 @@ Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음 (Table 객체의
 Prefer_group = Candidate()  # 들으면 좋음 그룹 (그룹 하나 = Course 객체의 리스트, 그룹들의 리스트)
 Prefer_layout = []  # 들으면 좋음 그룹에 추가되는 테이블 모음
 selected_schedule = []  # 선택한 최종 시간표
-tot_credits = 50 # 최대 학점
+tot_credits = 50  # 최대 학점
 
 DB = CourseDB.CourseDB('Data/lecture.txt')
 
-
 TABLE_ROW_SIZE = 40  # 테이블 행 크기
-TABLE_COL_SIZE_COLLEGE = 80 # 대학 열 너비
-TABLE_COL_SIZE_DEPARTMENT = 100 # 학과 열 너비
-TABLE_COL_SIZE_TITLE = 180 # 과목명 열 너비
-SAVE_AND_LOAD_FILE = True # 저장 여부
-width = 0 # 해상도
-height = 0 # 해상도
-
-# window 스타일시트
-window_stylesheet = """
-        /* 스크롤바 필요한 widget stylesheet에 입력 */
-
-#Dialog {
-
-	background-color: #1e1f22;
-
-}
-
-QTableWidget {
-	border-radius: 10px;
-	color: white;
-	border: 2px solid #ccc;
-	background-color: #2b2d31;
-    gridline-color: #404349;
-}
-
-QScrollBar:vertical {
-	boder: none;
-	background-color: transparent;
-	width: 14px;
-	margin: 0px 0 0px 0;
-	boder-radius: 0px;
-}
-
-QScrollBar::handle:vertical {
-	background-color: #1e1f23;
-	min-height: 30px;
-	border-radius: 7px;
-}
-
-QScrollBar::handle:vertical:hover {
-	background-color: #1a1b1e;
-}
-
-QScrollBar::handle:vertical:pressed {
-	background-color: #141416;
-}
-
-QScrollBar::sub-line:vertical {
-	border: none;
-	/*
-	background-color: rgb(59, 59, 90);
-	height: 15px;
-	border-top-left-radius: 7px;
-	border-top-right-radius: 7px;
-	subcontrol-position: top;
-	subcontrol-origin: margin;
-	*/
-}
-/*
-QScrollBar::sub-line:vertical:hover {
-	background-color: rgb(255, 0, 127);
-}
-
-QScrollBar::sub-line:vertical:pressed {
-	background-color: rgb(185, 0, 92);
-}
-*/
-QScrollBar::add-line:vertical {
-	border: none;
-	/*
-	background-color: rgb(59, 59, 90);
-	height: 15px;
-	border-bottom-left-radius: 7px;
-	border-bottom-right-radius: 7px;
-	subcontrol-position: top;
-	subcontrol-origin: margin;
-	*/
-}
-/*
-QScrollBar::add-line:vertical:hover {
-	background-color: rgb(255, 0, 127);
-}
-
-QScrollBar::add-line:vertical:pressed {
-	background-color: rgb(185, 0, 92);
-}
-*/
-QScrollBar::up-arrow:vertical, QScrollBar:down-arrow:vertical {
-	background: none;
-}
-
-QScrollBar::add-page:vertical, QScrollBar:sub-page:vertical {
-	background: none;
-}
-
-/* horizontal */
-
-QScrollBar:horizontal {
-	boder: none;
-	background-color: transparent;
-	height: 14px;
-	margin: 0 0px 0 0px;
-	boder-radius: 0px;
-}
-
-QScrollBar::handle:horizontal {
-	background-color: #1e1f23;
-	min-height: 30px;
-	border-radius: 7px;
-}
-
-QScrollBar::handle:horizontal:hover {
-	background-color: #1a1b1e;
-}
-
-QScrollBar::handle:horizontal:pressed {
-	background-color: #141416;
-}
-
-QScrollBar::sub-line:horizontal {
-	border: none;
-	/*
-	background-color: rgb(59, 59, 90);
-	width: 15px;
-	border-top-left-radius: 7px;
-	border-bottom-left-radius: 7px;
-	subcontrol-position: left;
-	subcontrol-origin: margin;
-	*/
-}
-/*
-QScrollBar::sub-line:horizontal:hover {
-	background-color: rgb(255, 0, 127);
-}
-
-QScrollBar::sub-line:horizontal:pressed {
-	background-color: rgb(185, 0, 92);
-}
-*/
-QScrollBar::add-line:horizontal {
-	border: none;
-	/*
-	background-color: rgb(59, 59, 90);
-	width: 15px;
-	border-top-right-radius: 7px;
-	border-bottom-right-radius: 7px;
-	subcontrol-position: right;
-	subcontrol-origin: margin;
-	*/
-}
-/*
-QScrollBar::add-line:horizontal:hover {
-	background-color: rgb(255, 0, 127);
-}
-
-QScrollBar::add-line:horizontal:pressed {
-	background-color: rgb(185, 0, 92);
-}
-*/
-QScrollBar::up-arrow:horizontal, QScrollBar:down-arrow:horizontal {
-	background: none;
-}
-
-QScrollBar::add-page:horizontal, QScrollBar:sub-page:horizontal {
-	background: none;
-}
-
-QTableView QTableCornerButton::section {
-    background-color: #1e1f23;
-}
-
-QGroupBox{
-	color: white;
-}
-
-QLabel {
-	color: white;
-}
-
-QPushButton {
-	background-color: #42454c;
-	color: white;
-	padding: 6px;
-
-}
-
-QPushButton:hover {
-	background-color: #383b40;
-}
-
-QPushButton:pressed {
-	background-color: #1d1e21;
-}
-
-toQHeaderView {
-	border-radius: 10px;
-}
-
-QHeaderView::section {
-	background-color: #1e1f23;
-    color: white;
-    border-style: none;
-    font-family: 'Montserrat', sans-serif;
-	/*border-bottom: 2px solid #fffff8;
-    border-top: 2px solid #fffff8;*/
-}
-
-QHeaderView::section:horizontal {
-	background-color: #1e1f23;
-	default-background-color: #3d5673;
-    margin: 0px;
-    padding: 0px;
-}
-
-QHeaderView::section:vertical {
-	background-color: #1e1f23;
-	default-background-color: #3d5673;
-    margin: 0px;
-    padding: 0px;
-}
-QHeaderView {
-    background-color: #1e1f23;
-}
-
-"""
+TABLE_COL_SIZE_COLLEGE = 80  # 대학 열 너비
+TABLE_COL_SIZE_DEPARTMENT = 100  # 학과 열 너비
+TABLE_COL_SIZE_TITLE = 180  # 과목명 열 너비
+SAVE_AND_LOAD_FILE = True  # 저장 여부
+width = 0  # 해상도
+height = 0  # 해상도
 
 # 파일 로드
 fm = FileManager.FileManager()
@@ -283,6 +64,7 @@ if SAVE_AND_LOAD_FILE:
             Prefer_group = fm.get("Prefer_group")
         if fm.get("selected_schedule"):
             selected_schedule = fm.get("selected_schedule")
+
 
 class Notification(QWidget):
     def __init__(self, message):
@@ -313,7 +95,7 @@ class Notification(QWidget):
 
         # Set up initial properties
         self.setGeometry(940, 520, 200, 50)
-        #self.setGeometry(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y(), 200, 50)
+        # self.setGeometry(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y(), 200, 50)
         self.setStyleSheet("background-color: rgba(0, 0, 0, 200); color: white;")
 
     def show_notification(self):
@@ -334,10 +116,10 @@ class SaveOnClose:
         if SAVE_AND_LOAD_FILE:
             fm.add("selected_course", selected_course)
             musts = Candidate()
-            musts.set_groups([m for m in Must_group.get_groups() if m]) # 빈 리스트 제거
+            musts.set_groups([m for m in Must_group.get_groups() if m])  # 빈 리스트 제거
             fm.add("Must_group", musts)
             prefers = Candidate()
-            prefers.set_groups([p for p in Prefer_group.get_groups() if p]) # 빈 리스트 제거
+            prefers.set_groups([p for p in Prefer_group.get_groups() if p])  # 빈 리스트 제거
             fm.add("Prefer_group", prefers)
             fm.add("selected_schedule", selected_schedule)
             fm.save()
@@ -345,7 +127,7 @@ class SaveOnClose:
 
 # 강의 검색 창
 class courseSearch(QMainWindow, form_class1, SaveOnClose):
-    # 세가지 클래스 상속. QMainWindow : 윈도우창 / form_class1 : ui파일 / SaveOnClose : 닫을 때 저장 
+    # 세가지 클래스 상속. QMainWindow : 윈도우창 / form_class1 : ui파일 / SaveOnClose : 닫을 때 저장
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -357,7 +139,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         self.Button_Magic.clicked.connect(self.Button_MagicFunction)  # 마법사 창으로 이동하는 버튼
 
         # 조건 검색
-        self.comboBoxCollege.addItems([""]+list(set(course.college for course in DB.course_list)))  # 대학 검색
+        self.comboBoxCollege.addItems([""] + list(set(course.college for course in DB.course_list)))  # 대학 검색
         self.comboBoxCollege.model().sort(0, Qt.AscendingOrder)
         self.comboBoxCollege.currentIndexChanged.connect(self.comboBoxFunction)
         self.comboBoxCollege.setCurrentIndex(0)  # 대학(전체)
@@ -382,15 +164,16 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         self.Table_Course.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setTable()  # 처음 생성할 때에도 장바구니 로드
-    
-    def keyPressEvent(self, qKeyEvent): # 키보드 이벤트 핸들러
-        if qKeyEvent.key() == Qt.Key_Return: 
-            self.Button_SearchFunction() 
- 
-    # 조건 넣고 검색 버튼 누르면 강의 검색 테이블 만들어짐
+
+    def keyPressEvent(self, qKeyEvent):  # 키보드 이벤트 핸들러
+        if qKeyEvent.key() == Qt.Key_Return:
+            self.Button_SearchFunction()
+
+            # 조건 넣고 검색 버튼 누르면 강의 검색 테이블 만들어짐
+
     def Button_SearchFunction(self):
         global searched_course
-        #print(condition)
+        # print(condition)
         self.Table_Course.setRowCount(0)
         searched_course.clear()
         searched_course = DB.search(condition)
@@ -407,7 +190,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
         for i in range(0, len(searched_course)):
             button = QPushButton("담기")
-            button.setStyleSheet("QPushButton {background-color: #42454c;color: #fff;}QPushButton:hover {background-color: #383b40;}QPushButton:pressed {background-color: #1d1e21;}")
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -438,7 +220,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
         for i in range(len(selected_course)):
             button = QPushButton("삭제")
-            button.setStyleSheet("QPushButton {background-color: #42454c;color: #fff;}QPushButton:hover {background-color: #383b40;}QPushButton:pressed {background-color: #1d1e21;}")
             button.setSizePolicy(
                 QSizePolicy.Fixed, QSizePolicy.Fixed
             )
@@ -470,7 +251,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
             for i in range(len(selected_course)):
                 button = QPushButton("삭제")
-                button.setStyleSheet("QPushButton {background-color: #42454c;color: #fff;}QPushButton:hover {background-color: #383b40;}QPushButton:pressed {background-color: #1d1e21;}")
                 button.setSizePolicy(
                     QSizePolicy.Expanding, QSizePolicy.Expanding
                 )
@@ -503,7 +283,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
             if row != -1:
                 del selected_course[row]
                 self.Course_Basket.removeRow(row)
-                #print(selected_course)
+                # print(selected_course)
 
     # 시간표 버튼 눌렀을 때 (최종 시간표 보는 창으로 이동)
     def Button_ScheduleFunction(self):
@@ -542,6 +322,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
     def printFunction(self):
         condition[2] = self.titleInput.text()
 
+
 # 마법사
 class Magic(QMainWindow, form_class2, SaveOnClose):
     def __init__(self):
@@ -553,9 +334,9 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Button_Schedule.clicked.connect(self.Button_ScheduleFunction)  # 최종 시간표 창으로 이동하는 버튼
         self.Button_Courses.clicked.connect(self.Button_CoursesFunction)  # 강의 검색 창으로 이동하는 버튼
         self.Button_Create.clicked.connect(self.Button_CreateFunction)  # 시간표 생성 창으로 이동하는 버튼
-        self.Must_Remove.clicked.connect(self.must_RemoveFunction)      # 꼭 그룹에서 그룹 삭제 버튼
+        self.Must_Remove.clicked.connect(self.must_RemoveFunction)  # 꼭 그룹에서 그룹 삭제 버튼
         self.Prefer_Remove.clicked.connect(self.prefer_RemoveFunction)  # 들으면 좋음 그룹에서 그룹 삭제 버튼
-        self.credit_edit.textChanged.connect(self.text_changed)         # 최대 학점 입력하는 칸
+        self.credit_edit.textChanged.connect(self.text_changed)  # 최대 학점 입력하는 칸
 
         self.must_scroll = QWidget(self.groupMust)
         self.must_scroll_layout = QVBoxLayout(self.must_scroll)
@@ -595,40 +376,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         for i in range(len(selected_course)):
             must_button = QPushButton("꼭")
-            must_button.setStyleSheet("""
-                        QPushButton {
-            	background-color: #42454c;
-            	color: #fff;
-
-            }
-
-            QPushButton:hover {
-            	background-color: #383b40;
-            }
-
-            QPushButton:pressed {
-            	background-color: #1d1e21;
-            }
-            """)
             must_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             must_button.clicked.connect(self.onMustButtonPress)
 
             prefer_button = QPushButton("들으면 좋음")
-            prefer_button.setStyleSheet("""
-                        QPushButton {
-            	background-color: #42454c;
-            	color: #fff;
-
-            }
-
-            QPushButton:hover {
-            	background-color: #383b40;
-            }
-
-            QPushButton:pressed {
-            	background-color: #1d1e21;
-            }
-            """)
             prefer_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             prefer_button.clicked.connect(self.onPreferButtonPress)
 
@@ -645,7 +396,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Course_Basket.resizeColumnsToContents()
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
-    
+
     # 저장된 Must_group이 있는 경우, 이를 바탕으로 관련 변수 초기화 & 화면에 그림
     def initializeMustLayout(self):
         global Must_layout
@@ -656,7 +407,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             # Table 객체를 만들고
             table = Table()
             table.createTable1(i)
-            Must_layout.append(table) # Must_layout : 전역변수
+            Must_layout.append(table)  # Must_layout : 전역변수
             # 맨 앞에 몇 번째 그룹인지 표시해주고
             groupbox = QGroupBox()
             groupbox.setStyleSheet("border: 0px;")
@@ -725,74 +476,29 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if c_button:
             index = self.Course_Basket.indexAt(c_button.pos())
             self.row = index.row()
-            #print(self.row)
+            # print(self.row)
 
             if self.row != -1:
                 course = selected_course[self.row]
 
                 xButton = QPushButton('추가 안 함')
-                xButton.setStyleSheet("""
-                            QPushButton {
-                	background-color: #42454c;
-                	color: #fff;
-
-                }
-
-                QPushButton:hover {
-                	background-color: #383b40;
-                }
-
-                QPushButton:pressed {
-                	background-color: #1d1e21;
-                }
-                """)
                 xButton.clicked.connect(self.must_removeGroup1)
                 self.must_group_layout.addWidget(xButton)
                 for i in range(len(Must_layout)):
                     button = QPushButton('그룹' + str(i + 1))
                     button.clicked.connect(partial(self.addCourse1, i, course))
-                    button.setStyleSheet("""
-                                                QPushButton {
-                                    	background-color: #42454c;
-                                    	color: #fff;
-
-                                    }
-
-                                    QPushButton:hover {
-                                    	background-color: #383b40;
-                                    }
-
-                                    QPushButton:pressed {
-                                    	background-color: #1d1e21;
-                                    }
-                                    """)
                     self.must_group_layout.addWidget(button)
 
                 button = QPushButton('그룹 추가')
                 button.clicked.connect(partial(self.must_AddFunction, course))
-                button.setStyleSheet("""
-                                            QPushButton {
-                                	background-color: #42454c;
-                                	color: #fff;
-
-                                }
-
-                                QPushButton:hover {
-                                	background-color: #383b40;
-                                }
-
-                                QPushButton:pressed {
-                                	background-color: #1d1e21;
-                                }
-                                """)
                 self.must_group_layout.addWidget(button)
 
                 self.layout().addWidget(self.must_button_group)
                 self.must_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                #self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
+                # self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
                 # 커서 위치에 뜨도록 한다
-                self.must_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
+                self.must_button_group.move(QCursor.pos().x() - self.pos().x(), QCursor.pos().y() - self.pos().y() - 59)
                 self.must_button_group.show()
 
     # 꼭 버튼 눌렀을 때 나오는 그룹리스트 버튼
@@ -835,66 +541,22 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
                 xButton = QPushButton('추가 안 함')
                 xButton.clicked.connect(self.prefer_removeGroup1)
-                xButton.setStyleSheet("""
-                                            QPushButton {
-                                	background-color: #42454c;
-                                	color: #fff;
-
-                                }
-
-                                QPushButton:hover {
-                                	background-color: #383b40;
-                                }
-
-                                QPushButton:pressed {
-                                	background-color: #1d1e21;
-                                }
-                                """)
                 self.prefer_group_layout.addWidget(xButton)
                 for i in range(len(Prefer_layout)):
                     button = QPushButton(str(i + 1) + '순위')
                     button.clicked.connect(partial(self.addCourse2, i, course))
-                    button.setStyleSheet("""
-                                                QPushButton {
-                                    	background-color: #42454c;
-                                    	color: #fff;
-
-                                    }
-
-                                    QPushButton:hover {
-                                    	background-color: #383b40;
-                                    }
-
-                                    QPushButton:pressed {
-                                    	background-color: #1d1e21;
-                                    }
-                                    """)
                     self.prefer_group_layout.addWidget(button)
 
                 button = QPushButton('그룹 추가')
                 button.clicked.connect(partial(self.prefer_AddFunction, course))
-                button.setStyleSheet("""
-                                            QPushButton {
-                                	background-color: #42454c;
-                                	color: #fff;
-
-                                }
-
-                                QPushButton:hover {
-                                	background-color: #383b40;
-                                }
-
-                                QPushButton:pressed {
-                                	background-color: #1d1e21;
-                                }
-                                """)
                 self.prefer_group_layout.addWidget(button)
 
                 self.layout().addWidget(self.prefer_button_group)
                 self.prefer_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                #self.prefer_button_group.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
-                self.prefer_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
+                # self.prefer_button_group.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
+                self.prefer_button_group.move(QCursor.pos().x() - self.pos().x(),
+                                              QCursor.pos().y() - self.pos().y() - 59)
                 self.prefer_button_group.show()
 
     # 꼭 버튼 눌렀을 때 나오는 그룹리스트 버튼 삭제
@@ -923,7 +585,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         groupbox = QGroupBox()
         groupbox.setStyleSheet("border: 0px;")
         box_layout = QHBoxLayout(groupbox)
-        label = QLabel('그룹' + str(self.must_scroll_layout.count()+1))
+        label = QLabel('그룹' + str(self.must_scroll_layout.count() + 1))
         box_layout.addWidget(label, alignment=Qt.AlignLeft)
 
         new_group = Table()
@@ -967,47 +629,18 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if Must_layout:
             xButton = QPushButton('삭제 안 함')
             xButton.clicked.connect(self.must_removeGroup2)
-            xButton.setStyleSheet("""
-                                        QPushButton {
-                            	background-color: #42454c;
-                            	color: #fff;
-
-                            }
-
-                            QPushButton:hover {
-                            	background-color: #383b40;
-                            }
-
-                            QPushButton:pressed {
-                            	background-color: #1d1e21;
-                            }
-                            """)
             self.delete_must_group_layout.addWidget(xButton)
 
             for i in range(len(Must_layout)):
                 button = QPushButton('그룹' + str(i + 1))
                 button.clicked.connect(partial(self.removeFunction1, i))
-                button.setStyleSheet("""
-                                            QPushButton {
-                                	background-color: #42454c;
-                                	color: #fff;
-
-                                }
-
-                                QPushButton:hover {
-                                	background-color: #383b40;
-                                }
-
-                                QPushButton:pressed {
-                                	background-color: #1d1e21;
-                                }
-                                """)
                 self.delete_must_group_layout.addWidget(button)
 
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
-            #self.delete_must_button_group.move(int((width*(self.Must_Remove.pos().x() + 50))/1920), int((height*(self.Must_Remove.pos().y() - 50))/1080))
-            self.delete_must_button_group.move(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y()-59)
+            # self.delete_must_button_group.move(int((width*(self.Must_Remove.pos().x() + 50))/1920), int((height*(self.Must_Remove.pos().y() - 50))/1080))
+            self.delete_must_button_group.move(QCursor.pos().x() - self.pos().x(),
+                                               QCursor.pos().y() - self.pos().y() - 59)
             self.delete_must_button_group.show()
 
     def must_removeGroup2(self):
@@ -1017,8 +650,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     def removeFunction1(self, i):
         # 안에 있는 강의 그룹을 장바구니로 돌린다
         for course in Must_group.get_group(i):
-            selected_course.append(course) 
-        # 그룹 삭제
+            selected_course.append(course)
+            # 그룹 삭제
         Must_group.delete(i)
         del Must_layout[i]
         # 장바구니 최신화
@@ -1111,46 +744,17 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if Prefer_layout:
             xButton = QPushButton('삭제 안 함')
             xButton.clicked.connect(self.prefer_removeGroup2)
-            xButton.setStyleSheet("""
-                                        QPushButton {
-                            	background-color: #42454c;
-                            	color: #fff;
-
-                            }
-
-                            QPushButton:hover {
-                            	background-color: #383b40;
-                            }
-
-                            QPushButton:pressed {
-                            	background-color: #1d1e21;
-                            }
-                            """)
             self.delete_prefer_group_layout.addWidget(xButton)
             for i in range(len(Prefer_layout)):
                 button = QPushButton(str(i + 1) + '순위')
                 button.clicked.connect(partial(self.removeFunction2, i))
-                button.setStyleSheet("""
-                                            QPushButton {
-                                	background-color: #42454c;
-                                	color: #fff;
-
-                                }
-
-                                QPushButton:hover {
-                                	background-color: #383b40;
-                                }
-
-                                QPushButton:pressed {
-                                	background-color: #1d1e21;
-                                }
-                                """)
                 self.delete_prefer_group_layout.addWidget(button)
 
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
-            #self.delete_prefer_button_group.move(int((width*(self.Prefer_Remove.pos().x() - 100))/1920), int((height*(self.Prefer_Remove.pos().y() - 50))/1080))
-            self.delete_prefer_button_group.move(QCursor.pos().x()-self.pos().x()-100, QCursor.pos().y()-self.pos().y()-59)
+            # self.delete_prefer_button_group.move(int((width*(self.Prefer_Remove.pos().x() - 100))/1920), int((height*(self.Prefer_Remove.pos().y() - 50))/1080))
+            self.delete_prefer_button_group.move(QCursor.pos().x() - self.pos().x() - 100,
+                                                 QCursor.pos().y() - self.pos().y() - 59)
             self.delete_prefer_button_group.show()
 
     def prefer_removeGroup2(self):
@@ -1161,8 +765,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         # TODO: 그룹삭제시 해당 강의그룹 장바구니로 돌려야됨
         # 안에 있는 강의 그룹을 장바구니로 돌린다
         for course in Prefer_group.get_group(i):
-            selected_course.append(course) 
-        # 그룹 삭제
+            selected_course.append(course)
+            # 그룹 삭제
         Prefer_group.delete(i)
         del Prefer_layout[i]
         # 장바구니 최신화
@@ -1209,6 +813,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         myWindow4.show()
         self.close()
 
+
 # 최종 시간표 보여주는 창
 class timeTable(QMainWindow, form_class3, SaveOnClose):
     def __init__(self):
@@ -1227,7 +832,7 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
         self.button_magic.clicked.connect(self.button_Magic)
         self.button_candidate.clicked.connect(self.button_Candidate)
 
-        self.setStyleSheet(window_stylesheet)
+        self.setStyleSheet(MainStyleSheet.window_stylesheet)
 
     # 최종 시간표를 생성하는 메소드
     def create_Table(self):
@@ -1268,6 +873,7 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
 
         self.close()
 
+
 # 시간표 후보 생성 창
 class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
     def __init__(self):
@@ -1276,14 +882,14 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         self.time_tables = []
         self.current_table_index = -1
         self.setWindowTitle("마법사 결과")
-        #self.showMaximized()
+        # self.showMaximized()
 
         self.main_layout = QVBoxLayout()
         self.central_widget = QWidget()
         self.central_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.central_widget)
 
-        self.setStyleSheet(window_stylesheet)
+        self.setStyleSheet(MainStyleSheet.window_stylesheet)
 
     # 시간표 생성 창 initialize
     def create_Header(self):
@@ -1293,7 +899,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
                 item.widget().deleteLater()
 
         self.time_tables = ScheduleManager.time_table_maker(Must_group, Prefer_group, int(tot_credits))
-        
+
         self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
         self.time_tables.sort(key=lambda x: len(x[1]), reverse=True)
 
@@ -1317,7 +923,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         group.setStyleSheet("border: 0px;")
 
         header_layout.addWidget(group)
-        #print(f"possible schedules : {self.time_tables}")
+        # print(f"possible schedules : {self.time_tables}")
         if len(self.time_tables) > 0:
             label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
             label.setAlignment(Qt.AlignCenter)
@@ -1327,9 +933,9 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             button_layout.addStretch()
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[0][1])
             if not self.time_tables[0][1]:
-                tableBox = QLineEdit('후보 ' + str(1)+" - 들으면 좋음 반영 안 됨")
+                tableBox = QLineEdit('후보 ' + str(1) + " - 들으면 좋음 반영 안 됨")
             else:
-                tableBox = QLineEdit('후보 ' + str(1)+" - "+preferences+" 반영")
+                tableBox = QLineEdit('후보 ' + str(1) + " - " + preferences + " 반영")
             tableBox.setAlignment(Qt.AlignCenter)
             tableBox.setReadOnly(True)
             tableBox.setMaximumWidth(300)
@@ -1338,15 +944,15 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             left_button = QPushButton('<')
             left_button.clicked.connect(lambda: self.leftbuttonClicked(tableBox, num_of_table))
             left_button.setFixedSize(100, 30)
-            #left_button.setMaximumWidth(100)
-            #left_button.setMinimumHeight(30)
+            # left_button.setMaximumWidth(100)
+            # left_button.setMinimumHeight(30)
             right_button = QPushButton('>')
             right_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
             left_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             left_button.setFixedSize(100, 30)
             right_button.setFixedSize(100, 30)
-            #right_button.setMaximumWidth(100)
-            #right_button.setMinimumHeight(30)
+            # right_button.setMaximumWidth(100)
+            # right_button.setMinimumHeight(30)
 
             num_of_table = QComboBox()
             num_of_table.setEditable(True)
@@ -1367,15 +973,15 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             for i in range(len(self.time_tables)):
                 preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
                 if not self.time_tables[i][1]:
-                    items.append('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안 됨")
+                    items.append('후보 ' + str(i + 1) + " - 들으면 좋음 반영 안 됨")
                 else:
-                    items.append('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+                    items.append('후보 ' + str(i + 1) + " - " + preferences + " 반영")
             num_of_table.addItems(items)
             header_layout.addWidget(label)
             header_layout.addLayout(button_layout)
 
             self.main_layout.addWidget(header)
-            self.create_Table(0)           
+            self.create_Table(0)
         else:
             label = QLabel('만들어진 시간표가 없습니다. 강의를 그룹에 추가하세요')
             label.setAlignment(Qt.AlignCenter)
@@ -1394,9 +1000,9 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
         if not self.time_tables[i][1]:
-            lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안 됨")
+            lineEdit.setText('후보 ' + str(i + 1) + " - 들으면 좋음 반영 안 됨")
         else:
-            lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+            lineEdit.setText('후보 ' + str(i + 1) + " - " + preferences + " 반영")
         comboBox.setCurrentIndex(i + 1)
         self.create_Table(i)
 
@@ -1411,9 +1017,9 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
         if not self.time_tables[i][1]:
-            lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안 됨")
+            lineEdit.setText('후보 ' + str(i + 1) + " - 들으면 좋음 반영 안 됨")
         else:
-            lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+            lineEdit.setText('후보 ' + str(i + 1) + " - " + preferences + " 반영")
         comboBox.setCurrentIndex(i + 1)
         self.create_Table(i)
 
@@ -1423,9 +1029,9 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             i = int(sender.currentText().split()[1]) - 1
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
             if not self.time_tables[i][1]:
-                lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안 됨")
+                lineEdit.setText('후보 ' + str(i + 1) + " - 들으면 좋음 반영 안 됨")
             else:
-                lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
+                lineEdit.setText('후보 ' + str(i + 1) + " - " + preferences + " 반영")
             self.create_Table(i)
 
     # 시간표 보여주기 (초기화)
@@ -1441,7 +1047,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         group = QGroupBox()
         group.setLayout(QVBoxLayout(group))
 
-        schedule = Schedule_table(self.time_tables[index][0],self.time_tables[index][1])
+        schedule = Schedule_table(self.time_tables[index][0], self.time_tables[index][1])
 
         button = QPushButton('저장')
         button.setFixedSize(100, 30)
@@ -1515,7 +1121,7 @@ class Schedule_table(QTableWidget):
                 count_hours = 0
         used_colors = []
         for course in courses:
-            color = self.random_color() # 시간표 블럭에 칠할 색 -> 랜덤으로 정한다
+            color = self.random_color()  # 시간표 블럭에 칠할 색 -> 랜덤으로 정한다
             while color in used_colors:
                 color = self.random_color()
             used_colors.append(color)
@@ -1523,7 +1129,6 @@ class Schedule_table(QTableWidget):
                 day_column = self.get_day_index(time_block.day)
                 start_row = self.get_time_index(time_block.start_time)
                 end_row = self.get_time_index(time_block.end_time)
-
 
                 for row in range(start_row, end_row - 1):
                     hours, minutes = map(int, time_block.course_time.split(':'))
@@ -1544,7 +1149,7 @@ class Schedule_table(QTableWidget):
                     item.setForeground(QColor(0, 0, 0))
                     item.setTextAlignment(Qt.AlignCenter)
                     self.setItem(row, day_column, item)
-                    
+
                     self.item(row, day_column).setBackground(QColor(*color))
 
         fixed_row_height = 5
@@ -1558,9 +1163,9 @@ class Schedule_table(QTableWidget):
         self.setSelectionMode(QAbstractItemView.NoSelection)
         self.setFocusPolicy(0)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-    
+
     def random_color(self):
-        color = [255, 117, 115+35*random.randint(1,4)]
+        color = [255, 117, 115 + 35 * random.randint(1, 4)]
         random.shuffle(color)
         return color
 
@@ -1572,53 +1177,18 @@ class Schedule_table(QTableWidget):
         hours, minutes = map(int, time_str.split(':'))
         return (hours - 8) * 4 + (1 if minutes == 15 else 0)
 
+
 # 꼭, 들으면 좋음에서 추가되는 하나의 그룹을 테이블로 표현함
 class Table(QTableWidget):
     widget_counts = 0
+
     def __init__(self):
         super().__init__()
         self.id = Table.widget_counts
         Table.widget_counts += 1
         self.setColumnCount(5)
         self.setHorizontalHeaderLabels(["", '과목명', '과목번호', '담당교수', '강의시간'])
-        self.setStyleSheet("""
-toQHeaderView {
-	border-radius: 10px;
-}
-
-QHeaderView::section {
-	background-color: #1e1f23;
-    color: white;
-    border-style: none;
-    font-family: 'Montserrat', sans-serif;
-	/*border-bottom: 2px solid #fffff8;
-    border-top: 2px solid #fffff8;*/
-}
-
-QTableWidget {
-	border-radius: 10px;
-    border: 2px solid #ccc;
-	background-color: #2b2d31;
-    gridline-color: #404349;
-}
-
-QHeaderView::section:horizontal {
-	background-color: #1e1f23;
-	default-background-color: #3d5673;
-    margin: 0px;
-    padding: 0px;
-}
-
-QHeaderView::section:vertical {
-	background-color: #1e1f23;
-	default-background-color: #3d5673;
-    margin: 0px;
-    padding: 0px;
-}
-QHeaderView {
-    background-color: #1e1f23;
-}
-        """)
+        self.setStyleSheet(MainStyleSheet.table_stylesheet)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.NoSelection)
@@ -1632,21 +1202,7 @@ QHeaderView {
         # for i in range(len(Must_group[index])):
         for i in range(len(Must_group.get_groups()[index])):
             button = QPushButton("X")
-            button.setStyleSheet("""
-QPushButton {
-	background-color: #42454c;
-	color: #fff;
-
-}
-
-QPushButton:hover {
-	background-color: #383b40;
-}
-
-QPushButton:pressed {
-	background-color: #1d1e21;
-}
-""")
+            button.setStyleSheet(MainStyleSheet.button_stylesheet)
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -1681,21 +1237,7 @@ QPushButton:pressed {
 
         for i in range(len(courses)):
             button = QPushButton("X")
-            button.setStyleSheet("""
-            QPushButton {
-            	background-color: #42454c;
-            	color: #fff;
-
-            }
-
-            QPushButton:hover {
-            	background-color: #383b40;
-            }
-
-            QPushButton:pressed {
-            	background-color: #1d1e21;
-            }
-            """)
+            button.setStyleSheet(MainStyleSheet.button_stylesheet)
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -1728,21 +1270,7 @@ QPushButton:pressed {
         # for i in range(len(Prefer_group[index])):
         for i in range(len(Prefer_group.get_group(index))):
             button = QPushButton("X")
-            button.setStyleSheet("""
-            QPushButton {
-            	background-color: #42454c;
-            	color: #fff;
-
-            }
-
-            QPushButton:hover {
-            	background-color: #383b40;
-            }
-
-            QPushButton:pressed {
-            	background-color: #1d1e21;
-            }
-            """)
+            button.setStyleSheet(MainStyleSheet.button_stylesheet)
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -1773,21 +1301,7 @@ QPushButton:pressed {
 
         for i in range(len(courses)):
             button = QPushButton("X")
-            button.setStyleSheet("""
-            QPushButton {
-            	background-color: #42454c;
-            	color: #fff;
-
-            }
-
-            QPushButton:hover {
-            	background-color: #383b40;
-            }
-
-            QPushButton:pressed {
-            	background-color: #1d1e21;
-            }
-            """)
+            button.setStyleSheet(MainStyleSheet.button_stylesheet)
             button.setSizePolicy(
                 QSizePolicy.Expanding, QSizePolicy.Expanding
             )
@@ -1832,10 +1346,10 @@ QPushButton:pressed {
                 del Must_group.get_group(idx)[row]
                 self.removeRow(row)
         # 개수 0이면 삭제
-        #if self.rowCount() == 0:
+        # if self.rowCount() == 0:
         #    self.deleteLater()
         #    del Must_layout[idx]
-            
+
         myWindow2.setTable()
 
     # 들으면 좋음 그룹에서 X 버튼 누르면 강의가 장바구니로 이동함
@@ -1852,7 +1366,7 @@ QPushButton:pressed {
                 del Prefer_group.get_group(idx)[row]
                 self.removeRow(row)
         # 개수 0이면 삭제
-        #if self.rowCount() == 0:
+        # if self.rowCount() == 0:
         #    self.deleteLater()
         #    del Prefer_layout[idx]
 
@@ -1865,6 +1379,7 @@ def suppress_qt_warnings():  # 해상도 별 UI크기 강제 고정
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     environ["QT_SCALE_FACTOR"] = "1"
 
+
 if __name__ == "__main__":
     suppress_qt_warnings()
     # QApplication : 프로그램을 실행시켜주는 클래스
@@ -1874,17 +1389,17 @@ if __name__ == "__main__":
     height = screen_rect.height()
 
     for s in set([c.department for c in DB.course_list]):
-        #print(s)
+        # print(s)
         pass
     # 각 창의 인스턴스 생성
     myWindow1 = courseSearch()
     myWindow2 = Magic()
     myWindow3 = timeTable()
     myWindow4 = ScheduleCandidates()
-    
 
     # 프로그램 화면을 보여주는 코드
     myWindow1.show()
 
     # 프로그램을 이벤트루프로 진입시키는(프로그램을 작동시키는) 코드
     app.exec_()
+
