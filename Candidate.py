@@ -112,7 +112,12 @@ class CourseGroup:
     # 강의 존재하는지
     def exists(self, lecture):
         return lecture.course_id in self.__ids
- 
+    
+    # 리스트 날리기
+    def clear(self):
+        self.__ids = []
+        self.__courses = []
+        
     # 내장함수들
     # __len__ : len()으로 감쌀 때 반환값
     def __len__(self):
