@@ -29,7 +29,7 @@ form_class4 = uic.loadUiType("create.ui")[0]
 
 ####### 전역변수 ########
 condition = ["", "", "", "", ""]  # 검색 조건
-searched_course = []  # 검색 조건에 부합하는 강의 리스트
+searched_course = CourseGroup(filter_by_id=False)  # 검색 조건에 부합하는 강의 리스트 -> 과목번호 중복돼도 받아들임
 selected_course = CourseGroup()  # 장바구니에 담을 강의 리스트
 Must_group = Candidate()  # 꼭 그룹 (그룹 하나: Course 객체의 리스트, 그룹들의 리스트)
 Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음 (Table 객체의 리스트)
@@ -178,7 +178,8 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
         # print(condition)
         self.Table_Course.setRowCount(0)
         searched_course.clear()
-        searched_course = DB.search(condition)
+        # DB에서 검색 & 반환한 리스트를 CourseGroup 객체로 변환해서 저장
+        searched_course = CourseGroup(DB.search(condition), filter_by_id=False) 
         self.createTable()
 
     # 강의 검색 테이블 생성
