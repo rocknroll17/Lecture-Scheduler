@@ -2,7 +2,8 @@ import Course
 from ScheduleManager import ScheduleManager
 import CourseDB
 from Candidate import Candidate
-from Candidate import Basket
+#from Candidate import Basket
+from Candidate import CourseGroup
 import FileManager
 import random
 
@@ -28,7 +29,7 @@ form_class4 = uic.loadUiType("create.ui")[0]
 ####### 전역변수 ########
 condition = ["", "", "", "", ""]  # 검색 조건
 searched_course = []  # 검색 조건에 부합하는 강의 리스트
-selected_course = []  # 장바구니에 담을 강의 리스트
+selected_course = CourseGroup()  # 장바구니에 담을 강의 리스트
 Must_group = Candidate()  # 꼭 그룹 (그룹 하나: Course 객체의 리스트, 그룹들의 리스트)
 Must_layout = []  # 꼭 그룹에 추가되는 테이블 모음 (Table 객체의 리스트)
 Prefer_group = Candidate()  # 들으면 좋음 그룹 (그룹 하나 = Course 객체의 리스트, 그룹들의 리스트)
@@ -42,7 +43,7 @@ TABLE_ROW_SIZE = 40  # 테이블 행 크기
 TABLE_COL_SIZE_COLLEGE = 80  # 대학 열 너비
 TABLE_COL_SIZE_DEPARTMENT = 100  # 학과 열 너비
 TABLE_COL_SIZE_TITLE = 180  # 과목명 열 너비
-SAVE_AND_LOAD_FILE = True  # 저장 여부
+SAVE_AND_LOAD_FILE = False  # 저장 여부
 width = 0  # 해상도
 height = 0  # 해상도
 
@@ -281,7 +282,8 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
             row = index.row()
 
             if row != -1:
-                del selected_course[row]
+                #del selected_course[row]
+                selected_course.delete(row)
                 self.Course_Basket.removeRow(row)
                 # print(selected_course)
 
@@ -566,7 +568,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 꼭 버튼 -> 그룹 번호 선택
     def addCourse1(self, i, course):
-        del selected_course[self.row]
+        #del selected_course[self.row]
+        selected_course.delete(self.row)
         self.Course_Basket.removeRow(self.row)
         self.layout().removeWidget(self.must_button_group)
         while self.must_group_layout.count():
@@ -682,7 +685,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 들으면 좋음 버튼 -> 그룹 번호 선택
     def addCourse2(self, i, course):
-        del selected_course[self.row]
+        #del selected_course[self.row]
+        selected_course.delete(self.row)
         self.Course_Basket.removeRow(self.row)
         self.layout().removeWidget(self.prefer_button_group)
         while self.prefer_group_layout.count():
