@@ -43,7 +43,7 @@ TABLE_ROW_SIZE = 40  # 테이블 행 크기
 TABLE_COL_SIZE_COLLEGE = 80  # 대학 열 너비
 TABLE_COL_SIZE_DEPARTMENT = 100  # 학과 열 너비
 TABLE_COL_SIZE_TITLE = 180  # 과목명 열 너비
-SAVE_AND_LOAD_FILE = False  # 저장 여부
+SAVE_AND_LOAD_FILE = True  # 저장 여부
 width = 0  # 해상도
 height = 0  # 해상도
 
