@@ -595,7 +595,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                                 """)
                 self.prefer_group_layout.addWidget(xButton)
                 for i in range(len(Prefer_layout)):
-                    button = QPushButton('그룹 ' + str(i + 1))
+                    button = QPushButton(str(i + 1) + '순위')
                     button.clicked.connect(partial(self.addCourse2, i, course))
                     button.setStyleSheet("""
                                                 QPushButton {
@@ -843,7 +843,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                             """)
             self.delete_prefer_group_layout.addWidget(xButton)
             for i in range(len(Prefer_layout)):
-                button = QPushButton('그룹' + str(i + 1))
+                button = QPushButton(str(i + 1) + '순위')
                 button.clicked.connect(partial(self.removeFunction2, i))
                 button.setStyleSheet("""
                                             QPushButton {
