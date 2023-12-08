@@ -342,8 +342,8 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.must_scroll = QWidget(self.groupMust)
         self.must_scroll_layout = QVBoxLayout(self.must_scroll)
 
-        # self.groupMust.setLayout(QVBoxLayout(self.groupMust))
-        self.groupPrefer.setLayout(QVBoxLayout(self.groupPrefer))
+        self.prefer_scroll = QWidget(self.groupPrefer)
+        self.prefer_scroll_layout = QVBoxLayout(self.prefer_scroll)
 
         # 꼭 버튼 누르면 뜨는 버튼 그룹
         self.must_button_group = QGroupBox()
@@ -424,7 +424,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 item.setTextAlignment(Qt.AlignCenter)
                 self.Course_Basket.setItem(i, j, item)
             self.Course_Basket.setRowHeight(i, TABLE_ROW_SIZE)
-        # self.Course_Basket.resizeRowsToContents()
         self.Course_Basket.resizeColumnsToContents()
         self.Course_Basket.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
@@ -443,16 +442,14 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             # 맨 앞에 몇 번째 그룹인지 표시해주고
             groupbox = QGroupBox()
             box_layout = QHBoxLayout(groupbox)
-            # label = QLabel('그룹' + str(self.groupMust.layout().count() + 1))
             label = QLabel('그룹' + str(self.must_scroll_layout.count() + 1))
 
             box_layout.addWidget(label, alignment=Qt.AlignLeft)
             box_layout.addWidget(table)
             # 레이아웃에 추가
-            groupbox.setMinimumHeight(200)
+            groupbox.setMinimumHeight(300)
             self.must_scroll_layout.addWidget(groupbox)
             self.groupMust.setWidget(self.must_scroll)
-            # self.groupMust.layout().addWidget(groupbox)
 
     # 저장된 Prefer_group이 있는 경우, 이를 바탕으로 관련 변수 초기화 & 화면에 그림
     def initializePreferLayout(self):
@@ -467,11 +464,14 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             # 맨 앞에 몇 번째 그룹인지 표시해주고
             groupbox = QGroupBox()
             box_layout = QHBoxLayout(groupbox)
-            label = QLabel(str(self.groupPrefer.layout().count() + 1) + '순위')
+            label = QLabel(str(self.prefer_scroll_layout.count() + 1) + '순위')
+
             box_layout.addWidget(label, alignment=Qt.AlignLeft)
             box_layout.addWidget(table)
             # 레이아웃에 추가
-            self.groupPrefer.layout().addWidget(groupbox)
+            groupbox.setMinimumHeight(300)
+            self.prefer_scroll_layout.addWidget(groupbox)
+            self.groupPrefer.setWidget(self.prefer_scroll)
 
     # 장바구니에서 꼭 버튼 눌렀을 때
     def onMustButtonPress(self):
@@ -702,7 +702,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     def must_AddFunction(self, course):
         groupbox = QGroupBox()
         box_layout = QHBoxLayout(groupbox)
-        # label = QLabel('그룹' + str(self.groupMust.layout().count()+1))
         label = QLabel('그룹' + str(self.must_scroll_layout.count()+1))
         box_layout.addWidget(label, alignment=Qt.AlignLeft)
 
@@ -712,13 +711,11 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         Must_layout.append(new_group)
 
         box_layout.addWidget(new_group)
-        
-        groupbox.setMinimumHeight(200)
+
+        groupbox.setMinimumHeight(300)
         self.must_scroll_layout.addWidget(groupbox)
         self.groupMust.setWidget(self.must_scroll)
-        # self.groupMust.layout().addWidget(groupbox)
         self.addCourse1(self.must_scroll_layout.count() - 1, course)
-        # self.addCourse1(self.groupMust.layout().count() - 1, course)
 
     # 꼭에서 그룹 삭제 버튼 클릭
     def must_RemoveFunction(self):
@@ -806,7 +803,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         # 장바구니 최신화
         self.setTable()
 
-        # item = self.groupMust.layout().takeAt(i)
         item = self.must_scroll_layout.takeAt(i)
         widget = item.widget()
         if widget:
@@ -850,7 +846,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     def prefer_AddFunction(self, course):
         groupbox = QGroupBox()
         box_layout = QHBoxLayout(groupbox)
-        label = QLabel(str(self.groupPrefer.layout().count() + 1) + '순위')
+        label = QLabel(str(self.prefer_scroll_layout.count() + 1) + '순위')
         box_layout.addWidget(label, alignment=Qt.AlignLeft)
 
         new_group = Table()
@@ -859,8 +855,11 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         Prefer_layout.append(new_group)
 
         box_layout.addWidget(new_group)
-        self.groupPrefer.layout().addWidget(groupbox)
-        self.addCourse2(self.groupPrefer.layout().count() - 1, course)
+
+        groupbox.setMinimumHeight(300)
+        self.prefer_scroll_layout.addWidget(groupbox)
+        self.groupPrefer.setWidget(self.prefer_scroll)
+        self.addCourse2(self.prefer_scroll_layout.count() - 1, course)
 
     # 들으면 좋음에서 그룹 삭제 버튼 클릭
     def prefer_RemoveFunction(self):
@@ -947,14 +946,14 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         # 장바구니 최신화
         self.setTable()
 
-        item = self.groupPrefer.layout().takeAt(i)
+        item = self.prefer_scroll_layout.takeAt(i)
         widget = item.widget()
         if widget:
             widget.deleteLater()
 
         # 그룹 번호 최신화
-        for index in range(self.groupPrefer.layout().count()):
-            item = self.groupPrefer.layout().itemAt(index)
+        for index in range(self.prefer_scroll_layout.count()):
+            item = self.prefer_scroll_layout.itemAt(index)
             if item and isinstance(item.widget(), QGroupBox):
                 label = item.widget().layout().itemAt(0).widget()
                 if label and isinstance(label, QLabel):

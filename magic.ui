@@ -381,37 +381,6 @@ QHeaderView {
     </column>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupPrefer">
-   <property name="geometry">
-    <rect>
-     <x>730</x>
-     <y>30</y>
-     <width>641</width>
-     <height>450</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>0</width>
-     <height>450</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>650</width>
-     <height>450</height>
-    </size>
-   </property>
-   <property name="title">
-    <string>들으면 좋음</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="Must_Remove">
    <property name="geometry">
     <rect>
@@ -634,6 +603,29 @@ QPushButton:pressed {
     <bool>true</bool>
    </property>
    <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>639</width>
+      <height>439</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QScrollArea" name="groupPrefer">
+   <property name="geometry">
+    <rect>
+     <x>720</x>
+     <y>40</y>
+     <width>641</width>
+     <height>441</height>
+    </rect>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents_2">
     <property name="geometry">
      <rect>
       <x>0</x>
