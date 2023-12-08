@@ -239,6 +239,9 @@ QLabel {
       <height>220</height>
      </size>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="styleSheet">
      <string notr="true">toQHeaderView {
 	border-radius: 10px;

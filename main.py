@@ -1201,6 +1201,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     # 시간표 만들기 (시간표 생성 창으로 이동)
     def Button_CreateFunction(self):
         myWindow4.create_Header()
+        myWindow4.showMaximized()
         myWindow4.show()
         self.close()
 
@@ -1258,7 +1259,9 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
     # 시간표 생성 버튼 클릭 (시간표 생성 창으로 이동)
     def button_Candidate(self):
         myWindow4.create_Header()
+        myWindow4.showMaximized()
         myWindow4.show()
+
         self.close()
 
 # 시간표 후보 생성 창
@@ -1269,6 +1272,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         self.time_tables = []
         self.current_table_index = -1
         self.setWindowTitle("마법사 결과")
+        #self.showMaximized()
 
         self.main_layout = QVBoxLayout()
         self.central_widget = QWidget()
