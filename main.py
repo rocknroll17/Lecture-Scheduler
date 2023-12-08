@@ -1310,6 +1310,8 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         group_layout.addWidget(button_search)
         group_layout.addWidget(button_magic)
 
+        group.setStyleSheet("border: 0px;")
+
         header_layout.addWidget(group)
         #print(f"possible schedules : {self.time_tables}")
         if len(self.time_tables) > 0:
@@ -1438,6 +1440,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         schedule = Schedule_table(self.time_tables[index][0],self.time_tables[index][1])
 
         button = QPushButton('저장')
+        button.setFixedSize(100, 30)
         button.clicked.connect(lambda _, idx=index: self.select_Table(idx))
 
         group.layout().addWidget(button, alignment=Qt.AlignRight)
