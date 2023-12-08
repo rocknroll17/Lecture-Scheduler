@@ -1,5 +1,6 @@
 # 스케줄메니저
 from itertools import product
+from Schedule import Schedule
 
 class ScheduleManager:
     @staticmethod
@@ -7,7 +8,7 @@ class ScheduleManager:
         must_group = [i for i in must_group.get_groups() if i != []]
         prefer_group = [i for i in prefer_group.get_groups() if i != []]
         prefer_rank = [i+1 for i in range(len(prefer_group))]
-        possible_table = []  # 꼭에 관한 가능한 시간표를 담아서 나중에 반환
+        possible_tables = []  # 꼭에 관한 가능한 시간표를 담아서 나중에 반환
         prefer_combinations = []  # 들으면 좋음에 관한 모든 경우의 수를 찾아서 반환
         must_combinations = list(product(*must_group))  # 가능한 모든 경우의 수를 뽑음
 
@@ -27,8 +28,8 @@ class ScheduleManager:
                                 if lecture in group:
                                     rank_list.append(prefer_rank[prefer_group.index(group)])
                                     break
-                        possible_table.append([list(i) + list(j), rank_list])  # 가능한 시간표라면 추가
-        return possible_table  # 반환
+                        possible_tables.append(Schedule([list(i) + list(j), rank_list]))  # 가능한 시간표라면 추가
+        return possible_tables  # 반환
 
     @staticmethod
     # 후보 하나가 주어지면 이 후보로 시간표가 작성이 가능한지 판단
