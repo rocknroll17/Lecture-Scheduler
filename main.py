@@ -1034,7 +1034,6 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
             left_button = QPushButton('<')
             left_button.clicked.connect(lambda: self.leftbuttonClicked(tableBox, num_of_table))
-            left_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
             left_button.setFixedSize(100, 30)
             #left_button.setMaximumWidth(100)
             #left_button.setMinimumHeight(30)
@@ -1082,6 +1081,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
     def leftbuttonClicked(self, lineEdit, comboBox):
         i = int(lineEdit.text().split()[1]) - 1
+        print('왼쪽' + str(i))
         num = len(self.time_tables)
         if i == 0:
             i = num - 1
@@ -1098,11 +1098,13 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
     def rightbuttonClicked(self, lineEdit, comboBox):
         i = int(lineEdit.text().split()[1]) - 1
+        print('오른쪽' + str(i))
         num = len(self.time_tables)
         if i == num - 1:
             i = 0
         else:
             i = i + 1
+
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
         if not self.time_tables[i][1]:
             lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
