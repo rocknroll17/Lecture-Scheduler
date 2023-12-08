@@ -288,6 +288,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
     # 시간표 버튼 눌렀을 때 (최종 시간표 보는 창으로 이동)
     def Button_ScheduleFunction(self):
         myWindow3.create_Table()
+        myWindow3.showMaximized()
         myWindow3.show()
         self.close()
 
@@ -797,6 +798,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
     # 시간표 버튼 클릭 (최종 시간표 창으로 이동)
     def Button_ScheduleFunction(self):
         myWindow3.create_Table()
+        myWindow3.showMaximized()
         myWindow3.show()
         self.close()
 
@@ -1075,6 +1077,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
     # 시간표 버튼 클릭 (시간표 창으로 이동)
     def button_Schedule(self):
         myWindow3.create_Table()
+        myWindow3.showMaximized()
         myWindow3.show()
         self.close()
 
