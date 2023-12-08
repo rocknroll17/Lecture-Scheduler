@@ -60,7 +60,14 @@ class Candidate:
         return str(self.__groups)
 
 
-# Basket 클래스 : 강의를 담는 그룹
+# Basket 클래스 -> CourseGroup 클래스로 개명
+# - 바꾼 이유 : 
+#   해당 클래스는 장바구니를 나타내기 이전에 '강의를 담은 그룹'을 나타내는 클래스임
+#   그래서 Basket이라고 직접 이름짓기보단 CourseGroup처럼  범용적인 이름으로 개명하는 게 낫다고 판단함
+#   + 강의를 담는 그룹이므로 기타 Course 객체 리스트도 CourseGroup 객체로 만들 수 있고
+#     Candidate에서도 CourseGroup의 리스트를 저장하도록 만들 수 있음
+
+# CourseGroup : 강의를 담는 그룹
 # - 리스트처럼 사용할 수 있게 하는 데에 중점을 둠
 #   a = CourseGroup일 때
 #   인덱싱 가능 : a[0]  ->  0번째 강의 반환
@@ -68,18 +75,16 @@ class Candidate:
 # - 리스트처럼 활용하되, Course 객체만 담을 수 있도록 타입체킹 기능 + 중복 강의는 담지 않는 등의 편의기능 추가
 
 #class Basket:
+
+#class Basket:
 class CourseGroup:
-    # 생성자 - 인자 X
-    def __init__(self):
+    # 생성자 - course 리스트 객체로 받음
+    def __init__(self, courses=None):
         self.__courses = []
         self.__ids = [] # 강의 존재하는지 확인용
-
-    # 생성자 - course 리스트 객체로 받음
-    def __init__(self, courses):
-        self.__courses = []
-        self.__ids = []
-        for c in courses:
-            self.append(c)
+        if courses:
+            for c in courses:
+                self.append(c)
 
     # 강의 추가
     def append(self, course):
