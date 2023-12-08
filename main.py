@@ -1525,6 +1525,7 @@ class Schedule_table(QTableWidget):
 
                     info_text = f"{course.title}\n{course.instructor}\n{result}"
                     item = QTableWidgetItem(info_text)
+                    item.setForeground(QColor(0, 0, 0))
                     item.setTextAlignment(Qt.AlignCenter)
                     self.setItem(row, day_column, item)
                     
@@ -1542,7 +1543,7 @@ class Schedule_table(QTableWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
     
     def random_color(self):
-        color = [255, 117, random.randint(117, 255)]
+        color = [255, 117, 115+10*random.randint(1,14)]
         random.shuffle(color)
         return color
 
