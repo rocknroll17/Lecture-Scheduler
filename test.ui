@@ -515,7 +515,7 @@ QHeaderView {
    <property name="styleSheet">
     <string notr="true">QGroupBox  {
     border: 2px solid gray;
-    border-color: #42454c;
+    border-color: #cccccc;
     font-size: 14px;
     border-radius: 15px;
 }
