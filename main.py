@@ -842,6 +842,7 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
                 item.layout().deleteLater()
 
         group = QGroupBox()
+        group.setStyleSheet("border: 0px;")
         group_layout = QHBoxLayout(group)
         group_layout.addWidget(self.button_magic)
         group_layout.addWidget(self.button_search)
