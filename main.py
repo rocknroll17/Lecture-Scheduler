@@ -1321,7 +1321,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             button_layout.addStretch()
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[0][1])
             if not self.time_tables[0][1]:
-                tableBox = QLineEdit('후보 ' + str(1)+" - 들으면 좋음 반영 안됌")
+                tableBox = QLineEdit('후보 ' + str(1)+" - 들으면 좋음 반영 안 됨")
             else:
                 tableBox = QLineEdit('후보 ' + str(1)+" - "+preferences+" 반영")
             tableBox.setAlignment(Qt.AlignCenter)
@@ -1361,7 +1361,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             for i in range(len(self.time_tables)):
                 preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
                 if not self.time_tables[i][1]:
-                    items.append('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
+                    items.append('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안 됨")
                 else:
                     items.append('후보 ' + str(i + 1)+" - "+preferences+" 반영")
             num_of_table.addItems(items)
@@ -1388,7 +1388,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
         if not self.time_tables[i][1]:
-            lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
+            lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안 됨")
         else:
             lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
         comboBox.setCurrentIndex(i + 1)
@@ -1405,7 +1405,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
         if not self.time_tables[i][1]:
-            lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
+            lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안 됨")
         else:
             lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
         comboBox.setCurrentIndex(i + 1)
@@ -1417,7 +1417,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             i = int(sender.currentText().split()[1]) - 1
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
             if not self.time_tables[i][1]:
-                lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안됌")
+                lineEdit.setText('후보 ' + str(i + 1)+" - 들으면 좋음 반영 안 됨")
             else:
                 lineEdit.setText('후보 ' + str(i + 1)+" - "+preferences+" 반영")
             self.create_Table(i)

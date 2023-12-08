@@ -228,7 +228,7 @@ QLabel {
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>30</y>
       <width>1320</width>
       <height>220</height>
      </rect>
@@ -260,6 +260,7 @@ QHeaderView::section {
 	border-radius: 10px;
     border: 2px solid #ccc;
 	background-color: #2b2d31;
+	gridline-color: #404349;
 }
 
 QHeaderView::section:horizontal {
@@ -602,9 +603,6 @@ QPushButton:pressed {
      <height>441</height>
     </rect>
    </property>
-   <property name="focusPolicy">
-    <enum>Qt::NoFocus</enum>
-   </property>
    <property name="styleSheet">
     <string notr="true">background: transparent;</string>
    </property>
@@ -633,9 +631,6 @@ QPushButton:pressed {
      <width>641</width>
      <height>441</height>
     </rect>
-   </property>
-   <property name="focusPolicy">
-    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">background: transparent;</string>
