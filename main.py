@@ -180,6 +180,11 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
     # 강의 검색 테이블 생성
     def createTable(self):
+        # 테이블 수직헤더 너비 고정
+        self.Table_Course.verticalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.Table_Course.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.Table_Course.verticalHeader().setFixedWidth(30)
+
         self.Table_Course.setRowCount(len(searched_course))
 
         for i in range(0, len(searched_course)):
@@ -192,7 +197,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
             self.Table_Course.setCellWidget(i, 0, button)
 
             # 인덱스 : 버튼 0 대학 1 개설학과 2 과목명 8 담당교수 10 강의시간 12 비고 13
-            for j in range(1, 13):
+            for j in range(1, 14):
                 item_text = searched_course[i].total[j - 1]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
@@ -206,6 +211,11 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
 
     # 장바구니 테이블 생성(최신화)
     def setTable(self):
+        # 테이블 수직헤더 너비 고정
+        self.Course_Basket.verticalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.Course_Basket.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.Course_Basket.verticalHeader().setFixedWidth(30)
+
         self.Course_Basket.setRowCount(len(selected_course))
 
         for i in range(len(selected_course)):
@@ -356,6 +366,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     #  장바구니 테이블 생성하는 메소드
     def setTable(self):
+        # 테이블 수직 헤더 너비 고정
+        self.Course_Basket.verticalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.Course_Basket.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.Course_Basket.verticalHeader().setFixedWidth(30)
         self.Course_Basket.setRowCount(len(selected_course))
 
         for i in range(len(selected_course)):
@@ -427,6 +441,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             groupbox = QGroupBox()
             box_layout = QHBoxLayout(groupbox)
             label = QLabel('그룹' + str(self.groupMust.layout().count() + 1))
+
             box_layout.addWidget(label, alignment=Qt.AlignLeft)
             box_layout.addWidget(table)
             # 레이아웃에 추가
