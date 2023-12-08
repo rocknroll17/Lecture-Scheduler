@@ -1208,10 +1208,12 @@ class Schedule_table(QTableWidget):
                 count_hours = 0
 
         for course in courses:
+            color = self.random_color() # 시간표 블럭에 칠할 색 -> 랜덤으로 정한다
             for time_block in course.time:
                 day_column = self.get_day_index(time_block.day)
                 start_row = self.get_time_index(time_block.start_time)
                 end_row = self.get_time_index(time_block.end_time)
+
 
                 for row in range(start_row, end_row - 1):
                     hours, minutes = map(int, time_block.course_time.split(':'))
@@ -1231,8 +1233,8 @@ class Schedule_table(QTableWidget):
                     item = QTableWidgetItem(info_text)
                     item.setTextAlignment(Qt.AlignCenter)
                     self.setItem(row, day_column, item)
-                    color = self.random_color()
-                    self.item(row, day_column).setBackground(QColor(color[0], color[1], color[2]))
+                    
+                    self.item(row, day_column).setBackground(QColor(*color))
 
         fixed_row_height = 5
         fixed_column_width = 265
