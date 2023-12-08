@@ -447,7 +447,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             box_layout.addWidget(label, alignment=Qt.AlignLeft)
             box_layout.addWidget(table)
             # 레이아웃에 추가
-            groupbox.setMinimumHeight(300)
+            groupbox.setMinimumHeight(200)
             self.must_scroll_layout.addWidget(groupbox)
             self.groupMust.setWidget(self.must_scroll)
 
@@ -469,7 +469,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             box_layout.addWidget(label, alignment=Qt.AlignLeft)
             box_layout.addWidget(table)
             # 레이아웃에 추가
-            groupbox.setMinimumHeight(300)
+            groupbox.setMinimumHeight(200)
             self.prefer_scroll_layout.addWidget(groupbox)
             self.groupPrefer.setWidget(self.prefer_scroll)
 
@@ -712,7 +712,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         box_layout.addWidget(new_group)
 
-        groupbox.setMinimumHeight(300)
+        groupbox.setMinimumHeight(200)
         self.must_scroll_layout.addWidget(groupbox)
         self.groupMust.setWidget(self.must_scroll)
         self.addCourse1(self.must_scroll_layout.count() - 1, course)
@@ -856,7 +856,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
         box_layout.addWidget(new_group)
 
-        groupbox.setMinimumHeight(300)
+        groupbox.setMinimumHeight(200)
         self.prefer_scroll_layout.addWidget(groupbox)
         self.groupPrefer.setWidget(self.prefer_scroll)
         self.addCourse2(self.prefer_scroll_layout.count() - 1, course)
