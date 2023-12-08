@@ -1333,6 +1333,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             right_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
             left_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             left_button.setFixedSize(100, 30)
+            right_button.setFixedSize(100, 30)
             #right_button.setMaximumWidth(100)
             #right_button.setMinimumHeight(30)
 
