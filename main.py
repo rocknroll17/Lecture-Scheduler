@@ -1608,7 +1608,8 @@ QHeaderView {
         """)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.setFocusPolicy(0)
 
     # 꼭에서 그룹 생성
     def createTable1(self, index):
