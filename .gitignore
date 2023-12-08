@@ -155,6 +155,6 @@ cython_debug/
 # 세이브파일은 push하면 안되니까
 scheduleManagerSaveFile.pickle
 save.data
-
+saveTestFile
 # designer는 push하면 안되니까
 designer.exe.lnk
