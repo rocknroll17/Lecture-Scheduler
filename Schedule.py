@@ -4,9 +4,11 @@
 
 class Schedule:
     schedule_counts = 0 # 클래스변수 - 스케줄 객체 수 관리
-    def __init__(self):
+    def __init__(self, courses=[]):
         self.__courses = [] # 시간표에 들어갈 강의들.
         self.__id = Schedule.schedule_counts # 스케줄 개수로 id 부여 (자기식별용)
+        if courses:
+            self.__courses = courses[:]
         Schedule.schedule_counts += 1
 
     # 강의 추가
@@ -16,6 +18,10 @@ class Schedule:
             return False
         self.__courses.append(course) # 강의 추가
         return True
+
+    # 날리기
+    def clear(self):
+        self.__courses = []
     
     # 시간표에 course랑 겹치는 강의 있는지 
     def check_intersection(self, course):
@@ -33,15 +39,22 @@ class Schedule:
     # index번째 원소 반환
     def get(self, index):
         try:
-            ret = self.__course[index]
+            ret = self.__courses[index]
             return ret
         except Exception as e:
             print(e)
             return None
     
-    # 시간 순 정렬
-    def sort(self):
-        self.__courses.sort(key=lambda x : x.time.period)   
+    
+    #def sort(self):
+     #   self.__courses.sort(key=lambda x : x.time.period) 
+
+    # 정렬
+    # 기본은 시간 순 정렬, 정렬함수 f 주어진 경우 그거 기준으로 정렬
+    def sort(self,key=None, reverse=False):  
+        if not key:
+            key = lambda x : x.time.period
+        self.__courses.sort(key=key, reverse=reverse)
     
     # 시간표 리스트 반환
     def get_courses(self):
@@ -50,7 +63,7 @@ class Schedule:
     # 내장함수들
     # __getitem__ : 객체 인덱스 접근 시 호출  ex) s가 Schedule 객체일 때 s[i] -> __getitem(self, i)__
     def __getitem__(self, index):
-        return self.__course[index]
+        return self.__courses[index]
         
     # __len__ : len()으로 객체 덮었을 때 반환 값
     def __len__(self):
