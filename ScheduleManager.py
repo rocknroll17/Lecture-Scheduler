@@ -26,7 +26,7 @@ class ScheduleManager:
                             for group in prefer_group:
                                 if lecture in group:
                                     rank_list.append(prefer_rank[prefer_group.index(group)])
-                                    break;
+                                    break
                         possible_table.append([list(i) + list(j), rank_list])  # 가능한 시간표라면 추가
         return possible_table  # 반환
 
