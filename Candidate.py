@@ -60,14 +60,7 @@ class Candidate:
         return str(self.__groups)
 
 
-
-# Basket 클래스 -> CourseGroup 클래스로 개명
-# - 바꾼 이유 : 
-#   해당 클래스는 장바구니를 나타내기 이전에 '강의를 담은 그룹'을 나타내는 클래스임
-#   그래서 Basket이라고 직접 이름짓기보단 CourseGroup처럼 포괄적인 이름으로 개명하는 게 낫다고 판단함
-#   + 강의를 담는 그룹이므로 Candidate에서도 CourseGroup의 리스트를 저장하도록 만들 수 있음
-
-# CourseGroup : 강의를 담는 그룹
+# Basket 클래스 : 강의를 담는 그룹
 # - 리스트처럼 사용할 수 있게 하는 데에 중점을 둠
 #   a = CourseGroup일 때
 #   인덱싱 가능 : a[0]  ->  0번째 강의 반환
@@ -106,8 +99,10 @@ class CourseGroup:
         self.__ids.remove(course.course_id)
         del self.__courses[index]
     
-    def remove(self, index):
-        self.delete(index)
+    # 삭제 : course에 해당하는 강의 삭제
+    def remove(self, course):
+        self.__ids.remove(course.course_id)
+        self.__courses.remove(course)
     
     # 강의 존재하는지
     def exists(self, lecture):
