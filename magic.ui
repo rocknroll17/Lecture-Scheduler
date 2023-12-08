@@ -260,6 +260,7 @@ QHeaderView::section {
 	border-radius: 10px;
     border: 2px solid #ccc;
 	background-color: #2b2d31;
+	gridline-color: #404349;
 }
 
 QHeaderView::section:horizontal {
@@ -277,7 +278,8 @@ QHeaderView::section:vertical {
 }
 QHeaderView {
     background-color: #1e1f23;
-}</string>
+}
+</string>
     </property>
     <property name="dragEnabled">
      <bool>true</bool>
