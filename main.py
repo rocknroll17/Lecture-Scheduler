@@ -61,6 +61,7 @@ QTableWidget {
 	color: white;
 	border: 2px solid #ccc;
 	background-color: #2b2d31;
+    gridline-color: #404349;
 }
 
 QScrollBar:vertical {
@@ -1333,7 +1334,6 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             right_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
             left_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             left_button.setFixedSize(100, 30)
-            right_button.setFixedSize(100, 30)
             #right_button.setMaximumWidth(100)
             #right_button.setMinimumHeight(30)
 
@@ -1586,6 +1586,7 @@ QTableWidget {
 	border-radius: 10px;
     border: 2px solid #ccc;
 	background-color: #2b2d31;
+    gridline-color: #404349;
 }
 
 QHeaderView::section:horizontal {
