@@ -803,6 +803,18 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 시간표 버튼 클릭 (최종 시간표 창으로 이동)
     def Button_ScheduleFunction(self):
+        if self.must_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움
+            self.must_button_group.setVisible(False)
+        elif self.prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.prefer_button_group.setVisible(False)
+        elif self.delete_must_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.delete_must_button_group.setVisible(False)
+        elif self.delete_prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.delete_prefer_button_group.setVisible(False)
         myWindow3.create_Table()
         myWindow3.showMaximized()
         myWindow3.show()
@@ -810,12 +822,36 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 강의 검색 버튼 클릭 (강의 검색 창으로 이동)
     def Button_CoursesFunction(self):
+        if self.must_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움
+            self.must_button_group.setVisible(False)
+        elif self.prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.prefer_button_group.setVisible(False)
+        elif self.delete_must_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.delete_must_button_group.setVisible(False)
+        elif self.delete_prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.delete_prefer_button_group.setVisible(False)
         myWindow1.setTable()
         myWindow1.show()
         self.close()
 
     # 시간표 만들기 (시간표 생성 창으로 이동)
     def Button_CreateFunction(self):
+        if self.must_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움
+            self.must_button_group.setVisible(False)
+        elif self.prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.prefer_button_group.setVisible(False)
+        elif self.delete_must_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.delete_must_button_group.setVisible(False)
+        elif self.delete_prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.delete_prefer_button_group.setVisible(False)
         myWindow4.create_Header()
         myWindow4.showMaximized()
         myWindow4.show()
