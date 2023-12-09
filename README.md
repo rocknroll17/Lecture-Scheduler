@@ -17,7 +17,9 @@
 1) Download the project file.
 2) Download the required dependencies above.
 3) Run 'main.py'
-
+The file might not work well if python is installed in a path which contains korean.
+(this is an issue due to pyqt)
+If any problems occur, try running 'main.exe'
 
 # How to execute by running "main.exe"
 If running 'main.py' fails, try executing main.exe file.
