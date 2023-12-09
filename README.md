@@ -23,5 +23,6 @@ If any problems occur, try running 'main.exe'
 
 # How to execute by running "main.exe"
 If running 'main.py' fails, try executing main.exe file.
-This is the compiled file that contains all the dependencies.
+This is the compiled file that contains the module dependencies.
 1) run 'main.exe'
+NOTES: main.exe should be in the same directory with '/data', '/plugin' and .ui files.
