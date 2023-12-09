@@ -454,19 +454,15 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if self.must_button_group.isVisible():
             # 그룹박스 이미 띄워져있으면 창 지움
             self.must_button_group.setVisible(False)
-            return
-        if self.prefer_button_group.isVisible():
+        elif self.prefer_button_group.isVisible():
             # 그룹박스 이미 띄워져있으면 창 지움 2
             self.prefer_button_group.setVisible(False)
-            return
-        if self.delete_must_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+        elif self.delete_must_button_group.isVisible():
+            # 이미 꼭 삭제창 띄워져있으면 지움
             self.delete_must_button_group.setVisible(False)
-            return
-        if self.delete_prefer_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+        elif self.delete_prefer_button_group.isVisible():
+            # 이미 들으면 좋음 삭제창 띄워져있으면 지움
             self.delete_prefer_button_group.setVisible(False)
-            return
         # 원래 들어가있었던 버튼 그룹 삭제  (ex) ['추가하지 않음','그룹 1','그룹 추가'])
         self.layout().removeWidget(self.must_button_group)
         while self.must_group_layout.count():
@@ -512,22 +508,18 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 들으면 좋음 버튼 눌렀을 때
     def onPreferButtonPress(self):
-        if self.prefer_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움
-            self.prefer_button_group.setVisible(False)
-            return
         if self.must_button_group.isVisible():
-            # 이미 띄워져 있으면 창 지움 2
+            # 그룹박스 이미 띄워져있으면 창 지움
             self.must_button_group.setVisible(False)
-            return
-        if self.delete_must_button_group.isVisible():
+        elif self.prefer_button_group.isVisible():
             # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.prefer_button_group.setVisible(False)
+        elif self.delete_must_button_group.isVisible():
+            # 이미 꼭 삭제창 띄워져있으면 지움
             self.delete_must_button_group.setVisible(False)
-            return
-        if self.delete_prefer_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+        elif self.delete_prefer_button_group.isVisible():
+            # 이미 들으면 좋음 삭제창 띄워져있으면 지움
             self.delete_prefer_button_group.setVisible(False)
-            return
         self.layout().removeWidget(self.prefer_button_group)
         while self.prefer_group_layout.count():
             item = self.prefer_group_layout.takeAt(0)
@@ -616,22 +608,18 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 if widget:
                     widget.deleteLater()
 
-        if self.delete_must_button_group.isVisible():
-            # 이미 삭제창 띄워져있으면 창 지움
-            self.delete_must_button_group.setVisible(False)
-            return
-        if self.delete_prefer_button_group.isVisible():
-            # 들으면좋음 삭제창 띄워져있으면 지움
-            self.delete_prefer_button_group.setVisible(False)
-            return
-        if self.prefer_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움
-            self.prefer_button_group.setVisible(False)
-            return
         if self.must_button_group.isVisible():
-            # 이미 띄워져 있으면 창 지움 2
+            # 그룹박스 이미 띄워져있으면 창 지움
             self.must_button_group.setVisible(False)
-            return
+        elif self.prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.prefer_button_group.setVisible(False)
+        elif self.delete_must_button_group.isVisible():
+            # 이미 꼭 삭제창 띄워져있으면 지움
+            self.delete_must_button_group.setVisible(False)
+        elif self.delete_prefer_button_group.isVisible():
+            # 이미 들으면 좋음 삭제창 띄워져있으면 지움
+            self.delete_prefer_button_group.setVisible(False)
         if Must_layout:
             xButton = QPushButton('삭제 안 함')
             xButton.clicked.connect(self.must_removeGroup2)
@@ -732,22 +720,18 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 widget = item.widget()
                 if widget:
                     widget.deleteLater()
-        if self.delete_prefer_button_group.isVisible():
-            # 이미 삭제창 띄워져있으면 지움
-            self.delete_prefer_button_group.setVisible(False)
-            return
-        if self.delete_must_button_group.isVisible():
-            # 꼭 삭제창 띄워져있어도 창 지움
-            self.delete_must_button_group.setVisible(False)
-            return
-        if self.prefer_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움
-            self.prefer_button_group.setVisible(False)
-            return
         if self.must_button_group.isVisible():
-            # 이미 띄워져 있으면 창 지움 2
+            # 그룹박스 이미 띄워져있으면 창 지움
             self.must_button_group.setVisible(False)
-            return
+        elif self.prefer_button_group.isVisible():
+            # 그룹박스 이미 띄워져있으면 창 지움 2
+            self.prefer_button_group.setVisible(False)
+        elif self.delete_must_button_group.isVisible():
+            # 이미 꼭 삭제창 띄워져있으면 지움
+            self.delete_must_button_group.setVisible(False)
+        elif self.delete_prefer_button_group.isVisible():
+            # 이미 들으면 좋음 삭제창 띄워져있으면 지움
+            self.delete_prefer_button_group.setVisible(False)
         if Prefer_layout:
             xButton = QPushButton('삭제 안 함')
             xButton.clicked.connect(self.prefer_removeGroup2)
@@ -810,10 +794,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             # 그룹박스 이미 띄워져있으면 창 지움 2
             self.prefer_button_group.setVisible(False)
         elif self.delete_must_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+            # 이미 꼭 삭제창 띄워져있으면 지움
             self.delete_must_button_group.setVisible(False)
         elif self.delete_prefer_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+            # 이미 들으면 좋음 삭제창 띄워져있으면 지움
             self.delete_prefer_button_group.setVisible(False)
         myWindow3.create_Table()
         myWindow3.showMaximized()
@@ -829,10 +813,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             # 그룹박스 이미 띄워져있으면 창 지움 2
             self.prefer_button_group.setVisible(False)
         elif self.delete_must_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+            # 이미 꼭 삭제창 띄워져있으면 지움
             self.delete_must_button_group.setVisible(False)
         elif self.delete_prefer_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+            # 이미 들으면 좋음 삭제창 띄워져있으면 지움
             self.delete_prefer_button_group.setVisible(False)
         myWindow1.setTable()
         myWindow1.show()
@@ -847,10 +831,10 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             # 그룹박스 이미 띄워져있으면 창 지움 2
             self.prefer_button_group.setVisible(False)
         elif self.delete_must_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+            # 이미 꼭 삭제창 띄워져있으면 지움
             self.delete_must_button_group.setVisible(False)
         elif self.delete_prefer_button_group.isVisible():
-            # 그룹박스 이미 띄워져있으면 창 지움 2
+            # 이미 들으면 좋음 삭제창 띄워져있으면 지움
             self.delete_prefer_button_group.setVisible(False)
         myWindow4.create_Header()
         myWindow4.showMaximized()
