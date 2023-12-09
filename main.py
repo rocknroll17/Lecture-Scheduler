@@ -277,10 +277,8 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
             row = index.row()
 
             if row != -1:
-                #del selected_course[row]
                 selected_course.delete(row)
                 self.Course_Basket.removeRow(row)
-                # print(selected_course)
 
     # 시간표 버튼 눌렀을 때 (최종 시간표 보는 창으로 이동)
     def Button_ScheduleFunction(self):
@@ -292,7 +290,6 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
     # 마법사 버튼 눌렀을 때 (마법사 창으로 이동)
     def Button_MagicFunction(self):
         myWindow2.setTable()
-        # myWindow2.setGroup()
         myWindow2.show()
         self.close()
 
@@ -474,7 +471,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         if c_button:
             index = self.Course_Basket.indexAt(c_button.pos())
             self.row = index.row()
-            # print(self.row)
 
             if self.row != -1:
                 course = selected_course[self.row]
@@ -494,7 +490,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.layout().addWidget(self.must_button_group)
                 self.must_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                # self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
                 # 커서 위치에 뜨도록 한다
                 self.must_button_group.move(QCursor.pos().x() - self.pos().x(), QCursor.pos().y() - self.pos().y() - 59)
                 #동적으로 생성되는 객체가 화면과 마우스의 움직임을 따라가기 위한 코드
@@ -549,7 +544,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 self.layout().addWidget(self.prefer_button_group)
                 self.prefer_button_group.adjustSize()
                 c_button_pos = c_button.mapToGlobal(c_button.pos())
-                # self.prefer_button_group.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
                 self.prefer_button_group.move(QCursor.pos().x() - self.pos().x(),
                                               QCursor.pos().y() - self.pos().y() - 59)
                 #동적으로 생성되는 객체가 화면과 마우스의 움직임을 따라가기 위한 코드
@@ -561,7 +555,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 꼭 버튼 -> 그룹 번호 선택
     def addCourse1(self, i, course):
-        #del selected_course[self.row]
         selected_course.delete(self.row)
         self.Course_Basket.removeRow(self.row)
         self.layout().removeWidget(self.must_button_group)
@@ -631,7 +624,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.layout().addWidget(self.delete_must_button_group)
             self.delete_must_button_group.adjustSize()
-            # self.delete_must_button_group.move(int((width*(self.Must_Remove.pos().x() + 50))/1920), int((height*(self.Must_Remove.pos().y() - 50))/1080))
             self.delete_must_button_group.move(QCursor.pos().x() - self.pos().x(),
                                                QCursor.pos().y() - self.pos().y() - 59)
             #동적으로 생성되는 객체가 화면과 마우스의 움직임을 따라가기 위한 코드
@@ -675,7 +667,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
     # 장바구니에서 들으면 좋음 버튼 -> 그룹 번호 선택
     def addCourse2(self, i, course):
-        #del selected_course[self.row]
         selected_course.delete(self.row)
         self.Course_Basket.removeRow(self.row)
         self.layout().removeWidget(self.prefer_button_group)
@@ -743,7 +734,6 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
 
             self.layout().addWidget(self.delete_prefer_button_group)
             self.delete_prefer_button_group.adjustSize()
-            # self.delete_prefer_button_group.move(int((width*(self.Prefer_Remove.pos().x() - 100))/1920), int((height*(self.Prefer_Remove.pos().y() - 50))/1080))
             self.delete_prefer_button_group.move(QCursor.pos().x() - self.pos().x() - 100,
                                                  QCursor.pos().y() - self.pos().y() - 59)
             self.delete_prefer_button_group.show()
@@ -890,7 +880,6 @@ class timeTable(QMainWindow, form_class3, SaveOnClose):
     # 마법사 버튼 클릭 (마법사 창으로 이동)
     def button_Magic(self):
         myWindow2.setTable()
-        # myWindow2.setGroup()
         myWindow2.show()
         self.close()
 
@@ -911,7 +900,6 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         self.time_tables = []
         self.current_table_index = -1
         self.setWindowTitle("마법사 결과")
-        # self.showMaximized()
 
         self.main_layout = QVBoxLayout()
         self.central_widget = QWidget()
@@ -957,7 +945,6 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         group.setStyleSheet("border: 0px;")
 
         header_layout.addWidget(group)
-        # print(f"possible schedules : {self.time_tables}")
         if len(self.time_tables) > 0:
             label = QLabel(f"결과 보기\n총 {len(self.time_tables)}개의 시간표가 만들어졌습니다.\n마음에 드는 시간표를 저장하세요.")
             label.setAlignment(Qt.AlignCenter)
@@ -978,15 +965,11 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             left_button = QPushButton('<')
             left_button.clicked.connect(lambda: self.leftbuttonClicked(tableBox, num_of_table))
             left_button.setFixedSize(100, 30)
-            # left_button.setMaximumWidth(100)
-            # left_button.setMinimumHeight(30)
             right_button = QPushButton('>')
             right_button.clicked.connect(lambda: self.rightbuttonClicked(tableBox, num_of_table))
             left_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             left_button.setFixedSize(100, 30)
             right_button.setFixedSize(100, 30)
-            # right_button.setMaximumWidth(100)
-            # right_button.setMinimumHeight(30)
 
             num_of_table = QComboBox()
             num_of_table.setEditable(True)
@@ -1231,10 +1214,8 @@ class Table(QTableWidget):
 
     # 꼭에서 그룹 생성
     def createTable1(self, index):
-        # self.setRowCount(len(Must_group[index]))
         self.setRowCount(len(Must_group.get_groups()[index]))
 
-        # for i in range(len(Must_group[index])):
         for i in range(len(Must_group.get_groups()[index])):
             button = QPushButton("X")
             button.setStyleSheet(MainStyleSheet.button_stylesheet)
@@ -1247,23 +1228,18 @@ class Table(QTableWidget):
             for j in range(1, 5):
                 item_text = ""
                 if j == 1:
-                    # item_text = Must_group[index][i].total[7]
                     item_text = Must_group.get_group(index)[i].total[7]
                 elif j == 2:
-                    # item_text = Must_group[index][i].total[6]
                     item_text = Must_group.get_group(index)[i].total[6]
                 elif j == 3:
-                    # item_text = Must_group[index][i].total[9]
                     item_text = Must_group.get_group(index)[i].total[9]
                 elif j == 4:
-                    # item_text = Must_group[index][i].total[11]
                     item_text = Must_group.get_group(index)[i].total[11]
                 item = QTableWidgetItem(item_text)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(i, j, item)
             self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        # self.resizeRowsToContents()
         self.resizeColumnsToContents()
 
     # 꼭에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
@@ -1294,15 +1270,12 @@ class Table(QTableWidget):
                 self.setItem(i, j, item)
             self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        # self.resizeRowsToContents()
         self.resizeColumnsToContents()
 
     # 들으면 좋음에서 그룹 생성
     def createTable2(self, index):
-        # self.setRowCount(len(Prefer_group[index]))
         self.setRowCount(len(Prefer_group.get_group(index)))
 
-        # for i in range(len(Prefer_group[index])):
         for i in range(len(Prefer_group.get_group(index))):
             button = QPushButton("X")
             button.setStyleSheet(MainStyleSheet.button_stylesheet)
@@ -1327,7 +1300,6 @@ class Table(QTableWidget):
                 self.setItem(i, j, item)
             self.setRowHeight(i, TABLE_ROW_SIZE)
 
-        # self.resizeRowsToContents()  # 칸 크기 맞추기
         self.resizeColumnsToContents()  # 칸 크기 맞추기
 
     # 들으면 좋음에서 그룹 생성하는건데 얘는 창을 끄고 키거나 했을 때 기존에 저장된 그룹 복원 용도
