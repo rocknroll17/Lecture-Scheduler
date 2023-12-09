@@ -84,9 +84,3 @@ class Timeblock:
         if self.day != other.day:
             return Timeblock.day_value[self.day] < Timeblock.day_value[other.day]
         return self.startmin < other.startmin and self.endmin < other.startmin
-
-
-
-if __name__ == "__main__":
-
-    pass

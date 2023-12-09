@@ -1,4 +1,5 @@
 # window 스타일시트
+#동적으로 생성되는 객체들의 스타일 시트를 정의
 window_stylesheet = """
 
 /* 스크롤바 필요한 widget stylesheet에 입력 */

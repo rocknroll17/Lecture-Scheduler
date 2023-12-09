@@ -66,13 +66,3 @@ class FileManager:
             s += f"'{key}':'{val}'"
             s += ' $ '
         return s
-    
-if __name__ == "__main__":
-    # 테스트 코드
-    '''
-    f = FileManager()
-    f.filename = "saveTestFile"
-    f.save()
-    f.load()
-    print(f)
-    '''

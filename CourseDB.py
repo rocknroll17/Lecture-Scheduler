@@ -1,5 +1,5 @@
 from Timeblock import *
-import Course # 나중에 지워 test
+import Course
 
 class CourseDB():
     def __init__(self, path=""):
@@ -105,6 +105,8 @@ class CourseDB():
 
         return result
 
+#pyinstaller 성능 이슈로 구문 주석 처리
+'''
 if __name__ == "__main__":
     # DB 테스트 코드
     db = CourseDB()
@@ -123,3 +125,4 @@ if __name__ == "__main__":
         print(r)
     print(len(db.course_list), len(results))
     pass
+'''

@@ -1,8 +1,6 @@
-import Course
 from ScheduleManager import ScheduleManager
 import CourseDB
 from Candidate import Candidate
-#from Candidate import Basket
 from Candidate import CourseGroup
 from Schedule import Schedule
 import FileManager
@@ -69,44 +67,40 @@ if SAVE_AND_LOAD_FILE:
 
 
 class Notification(QWidget):
-    def __init__(self, message):
+    def __init__(self, message, pos_x, pos_y):
         super(Notification, self).__init__()
 
         self.message_label = QLabel(message)
         self.message_label.setAlignment(Qt.AlignCenter)
 
-        # Set up layout
         layout = QVBoxLayout()
         layout.addWidget(self.message_label)
         self.setLayout(layout)
 
-        # Set up window properties
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
-        # Set up animation
         self.fade_animation = QPropertyAnimation(self, b"windowOpacity")
         self.fade_animation.finished.connect(self.close)
         self.fade_animation.setStartValue(1.0)
         self.fade_animation.setEndValue(0.0)
         self.fade_animation.setDuration(1500)  # 1500 milliseconds (1.5 seconds)
 
-        # Set up timer for initial delay
+        # 페이드 아웃 시간까지 딜레이
         self.delay_timer = QTimer(self)
         self.delay_timer.timeout.connect(self.start_fade_out)
 
-        # Set up initial properties
-        self.setGeometry(940, 520, 200, 50)
-        # self.setGeometry(QCursor.pos().x()-self.pos().x(), QCursor.pos().y()-self.pos().y(), 200, 50)
+        # 창의 이동에 따라서 알림 위치 지정
+        self.setGeometry(pos_x+630, pos_y+420, 200, 50)
         self.setStyleSheet("background-color: rgba(0, 0, 0, 200); color: white;")
 
     def show_notification(self):
         self.show()
-        self.delay_timer.start(300)  # 500 milliseconds (0.5 seconds) delay
+        self.delay_timer.start(300)  # 300밀리초 딜레이
 
     def start_fade_out(self):
         self.delay_timer.stop()
-        self.fade_animation.start()
+        self.fade_animation.start() #페이드 아웃
 
 
 # 창 닫을 때 Event 호출하게 해주는 클래스 -> 창 닫힐때 저장하도록 만듬
@@ -272,8 +266,7 @@ class courseSearch(QMainWindow, form_class1, SaveOnClose):
             self.Course_Basket.setColumnWidth(8, TABLE_COL_SIZE_TITLE)
             self.Course_Basket.setSelectionMode(QAbstractItemView.NoSelection)
         else:
-            # QMessageBox.information(self, 'note', '이미 장바구니에 담았습니다.')
-            notification = Notification("이미 장바구니에 담았습니다.")
+            notification = Notification("이미 장바구니에 담았습니다.", self.pos().x(), self.pos().y()) #현재 창의 위치
             notification.show_notification()
 
     # 장바구니에서 삭제 버튼 누르면 해당 강의를 장바구니에서 삭제
@@ -380,11 +373,11 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
         self.Course_Basket.setRowCount(len(selected_course))
 
         for i in range(len(selected_course)):
-            must_button = QPushButton("꼭")
+            must_button = QPushButton("필수 강의")
             must_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             must_button.clicked.connect(self.onMustButtonPress)
 
-            prefer_button = QPushButton("들으면 좋음")
+            prefer_button = QPushButton("희망 강의")
             prefer_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             prefer_button.clicked.connect(self.onPreferButtonPress)
 
@@ -500,6 +493,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 # self.must_button_group.move(c_button_pos.x() - 50, c_button_pos.y() - 150)
                 # 커서 위치에 뜨도록 한다
                 self.must_button_group.move(QCursor.pos().x() - self.pos().x(), QCursor.pos().y() - self.pos().y() - 59)
+                #동적으로 생성되는 객체가 화면과 마우스의 움직임을 따라가기 위한 코드
                 self.must_button_group.show()
 
     # 꼭 버튼 눌렀을 때 나오는 그룹리스트 버튼
@@ -554,6 +548,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
                 # self.prefer_button_group.move(c_button_pos.x() - 100, c_button_pos.y() - 150)
                 self.prefer_button_group.move(QCursor.pos().x() - self.pos().x(),
                                               QCursor.pos().y() - self.pos().y() - 59)
+                #동적으로 생성되는 객체가 화면과 마우스의 움직임을 따라가기 위한 코드
                 self.prefer_button_group.show()
 
     # 꼭 버튼 눌렀을 때 나오는 그룹리스트 버튼 삭제
@@ -635,6 +630,7 @@ class Magic(QMainWindow, form_class2, SaveOnClose):
             # self.delete_must_button_group.move(int((width*(self.Must_Remove.pos().x() + 50))/1920), int((height*(self.Must_Remove.pos().y() - 50))/1080))
             self.delete_must_button_group.move(QCursor.pos().x() - self.pos().x(),
                                                QCursor.pos().y() - self.pos().y() - 59)
+            #동적으로 생성되는 객체가 화면과 마우스의 움직임을 따라가기 위한 코드
             self.delete_must_button_group.show()
 
     def must_removeGroup2(self):
@@ -933,6 +929,10 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
         self.time_tables.sort(key=lambda x: ''.join(map(str, x[1])), reverse=False)
         self.time_tables.sort(key=lambda x: len(x[1]), reverse=True)
 
+        #정렬 순위
+        #1. 가장 많은 희망 강의를 반영한 시간표
+        #2. 순위가 높은 시간표를 반영한 시간표
+
         header = QGroupBox()
         header_layout = QVBoxLayout(header)
 
@@ -963,7 +963,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             button_layout.addStretch()
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[0][1])
             if not self.time_tables[0][1]:
-                tableBox = QLineEdit('후보 ' + str(1) + " - 들으면 좋음 반영 안 됨")
+                tableBox = QLineEdit('후보 ' + str(1) + " - 희망 강의 반영 안 됨")
             else:
                 tableBox = QLineEdit('후보 ' + str(1) + " - " + preferences + " 반영")
             tableBox.setAlignment(Qt.AlignCenter)
@@ -1003,7 +1003,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             for i in range(len(self.time_tables)):
                 preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
                 if not self.time_tables[i][1]:
-                    items.append('후보 ' + str(i + 1) + " - 들으면 좋음 반영 안 됨")
+                    items.append('후보 ' + str(i + 1) + " - 희망 강의 반영 안 됨")
                 else:
                     items.append('후보 ' + str(i + 1) + " - " + preferences + " 반영")
             num_of_table.addItems(items)
@@ -1030,7 +1030,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
         if not self.time_tables[i][1]:
-            lineEdit.setText('후보 ' + str(i + 1) + " - 들으면 좋음 반영 안 됨")
+            lineEdit.setText('후보 ' + str(i + 1) + " - 희망 강의 반영 안 됨")
         else:
             lineEdit.setText('후보 ' + str(i + 1) + " - " + preferences + " 반영")
         comboBox.setCurrentIndex(i + 1)
@@ -1047,7 +1047,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
 
         preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
         if not self.time_tables[i][1]:
-            lineEdit.setText('후보 ' + str(i + 1) + " - 들으면 좋음 반영 안 됨")
+            lineEdit.setText('후보 ' + str(i + 1) + " - 희망 강의 반영 안 됨")
         else:
             lineEdit.setText('후보 ' + str(i + 1) + " - " + preferences + " 반영")
         comboBox.setCurrentIndex(i + 1)
@@ -1059,7 +1059,7 @@ class ScheduleCandidates(QMainWindow, form_class4, SaveOnClose):
             i = int(sender.currentText().split()[1]) - 1
             preferences = ', '.join(f'{j}순위' for j in self.time_tables[i][1])
             if not self.time_tables[i][1]:
-                lineEdit.setText('후보 ' + str(i + 1) + " - 들으면 좋음 반영 안 됨")
+                lineEdit.setText('후보 ' + str(i + 1) + " - 희망 강의 반영 안 됨")
             else:
                 lineEdit.setText('후보 ' + str(i + 1) + " - " + preferences + " 반영")
             self.create_Table(i)
@@ -1364,22 +1364,11 @@ class Table(QTableWidget):
             index = self.indexAt(button.pos())
             row = index.row()
             idx = Must_layout.index(self)  # 오류?
-            '''
-            idx = 0
-            for i in range(len(Must_layout)):
-                if Must_layout[i].id == self.id:
-                    break
-                idx += 1
-            '''
 
             if row != -1:
                 selected_course.append(Must_group.get_group(idx)[row])
                 del Must_group.get_group(idx)[row]
                 self.removeRow(row)
-        # 개수 0이면 삭제
-        # if self.rowCount() == 0:
-        #    self.deleteLater()
-        #    del Must_layout[idx]
 
         myWindow2.setTable()
 
@@ -1396,10 +1385,6 @@ class Table(QTableWidget):
                 selected_course.append(Prefer_group.get_group(idx)[row])
                 del Prefer_group.get_group(idx)[row]
                 self.removeRow(row)
-        # 개수 0이면 삭제
-        # if self.rowCount() == 0:
-        #    self.deleteLater()
-        #    del Prefer_layout[idx]
 
         myWindow2.setTable()
 
@@ -1411,26 +1396,25 @@ def suppress_qt_warnings():  # 해상도 별 UI크기 강제 고정
     environ["QT_SCALE_FACTOR"] = "1"
 
 
-if __name__ == "__main__":
-    suppress_qt_warnings()
-    # QApplication : 프로그램을 실행시켜주는 클래스
-    app = QApplication(sys.argv)
-    screen_rect = app.desktop().screenGeometry()
-    width = screen_rect.width()
-    height = screen_rect.height()
+suppress_qt_warnings()
+# QApplication : 프로그램을 실행시켜주는 클래스
+app = QApplication(sys.argv)
+screen_rect = app.desktop().screenGeometry()
+width = screen_rect.width()
+height = screen_rect.height()
 
-    for s in set([c.department for c in DB.course_list]):
-        # print(s)
-        pass
-    # 각 창의 인스턴스 생성
-    myWindow1 = courseSearch()
-    myWindow2 = Magic()
-    myWindow3 = timeTable()
-    myWindow4 = ScheduleCandidates()
+for s in set([c.department for c in DB.course_list]):
+    # print(s)
+    pass
+# 각 창의 인스턴스 생성
+myWindow1 = courseSearch()
+myWindow2 = Magic()
+myWindow3 = timeTable()
+myWindow4 = ScheduleCandidates()
 
-    # 프로그램 화면을 보여주는 코드
-    myWindow1.show()
+# 프로그램 화면을 보여주는 코드
+myWindow1.show()
 
-    # 프로그램을 이벤트루프로 진입시키는(프로그램을 작동시키는) 코드
-    app.exec_()
+# 프로그램을 이벤트루프로 진입시키는(프로그램을 작동시키는) 코드
+app.exec_()
 
